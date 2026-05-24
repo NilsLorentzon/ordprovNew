@@ -1,0 +1,5 @@
+{
+  "ignore": [
+    "words/*.json", "words/wiktionaryData/*.json", "words/wiktionaryCleaned/*.json", "words/*.json","words/generated/*.json"
+  ]
+}

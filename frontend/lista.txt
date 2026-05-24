@@ -1,0 +1,55 @@
+Quiz på 10 ord
+Generera 10 random ord och ge alternativa svars alternativ som matchar ordklassen
+MINIMUM VIABLE PRODUCT:
+
+Start sida
+quiz resultat och starta om Quiz widgets
+
+
+Extra additions:
+
+alla flikar:
+    logga in
+    startsida
+    quiz
+    quiz settings
+    ordlista
+
+    repetition
+    statistik
+    konto
+
+
+no flik:
+    skapa konto
+
+AI arbete:
+    definition och 10 exempel meningar för alla 2000 ord.
+    gruppering Hallig-Wartburg!! system or Roget’s Thesaurus
+    utöka med gamla ordprovs orden
+
+Uttal på alla ord:
+    fixa admin panel på varje ord
+    kunna låta någon spela in sin röst
+    sparar in fil i backenden
+    lägg till soundUrl attribut
+
+Frontend
+    fixa menu knappen mobil versoin
+    lägg till lista på ord
+    
+inställningar
+    Backend integration
+
+logga in
+    kunna bokmärka ord
+    kunna anmäla fel
+    fixa swish rekommendation
+    spara ord användaren har quizat på
+    få quiz på ord man failat förut eller bokmärkta ord
+
+Extra ord
+    utöka med de hp ord som inte kom med i första batchen
+    lägg till idiom
+    utöka med statistiskt utvalda ord
+    lägg till synonymer och annan nyttig information om ordet

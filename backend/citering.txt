@@ -1,0 +1,3 @@
+ordfrekvens https://spraakbanken.gu.se/resurser/ordstatistik
+saol som facit för definitioner
+synonymer.se som facit för synonymer
