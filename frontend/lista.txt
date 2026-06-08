@@ -1,50 +1,52 @@
-Quiz på 10 ord
-Generera 10 random ord och ge alternativa svars alternativ som matchar ordklassen
-MINIMUM VIABLE PRODUCT:
+Done
+    kunna anmäla fel
+    sitemap
 
-Start sida
-quiz resultat och starta om Quiz widgets
+TODO
+    fixa samma definition 2 gånger i quiz
+    kom verb med substantiv på provet
+    Uttal på alla ord:
+        fixa admin panel på varje ord
+        kunna låta någon spela in sin röst
+        sparar in fil i backenden
+        lägg till soundUrl attribut
 
-
-Extra additions:
-
-alla flikar:
-    logga in
-    startsida
-    quiz
-    quiz settings
-    ordlista
-
-    repetition
-    statistik
-    konto
+    visa lista på ord bredvid sökningen
+    fixa swish rekommendation / free coffee
+    email confirmation, forgot password (resend)
+    LOGIN should be form element so enter sends data
 
 
-no flik:
-    skapa konto
+production
+    create droplet
+    add nginx
+    add docker compose
+    add docker containers code
+    link domain name to server
+    add https
+
+
+
+
+
+
+
+
+
+
+
+backlog:
+    start sida på quiz fliken, antal ord, random / spaced repetition / ordlista / quiztyp
 
 AI arbete:
     definition och 10 exempel meningar för alla 2000 ord.
     gruppering Hallig-Wartburg!! system or Roget’s Thesaurus
     utöka med gamla ordprovs orden
 
-Uttal på alla ord:
-    fixa admin panel på varje ord
-    kunna låta någon spela in sin röst
-    sparar in fil i backenden
-    lägg till soundUrl attribut
 
-Frontend
-    fixa menu knappen mobil versoin
-    lägg till lista på ord
-    
-inställningar
-    Backend integration
 
 logga in
     kunna bokmärka ord
-    kunna anmäla fel
-    fixa swish rekommendation
     spara ord användaren har quizat på
     få quiz på ord man failat förut eller bokmärkta ord
 
@@ -53,3 +55,9 @@ Extra ord
     lägg till idiom
     utöka med statistiskt utvalda ord
     lägg till synonymer och annan nyttig information om ordet
+
+    Vardagliga ord: Vanligt förekommande ord som används i dagligt tal.
+    Akademiska ord: Ord som ofta förekommer i akademiska texter och studiematerial.
+    Facktermer: Ord från specifika ämnesområden som juridik, medicin, teknik etc.
+    Lånord: Ord som har sitt ursprung i andra språk men används i svenska.
+    Ordspråk och idiomatiska uttryck: Uttryck vars betydelse inte kan förstås bokstavligen utan genom att känna till deras etablerade användning. Mer om detta kommer i lektionen om idiomatiska uttryck.

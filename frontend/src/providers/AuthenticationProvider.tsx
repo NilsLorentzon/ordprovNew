@@ -5,17 +5,9 @@ import type { SetStateAction, Dispatch, ReactNode } from "react";
 export interface Auth {
   email: string;
   role: Roles;
-  name: string;
+  userName: string;
   userId: string;
-  lastName: string;
 }
-// export interface AuthExtended {
-//   email: string;
-//   role: Roles;
-//   name: string;
-//   userId: string;
-//   lastName: string;
-// }
 export type Roles = "admin" | "user";
 export interface Token {
   token: string;
@@ -30,8 +22,7 @@ const defaultValue = {
   auth: {
     email: "",
     role: "user" as const,
-    name: "",
-    lastName: "",
+    userName: "",
     userId: "",
   },
   setAuth: () => console.log("wrap in provider"),
@@ -46,18 +37,16 @@ const getAuthFromLocalStorage = () => {
       email: string;
       exp: number;
       role: Roles;
-      name: string;
-      lastName: string;
+      userName: string;
       userId: string;
     }>(rawToken);
 
-    console.log("storedToken", storedToken);
+    // console.log("storedToken", storedToken);
     if (Date.now() < storedToken.exp * 1000) {
       return {
         email: storedToken.email,
         role: storedToken.role,
-        name: storedToken.name,
-        lastName: storedToken.lastName,
+        userName: storedToken.userName,
         userId: storedToken.userId,
       };
     }
@@ -65,8 +54,7 @@ const getAuthFromLocalStorage = () => {
   return {
     email: "",
     role: "user" as const,
-    name: "",
-    lastName: "",
+    userName: "", 
     userId: "",
   };
 };
@@ -74,12 +62,11 @@ interface Props {
   children: ReactNode;
 }
 function AuthProvider({ children }: Props) {
-  let { email, role, name, lastName, userId } = getAuthFromLocalStorage();
+  let { email, role, userName, userId } = getAuthFromLocalStorage();
   const [auth, setAuth] = useState<Auth>({
     email,
     role,
-    name,
-    lastName,
+    userName,
     userId,
   });
 

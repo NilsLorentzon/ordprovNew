@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { v4 as uuid } from "uuid";
 import { User, UserModel, UserTokenValidator } from "../Models/UserModel";
-
+import { z } from "zod";
 const authenticationRouter = express.Router();
 const JWT_SECRET = "super_secret_vocabulary_key_123";
 
@@ -32,9 +32,15 @@ export async function injectUser(req: Request, res, next) {
       if (userDocument === null || userDocument === undefined) {
         throw new Error("User not found.");
       }
-      userDocument.lastRequest = new Date().toISOString();
+      // userDocument.lastRequest = new Date().toISOString();
       await userDocument.save();
+
+      // console.log("Authenticated user:", userDocument.email);
       (req as any).currentUser = userDocument;
+      // console.log(
+      //   "Injected user into request:",
+      //   (req as any).currentUser.email,
+      // );
       next();
       return;
     }
@@ -44,24 +50,6 @@ export async function injectUser(req: Request, res, next) {
   }
   next();
 }
-// Simulated Database
-// const users: {
-//   userId: string;
-//   email: string;
-//   password: string;
-//   name: string;
-//   lastName: string;
-//   role: "user" | "admin";
-// }[] = [
-//   {
-//     userId: uuid(),
-//     email: "nils.lorentzon@hotmail.com",
-//     password: bcrypt.hashSync("1234", 10), // Pre-hashed password for testing
-//     name: "Nils",
-//     lastName: "Lorentzon",
-//     role: "admin",
-//   },
-// ];
 
 export function authenticateToken(req, res, next) {
   // Grab token from header: "Bearer <TOKEN>"
@@ -83,15 +71,24 @@ export function authenticateToken(req, res, next) {
 }
 
 authenticationRouter.post("/signup", async (req, res) => {
-  const { email, password, name, lastName } = req.body;
+  const zodValidator = z.object({
+    email: z.string().email(),
+    password: z.string().min(5),
+    userName: z.string().min(3).max(32),
+  });
+  const validationResult = zodValidator.safeParse(req.body);
+  if (!validationResult.success) {
+    // send validation error to frontend
+    return res.status(400).json({ error: validationResult.error.errors });
+  }
+  const { email, password, userName } = validationResult.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = new UserModel({
     userId: uuid(),
     email,
     password: hashedPassword,
-    name,
-    lastName,
+    userName,
     role: "user",
   });
   await newUser.save();
@@ -113,13 +110,12 @@ authenticationRouter.post("/login", async (req, res) => {
     {
       userId: existingUser.userId,
       role: existingUser.role,
-      name: existingUser.name,
-      lastName: existingUser.lastName,
+      userName: existingUser.userName,
       email: existingUser.email,
     },
     JWT_SECRET,
     {
-      expiresIn: "1h",
+      expiresIn: "20h",
     },
   );
   res.json({ message: "Login successful!", token });

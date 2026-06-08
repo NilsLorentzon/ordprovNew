@@ -1,4 +1,3 @@
-
 // jantelagen
 
 // Ett klassiskt och djupt rotat begrepp i den skandinaviska kulturen! Här har du en genomgång av jantelagen.
@@ -951,7 +950,6 @@
 // Bokproduktion/Design: En tom bok med rätt papper och bindning, men utan tryck, för att se hur den färdiga boken kommer att kännas i handen.
 
 // IT/Webb: Platshållare för text eller bilder (som Lorem Ipsum) för att se layouten innan det riktiga innehållet är klart.
-
 
 // Shutterstock
 // Synonymer och relaterade begrepp
@@ -4166,7 +4164,3 @@
 // Vilken intressant utveckling! Din lista innehåller nu både det som bryter mot mönstret (som ett hugskott eller en apart stil) och det som slaviskt följer det (schablonmässigt). Det är dragkampen mellan kreativitet och rutin.
 
 // Tycker du att det är skönt när saker flyter på schablonmässigt och förutsägbart, eller blir du rastlös när allt följer samma gamla mall?
-
-
-
-

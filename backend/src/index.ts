@@ -11,6 +11,7 @@ const app: Express = express();
 
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
+
 app.use(injectUser);
   
 app.use("/api", apiRouter);

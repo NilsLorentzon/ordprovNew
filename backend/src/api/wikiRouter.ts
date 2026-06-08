@@ -6,6 +6,7 @@ import * as cheerio from "cheerio";
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 import { authenticateToken } from "./loginRouter";
+import { Word, WordModel } from "../Models/WordModel";
 const wikiRouter = express.Router();
 
 // const wordClassesEnglishToSwedish = {
@@ -706,40 +707,41 @@ interface WordData {
     }[];
   }[];
 }
-interface WordDataQuiz {
-  word: string;
-  definitions: {
-    shortDefinition: string;
-    definition: string;
-    longDefinition: string;
-  };
-  partsOfSpeech: string[];
-  sentences: string[];
-  alternatives: string[];
+export interface WordDataQuiz extends Word {
+  // word: string;
+  // definitions: {
+  //   shortDefinition: string;
+  //   definition: string;
+  //   longDefinition: string;
+  // };
+  // partsOfSpeech: string[];
+  // sentences: string[];
+  alternatives: { word: string; definition: string }[];
+  generatedTime: Date;
 }
 
-const wordDataZodValidator = z.object({
-  word: z.string(),
-  wordList: z.array(
-    z.object({
-      listName: z.string(),
-      category: z.string(),
-    }),
-  ),
-  partsOfSpeech: z.array(
-    z.object({
-      partOfSpeech: z.string(),
-      conjugationsList: z.array(z.string()),
-      definitions: z.array(
-        z.object({
-          shortDefinition: z.string(),
-          definition: z.string(),
-          longDefinition: z.string(),
-        }),
-      ),
-    }),
-  ),
-});
+// const wordDataZodValidator = z.object({
+//   word: z.string(),
+//   wordList: z.array(
+//     z.object({
+//       listName: z.string(),
+//       category: z.string(),
+//     }),
+//   ),
+//   partsOfSpeech: z.array(
+//     z.object({
+//       partOfSpeech: z.string(),
+//       conjugationsList: z.array(z.string()),
+//       definitions: z.array(
+//         z.object({
+//           shortDefinition: z.string(),
+//           definition: z.string(),
+//           longDefinition: z.string(),
+//         }),
+//       ),
+//     }),
+//   ),
+// });
 
 wikiRouter.get("/amount-of-definitions", async (req, res) => {
   const filteredDataWithFrequencyFile = fs.readFileSync(
@@ -846,9 +848,97 @@ const generateWordDataStructureOnDataset = () => {
   fs.writeFileSync("words/final.json", JSON.stringify(wordDataList));
   return wordDataList;
 };
+
+wikiRouter.get(
+  "/word-list",
+  // authenticateToken,
+  async (req, res) => {
+    const wordDataList = generateWordDataStructureOnDataset();
+    const words = wordDataList.map((w) => ({
+      word: w.word,
+      partsOfSpeech: w.partsOfSpeech.map((pos) => pos.partOfSpeech),
+      definition:
+        "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+    }));
+
+    res.json(words);
+  },
+);
+
+wikiRouter.get(
+  "/save-to-db",
+  // authenticateToken,
+  async (req, res) => {
+    const wordDataList = generateWordDataStructureOnDataset();
+    const generatedDataFile = fs.readFileSync(
+      "words/generated/final.json",
+      "utf-8",
+    );
+    const generatedData: Record<string, GenerateRequestBody> =
+      JSON.parse(generatedDataFile);
+    const createdTime = new Date();
+
+    const wordsExtended: Word[] = wordDataList.map((wordData) => {
+      if (generatedData[wordData.word]) {
+        return {
+          word: wordData.word,
+          definitions: {
+            shortDefinition:
+              wordData.partsOfSpeech[0].definitions[0].shortDefinition,
+            definition: generatedData[wordData.word].definition,
+            longDefinition: generatedData[wordData.word].definition,
+          },
+          sentences: generatedData[wordData.word].sentences,
+          partsOfSpeech: wordData.partsOfSpeech.map((pos) => pos.partOfSpeech),
+          createdTime: createdTime,
+        };
+      } else {
+        return {
+          word: wordData.word,
+          definitions: {
+            shortDefinition:
+              wordData.partsOfSpeech[0].definitions[0].shortDefinition,
+            definition:
+              "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+            longDefinition: "",
+          },
+          sentences: [
+            "Svampen absorberar vatten extremt snabbt och effektivt.",
+            "Han absorberade all information under föreläsningen med ett djupt intresse.",
+            "Mörka kläder tenderar att absorbera solljus och blir därför snabbt varma.",
+            "Ljudet absorberas effektivt av de nya akustikplattorna i kontorslandskapet.",
+            "Barnet var helt absorberat av sitt datorspel och reagerade inte när vi ropade.",
+            "Gifterna hade tyvärr redan absorberats av kroppen innan motgiftet hann ges.",
+            "Hushållspapperet har en mycket bra absorberande förmåga vid spill.",
+            "All min uppmärksamhet absorberades av den fängslande och spännande boken.",
+            "Det stora moderbolaget har nyligen absorberat den mindre konkurrenten på marknaden.",
+            "Växter absorberar koldioxid ur luften som en viktig del i fotosyntesen.",
+          ],
+          partsOfSpeech: wordData.partsOfSpeech.map((pos) => pos.partOfSpeech),
+          createdTime: createdTime,
+        };
+      }
+    });
+
+    // skip duplicate keys instead of crashing entire process and continue inserting the rest of the words
+    // await WordModel.insertMany(wordsExtended)
+    await WordModel.create(wordsExtended).catch((error) => {
+      if (error.code === 11000) {
+        console.warn(
+          "Duplicate key error occurred. Skipping duplicate entry and continuing with the rest.",
+        );
+      } else {
+        console.error("Error inserting words into database:", error);
+      }
+    });
+
+    return res.json(wordsExtended);
+  },
+);
+
 wikiRouter.get(
   "/generate-WordData-structure-on-dataset",
-  authenticateToken,
+  // authenticateToken,
   async (req, res) => {
     const wordDataList = generateWordDataStructureOnDataset();
     const generatedDataFile = fs.readFileSync(
@@ -862,6 +952,7 @@ wikiRouter.get(
       if (generatedData[wordData.word]) {
         return {
           word: wordData.word,
+          createdTime: new Date(),
           definitions: {
             shortDefinition:
               wordData.partsOfSpeech[0].definitions[0].shortDefinition,
@@ -871,10 +962,12 @@ wikiRouter.get(
           sentences: generatedData[wordData.word].sentences,
           partsOfSpeech: wordData.partsOfSpeech.map((pos) => pos.partOfSpeech),
           alternatives: [],
+          generatedTime: new Date(),
         };
       } else {
         return {
           word: wordData.word,
+          createdTime: new Date(),
           definitions: {
             shortDefinition:
               wordData.partsOfSpeech[0].definitions[0].shortDefinition,
@@ -884,6 +977,7 @@ wikiRouter.get(
           sentences: [],
           partsOfSpeech: wordData.partsOfSpeech.map((pos) => pos.partOfSpeech),
           alternatives: [],
+          generatedTime: new Date(),
         };
       }
     });
@@ -934,8 +1028,11 @@ wikiRouter.get(
         .sort(() => 0.5 - Math.random())
         .slice(0, 3);
       word.alternatives = [
-        word.definitions.shortDefinition,
-        ...selectedAlternatives.map((a) => a.definitions.shortDefinition),
+        { word: word.word, definition: word.definitions.shortDefinition },
+        ...selectedAlternatives.map((a) => ({
+          word: a.word,
+          definition: a.definitions.shortDefinition,
+        })),
       ].sort(() => 0.5 - Math.random());
       // remove selected alternatives from the list to avoid reuse
       alternativesByPartOfSpeech[partOfSpeech] =
@@ -948,8 +1045,6 @@ wikiRouter.get(
   },
 );
 
-const GEMINI_API_KEY = "AIzaSyD6C2H4dQ9vbWmqcc9m1YUyaK8RnrkzKF4";
-
 const ai = new GoogleGenAI({});
 
 async function generateText() {
@@ -957,8 +1052,11 @@ async function generateText() {
     // Call the model (gemini-3.5-flash is ideal for fast, general text tasks)
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
-      contents:
-        "Svara på strikt html format så att inga modificationer på ditt svar måste göras för att en browser ska displaya det, ge mig en detaljerad beskrivning av ordet 'abnorm' på svenska, inkludera ordets betydelse, användning i meningar, och eventuella synonymer eller relaterade ord. Formatera svaret i HTML så att det är lätt att läsa och förstå.",
+      contents: `Svara på strikt html format så att inga modificationer 
+        på ditt svar måste göras för att en browser ska displaya det, 
+        ge mig en detaljerad beskrivning av ordet 'abnorm' på svenska, 
+        inkludera ordets betydelse, användning i meningar, och eventuella synonymer 
+        eller relaterade ord. Formatera svaret i HTML så att det är lätt att läsa och förstå.`,
     });
 
     console.log("Gemini's Response:\n");
@@ -987,7 +1085,7 @@ interface GenerateRequestBody {
 }
 wikiRouter.get("/generate", async (req, res) => {
   const generatedDataFile = fs.readFileSync(
-    "words/generated/generatedWords.json",
+    "words/generated/final.json",
     "utf-8",
   );
   const generatedData: Record<string, GenerateRequestBody> =
@@ -995,12 +1093,7 @@ wikiRouter.get("/generate", async (req, res) => {
 
   const existingWordData = generateWordDataStructureOnDataset();
 
-  // get body which contains wordData
-  // const wordData = wordDataZodValidator.parse(req.body);
-  // if (!wordData) {
-  //   return res.json({ error: "Invalid word data" });
-  // }
-  for (let index = 0; index < existingWordData.length; index++) {
+  for (let index = 500; index < existingWordData.length; index++) {
     const wordData = existingWordData[index];
     if (generatedData[wordData.word]) {
       console.log(
@@ -1016,29 +1109,39 @@ wikiRouter.get("/generate", async (req, res) => {
   "word": string,
   "definition": string,
   "sentences": string[]
-} där word är ordet som ska beskrivas, definition är några meningar om ordet så att man får en väldigt bra överblick och förståelse, notera att ordet kan ha flera betydelser och alla måste nämnas i definitionen du kan ta hjälp utav datan jag skickar med. sentences är en lista med 10 meningar som visar hur ordet används i dess vanligaste sammanhang och också använder sig utav några olika ordformer på ordet. Ge mig en detaljerad beskrivning av ordet '${wordData.word}' på svenska Formatera svaret i strikt JSON så att inga modificationer på ditt svar måste göras för att använda det i en applikation. till hjälp så att du använder det ord jag syftar på så får du lite existerande data om ordet ${JSON.stringify(wordData)}.`,
+} där word är ordet som ska beskrivas, 
+ definition är några meningar om ordet så att man får en väldigt bra överblick och förståelse, börja gärna att nämna synonymen som hittas i shortDefinition och få det att flyta in i resten av definitionen,
+ notera att ordet kan ha flera betydelser och du kan ta hjälp utav datan jag skickar med. 
+ sentences är en lista med 10 meningar som visar hur ordet används i dess vanligaste sammanhang 
+ och också använder sig utav några olika ordformer på ordet. Ge mig en detaljerad beskrivning av ordet '${wordData.word}' på svenska
+  Formatera svaret i strikt JSON så att inga modificationer på ditt svar måste göras för att använda det i en applikation. 
+  till hjälp så att du använder det ord jag syftar på så får du lite existerande data om ordet ${JSON.stringify(wordData)}.`,
       });
-      // return html
-      console.log("Gemini's Response:\n");
-      console.log(response.text);
+      console.log(`Generated data for word ${wordData.word}, index ${index}`);
 
-      // convert text to json
       const responseJson = JSON.parse(response.text || "{}");
       generatedData[wordData.word] = responseJson;
+      console.log("definition:", responseJson.definition);
     } catch (error) {
       console.error("Error communicating with Gemini API:", error);
-    }
-    if (index % 10 === 0 && index !== 0) {
       fs.writeFileSync(
-        "words/generatedWords.json",
+        "words/generated/final.json",
         JSON.stringify(generatedData),
       );
     }
+    if (index % 100 === 0 && index !== 0) {
+      fs.writeFileSync(
+        "words/generated/final.json",
+        JSON.stringify(generatedData),
+      );
+    }
+
     // fs.writeFileSync(
     //   `words/generated/${wordData.word}.json`,
     //   JSON.stringify(responseJson, null, 2),
     // );
   }
+  fs.writeFileSync("words/generated/final.json", JSON.stringify(generatedData));
   //   return res.json(responseJson);
   //   // return res.json({ response });
   // } catch (error) {

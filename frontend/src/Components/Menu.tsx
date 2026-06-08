@@ -1,5 +1,5 @@
 import { Check, ChevronRight } from "lucide-react";
-import React from "react";
+
 import {
   Menu as AriaMenu,
   MenuItem as AriaMenuItem,
@@ -19,12 +19,13 @@ import {
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { dropdownItemStyles } from "./ListBox.tsx";
 import { Popover, type PopoverProps } from "./Popover.tsx";
+import React from "react";
 
 export function Menu<T extends object>(props: MenuProps<T>) {
   return (
     <AriaMenu
       {...props}
-      className="font-sans p-1 bg-p-200  outline outline-0 max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)] empty:text-center empty:pb-2"
+      className=" p-1 bg-p-100  outline outline-0 max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)] empty:text-center empty:pb-2"
     />
   );
 }

@@ -1,8 +1,5 @@
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
-// import { useOnlineStatus } from "../hooks/useOnlineStatus";
-// import WarningIcon from "../assets/SVG/WarningIcon";
-import { useQuery } from "@tanstack/react-query";
 import MainMenu from "../MainMenu";
 
 export default function MainRoutesWrapper() {

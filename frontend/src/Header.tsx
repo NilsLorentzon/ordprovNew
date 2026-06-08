@@ -1,9 +1,7 @@
 // app.js
 
-import { clsx } from "clsx";
 import React, { useState } from "react";
 import Hamburger from "./Hamburger";
-import { useNavigate } from "react-router-dom";
 
 interface Props {
   children: React.ReactNode;

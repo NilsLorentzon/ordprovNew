@@ -1,12 +1,10 @@
-import { useContext } from "react";
-import { Navigate, useRoutes } from "react-router-dom";
-// import LoginPage from "../features/Misc/LoginPage";
-import { AuthContext } from "../providers/AuthenticationProvider";
+// import { useContext } from "react";
+import {  useRoutes } from "react-router-dom";
+// import { AuthContext } from "../providers/AuthenticationProvider";
 import { mainRoutes } from "./MainRoutes.tsx";
-// import RedirectPage from "../features/Misc/RedirectPage";
 
 export default function AppRoutes() {
-  const { auth } = useContext(AuthContext);
+  // const { auth } = useContext(AuthContext);
 //   const loggedOutRoutes = [
 //     {
 //       path: "/authentication",

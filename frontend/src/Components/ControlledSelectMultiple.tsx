@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Select from "react-select";
-import type { ActionMeta, MultiValue, SingleValue } from "react-select";
+import type { ActionMeta } from "react-select";
 import { SocInfoIcon } from "./ControlledSelect";
 interface Option {
   label: string;
@@ -36,26 +36,27 @@ export default function ControlledSelectMultiple({
     }),
     multiValueLabel: (provided: any) => ({
       ...provided,
-      color: "white", // Set your desired text color here
+      color: "white", 
+      backgroundColor: "hsl(250, 45%, 10%)", // change based on value
     }),
     option: (provided: any, state: any) => ({
       ...provided,
       color: "black",
-      backgroundColor: state.isFocused ? "var(--color-p-700)" : null,
+      backgroundColor: state.isFocused ? "#e8f0fe" : null,
       // backgroundColor: "red",
     }),
     singleValue: (provided: any, state: any) => ({
       ...provided,
-      color: "rgb(255 255 255)",
+      color: "black",
       cursor: state.isDisabled ? "not-allowed" : "pointer",
     }),
-    input: (provided: any, state: any) => ({
+    input: (provided: any) => ({
       ...provided,
-      color: "white",
+      color: "black",
     }),
-    dropdownIndicator: (provided: any, state: any) => ({
+    dropdownIndicator: (provided: any) => ({
       ...provided,
-      color: "var(--color-p-700)",
+      color: "black",
     }),
     control: (provided: any, state: any) => ({
       ...provided,
@@ -63,7 +64,7 @@ export default function ControlledSelectMultiple({
       // borderColor: "gray",
       borderWidth: "0px",
       color: "white",
-      backgroundColor: state.isDisabled ? "rgb(36 33 45)" : "var(--color-p-200)",
+      backgroundColor: state.isDisabled ? "rgb(36 33 45)" : "#e8f0fe",
       borderRadius: "4px",
     }),
     menu: ({ ...css }) => ({

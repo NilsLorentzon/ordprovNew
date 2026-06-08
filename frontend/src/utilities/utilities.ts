@@ -1,4 +1,3 @@
-import type { Auth } from "../providers/AuthenticationProvider";
 
 const round = (value: number, precision: number) => {
   const multiplier = Math.pow(10, precision || 0);

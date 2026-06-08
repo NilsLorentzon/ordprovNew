@@ -23,7 +23,7 @@ axios.interceptors.response.use(
         // const data = error.response.data;
         // if (data?.reload !== false) {
         // go to /login
-        window.location.href = "/login";
+        // window.location.href = "/login";
         // }
       }
     }
