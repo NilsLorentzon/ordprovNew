@@ -33,7 +33,7 @@ export default function ControlledSelect({
     option: (provided: any, state: any) => ({
       ...provided,
       color: "black",
-      backgroundColor: state.isFocused ? "#e8f0fe" : null,
+      backgroundColor: state.isFocused ? "#f2f7ff" : null,
       // backgroundColor: "red",
     }),
     singleValue: (provided: any, state: any) => ({
@@ -57,8 +57,8 @@ export default function ControlledSelect({
       // borderWidth: "0px",
       border: "2px solid black",
       color: "black",
-      backgroundColor: "#e8f0fe",
-      
+      backgroundColor: "#f2f7ff",
+
       // backgroundColor: state.isDisabled ? "var(--p3)" : "var(--p3)",
       // opacity: state.isDisabled ? "0.7" : "1",
       borderRadius: "4px",
@@ -129,9 +129,7 @@ interface SocInfoProps {
 export function SocInfoIcon({ iconHandlers }: SocInfoProps) {
   if (iconHandlers && iconHandlers.showInfo)
     return (
-      <button className="" onClick={iconHandlers.iconClickHandler}
-      
-      >
+      <button className="" onClick={iconHandlers.iconClickHandler}>
         <InfoIcon
           className={clsx(
             "inline h-6 w-6 ",

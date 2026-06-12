@@ -38,9 +38,11 @@ const Circle = ({
 const Text = ({
   currentAmount,
   totalAmount,
+  showProcentage = false,
 }: {
   currentAmount: number;
   totalAmount: number;
+  showProcentage?: boolean;
 }) => {
   return (
     <text
@@ -51,7 +53,9 @@ const Text = ({
       fontSize={"1.3em"}
       style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500 }}
     >
-      {currentAmount} / {totalAmount}
+      {showProcentage
+        ? `${Math.round((currentAmount / totalAmount) * 100)}%`
+        : `${currentAmount} / ${totalAmount}`}
     </text>
   );
 };
@@ -60,33 +64,39 @@ const CompletionCircle = ({
   currentAmount,
   totalAmount,
   colour,
+  showProcentage = false,
 }: {
   currentAmount: number;
   totalAmount: number;
   colour: string;
+  showProcentage?: boolean;
 }) => {
   const minDisplayGreen = currentAmount > 0 ? Math.max(10, currentAmount) : 0;
   const pct = cleanPercentage((minDisplayGreen / totalAmount) * 100);
-  const width = 160;
-  const height = 160;
+  const width = 200;
+  const height = 200;
   return (
     <svg width={width} height={height}>
-      <defs>
+      {/* <defs>
         <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#004d20" /> {/* Dark Green */}
-          <stop offset="100%" stopColor="#87e887" /> {/* Light Green */}
+          <stop offset="0%" stopColor="#004d20" /> 
+          <stop offset="100%" stopColor="#87e887" />
         </linearGradient>
-      </defs>
+      </defs> */}
       <g transform={`rotate(-90 ${width / 2} ${height / 2})`}>
-        <Circle colour="lightgray" width={width} height={height} />
-        <Circle
-          colour="url(#greenGradient)"
-          pct={pct}
-          width={width}
-          height={height}
-        />
+        {showProcentage ? (
+          <Circle colour="#e39084" width={width} height={height} />
+        ) : (
+          <Circle colour="lightgray" width={width} height={height} />
+        )}
+        {/* <Circle colour="lightgray" width={width} height={height} /> */}
+        <Circle colour="#32db32" pct={pct} width={width} height={height} />
       </g>
-      <Text currentAmount={currentAmount} totalAmount={totalAmount} />
+      <Text
+        currentAmount={currentAmount}
+        totalAmount={totalAmount}
+        showProcentage={showProcentage}
+      />
     </svg>
   );
 };

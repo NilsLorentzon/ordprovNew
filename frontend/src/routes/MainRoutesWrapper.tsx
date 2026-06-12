@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import MainMenu from "../MainMenu";
+import ScrollToTop from "../Components/ScrollToTop";
 
 export default function MainRoutesWrapper() {
   //   const online = useOnlineStatus();
@@ -18,6 +19,7 @@ export default function MainRoutesWrapper() {
       <div className="h-full max-h-full">
         <div className="relative isolate h-full max-h-full min-h-full overflow-auto">
           <MainMenu>
+            <ScrollToTop />
             <Outlet />
           </MainMenu>
         </div>

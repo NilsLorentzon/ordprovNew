@@ -1,0 +1,22 @@
+version: "3"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # ports:
+    #   - 3000:3000
+    volumes:
+      - /home/projects/ordprovNew/backend/words/:/usr/src/app/data/words/
+    networks:
+      - ordprov
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1k"
+        max-file: "1"
+
+networks:
+  ordprov:
+    external: true

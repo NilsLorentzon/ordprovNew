@@ -86,7 +86,7 @@ function InformationPage() {
               </a>{" "}
               eller bjuda på kaffe via{" "}
               <a
-                href="https://www.buymeacoffee.com/ordprov"
+                href="https://buymeacoffee.com/zevrialolw"
                 target="_blank"
                 className="text-p-400 underline"
               >

@@ -81,7 +81,7 @@ export default function FocusControlledInput({
           className={clsx(
             extraClasses,
             "relative disabled:bg-p-300/20 disabled:hover:cursor-not-allowed",
-            "block border-2 border-black/80 w-full bg-[#e8f0fe]  p-2 selected:bg-red-400",
+            "block border-2 border-black/80 w-full bg-[#f2f7ff]  p-2 selected:bg-red-400",
             "rounded-md placeholder-gray-700/40",
             "text-black focus:ring-blue-500",
             // "placeholder:text-gray-100/70",

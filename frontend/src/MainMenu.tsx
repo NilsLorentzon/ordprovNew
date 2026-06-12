@@ -111,7 +111,7 @@ const WebMenu = () => {
               <div className="h-full leading-4 text-sm">Om oss</div>
             </div>
           </Link>
-          <Link to={`${routePaths.prov}`} className=" ">
+          <Link to={`${routePaths.prov}`} className="">
             <div
               className={clsx(
                 "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-1 flex items-end",
@@ -126,7 +126,7 @@ const WebMenu = () => {
             <div
               className={clsx(
                 "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-1 flex items-end",
-                currentPath === routePaths.ordlista && "bg-p-300",
+                currentPath.includes("ordlista") && "bg-p-300",
               )}
             >
               <ListIcon className="w-5 h-5 fill-white inline-block mr-2" />
@@ -295,7 +295,7 @@ const MobileMenu = () => {
           // exit={{ opacity: 1, x: "-100%" }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
           ref={modalReference as any}
-          className="fixed max-h-full  z-30 bg-p-200 top-13 bottom-0 left-0 w-full max-w-70 mt-0 px-2 flex flex-col justify-between "
+          className="fixed max-h-full  z-30 bg-p-200 top-13 bottom-0 left-0 w-full max-w-60 mt-0 px-2 flex flex-col justify-between "
         >
           <div className={clsx("mt-4")}>
             <Link
@@ -352,7 +352,7 @@ const MobileMenu = () => {
               <div
                 className={clsx(
                   "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-2 flex items-end",
-                  currentPath === routePaths.ordlista && "bg-p-300",
+                  currentPath.includes("ordlista") && "bg-p-300",
                 )}
               >
                 <ListIcon className="w-5 h-5 fill-white inline-block mr-2" />
@@ -361,21 +361,41 @@ const MobileMenu = () => {
             </Link>
 
             {auth.email && (
-              <Link
-                to={`${routePaths.statistics}`}
-                className=" "
-                onClick={() => setIsOpen(false)}
-              >
-                <div
-                  className={clsx(
-                    "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-2 flex items-end",
-                    currentPath === routePaths.statistics && "bg-p-300",
-                  )}
-                >
-                  <StatisticsIcon className="w-5 h-5 fill-white inline-block mr-2" />
-                  <div className="h-full leading-4 text-md">Statistik</div>
+              <>
+                <div className="text-white text-lg mt-8 pl-1 mb-2">
+                  Mina Sidor
                 </div>
-              </Link>
+                <Link
+                  to={`${routePaths.statistics}`}
+                  className=" "
+                  onClick={() => setIsOpen(false)}
+                >
+                  <div
+                    className={clsx(
+                      "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-2 flex items-end",
+                      currentPath === routePaths.statistics && "bg-p-300",
+                    )}
+                  >
+                    <StatisticsIcon className="w-5 h-5 fill-white inline-block mr-2" />
+                    <div className="h-full leading-4 text-md">Statistik</div>
+                  </div>
+                </Link>
+                <Link
+                  to={`${routePaths.statistics}`}
+                  className=" "
+                  onClick={() => setIsOpen(false)}
+                >
+                  <div
+                    className={clsx(
+                      "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-2 flex items-end",
+                      currentPath === routePaths.statistics && "bg-p-300",
+                    )}
+                  >
+                    <StatisticsIcon className="w-5 h-5 fill-white inline-block mr-2" />
+                    <div className="h-full leading-4 text-md">Historik</div>
+                  </div>
+                </Link>
+              </>
             )}
           </div>
           <div className="">

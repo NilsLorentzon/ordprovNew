@@ -11,6 +11,7 @@ import StatisticsPageWrapper from "../features/StatisticsPageWrapper.tsx";
 import WordListWrapperDetail from "../features/WordListWrapperDetail.tsx";
 import WordListWrapper from "../features/WordListWrapper.tsx";
 import ReportPage from "../features/ReportPage.tsx";
+import QuizMultipleChoiceWrapper from "../QuizMultipleChoiceWrapper.tsx";
 
 const MainRoutesWrapper = lazy(() => import("./MainRoutesWrapper.tsx"));
 
@@ -18,6 +19,7 @@ export const routePaths = {
   start: "/",
   information: "/om-oss",
   prov: "/prov",
+  provStart: "/prov/start",
   ordlista: "/ordlista/tidigare-högskoleprov",
   ordlistaDetail: "/ordlista/tidigare-högskoleprov/:word",
   // settings: "/settings",
@@ -44,6 +46,10 @@ export const mainRoutes = [
       {
         path: routePaths.prov,
         element: <QuizWrapper />,
+      },
+      {
+        path: routePaths.provStart,
+        element: <QuizMultipleChoiceWrapper />,
       },
       {
         path: routePaths.ordlistaDetail,
@@ -78,8 +84,8 @@ export const mainRoutes = [
         element: <ReportPage />,
       },
 
-      { path: "/*", element: <Navigate to={routePaths.prov} /> },
-      { path: "*", element: <Navigate to={routePaths.prov} /> },
+      { path: "/*", element: <Navigate to={routePaths.start} /> },
+      { path: "*", element: <Navigate to={routePaths.start} /> },
       { path: "", element: <Navigate to={routePaths.start} /> },
     ],
   },

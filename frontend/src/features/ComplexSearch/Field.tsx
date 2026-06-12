@@ -83,7 +83,7 @@ export function FieldGroup(props: GroupProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "flex border rounded-full focus-within:ring-2 focus-within:ring-black border-neutral-300 bg-neutral-100" // Add your Tailwind classes here
+        "flex border rounded-full focus-within:ring-2 focus-within:ring-black border-neutral-300 bg-white" // Add your Tailwind classes here
       )}
       // className={composeRenderProps(props.className, (className, renderProps) =>
       //   fieldGroupStyles({ ...renderProps, className }),
@@ -98,7 +98,7 @@ export function Input(props: InputProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "px-3 py-0 min-h-12 flex-1 min-w-0 border-0 outline-none rounded-full bg-neutral-100 text-lg text-neutral-800 placeholder:text-neutral-400  disabled:text-neutral-200  disabled:placeholder:text-neutral-200  [-webkit-tap-highlight-color:transparent]",
+        "px-3 py-0 min-h-12 flex-1 min-w-0 border-0 outline-none rounded-full bg-white text-lg text-neutral-800 placeholder:text-neutral-400  disabled:text-neutral-200  disabled:placeholder:text-neutral-200  [-webkit-tap-highlight-color:transparent]",
       )}
     />
   );

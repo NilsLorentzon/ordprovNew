@@ -11,10 +11,11 @@ import { authenticateToken } from "./loginRouter";
 import { z } from "zod";
 import { QuestionModel } from "../Models/QuestionModel";
 import { RepetitionModel } from "../Models/RepetitionModel";
+import { upgradeKnowledgeLevel } from "./spacedRepetitionRouter";
 
 const answerRouter = express.Router();
 
-answerRouter.post("/", authenticateToken, (req, res) => {
+answerRouter.post("/", authenticateToken, async (req, res) => {
   const zodValidation = z.object({
     // userId: z.string(),
     word: z.string(),
@@ -40,16 +41,22 @@ answerRouter.post("/", authenticateToken, (req, res) => {
   const userId = (req as any).currentUser.userId;
   (questionData as any).userId = userId;
   const questionDocument = new QuestionModel(questionData);
-  questionDocument.save();
+  await questionDocument.save();
 
-  if (questionDocument.isCorrect === false) {
-    RepetitionModel.findOneAndUpdate(
-      { userId: questionDocument.userId, word: questionDocument.word },
-      { userId: questionDocument.userId, word: questionDocument.word },
-      { upsert: true, new: true },
-    ).exec();
-    // console.log("Saved repetition for user:", questionDocument.userId, "word:", questionDocument.word);
-  }
+  await upgradeKnowledgeLevel({
+    userId: questionDocument.userId,
+    word: questionDocument.word,
+    quizType: "multipleChoice",
+    isCorrect: true,
+  });
+  // if (questionDocument.isCorrect === false) {
+  //   RepetitionModel.findOneAndUpdate(
+  //     { userId: questionDocument.userId, word: questionDocument.word },
+  //     { userId: questionDocument.userId, word: questionDocument.word },
+  //     { upsert: true, new: true },
+  //   ).exec();
+  //   // console.log("Saved repetition for user:", questionDocument.userId, "word:", questionDocument.word);
+  // }
   return res.json({ message: "Question saved successfully" });
 });
 

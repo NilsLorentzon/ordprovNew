@@ -24,9 +24,21 @@ export default function Example({
     >
       {wordList.map((word) => (
         <ComboBoxItem
+          id={word.word}
           key={word.word}
           textValue={word.word}
-          onClick={() => setCurrentWord(word.word)}
+          onAction={() => setCurrentWord(word.word)}
+
+          // onClick={() => setCurrentWord(word.word)}
+          // // Triggers when pressing Enter while highlighted
+          // onKeyDown={(e) => {
+          //   console.log("Key pressed:", e.key);
+          //   if (e.key === "Enter") {
+          //     setCurrentWord(word.word);
+          //   }
+          // }}
+
+          // onClick={() => setCurrentWord(word.word)}
         >
           <div
             aria-label={`Välj ordet ${word.word}`}

@@ -12,6 +12,7 @@ import statisticsRouter from "./statisticsRouter";
 import wordRouter from "./wordRouter";
 import reportRouter from "./reportRouter";
 import scriptsRouter from "./scriptsRouter";
+import emailRouter from "./emailRouter";
 
 const apiRouter = express.Router();
 
@@ -25,6 +26,7 @@ apiRouter.use("/saldo", saldoRouter);
 apiRouter.use("/word", wordRouter);
 apiRouter.use("/report", reportRouter);
 apiRouter.use("/scripts", scriptsRouter);
+apiRouter.use("/email", emailRouter);
 
 // apiRouter.get(
 //   "/get-file",

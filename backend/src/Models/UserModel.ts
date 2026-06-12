@@ -7,6 +7,8 @@ export const UserValidator = z.object({
   role: z.enum(["admin", "user", "moderator"]),
   userId: z.string(),
   password: z.string(),
+  isVerified: z.boolean(),
+  verificationToken: z.string(),
   // lastRequest: z.string(),
 });
 export const UserTokenValidator = z.object({
@@ -23,6 +25,8 @@ const userSchema = new mongoose.Schema<User>({
   email: { type: String, unique: true, lowercase: true, trim: true },
   role: String,
   password: String,
+  isVerified: Boolean,
+  verificationToken: String,
   // lastRequest: String,
 });
 

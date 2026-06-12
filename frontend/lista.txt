@@ -1,29 +1,29 @@
 Done
     kunna anmäla fel
     sitemap
-
-TODO
     fixa samma definition 2 gånger i quiz
     kom verb med substantiv på provet
+
+TODO
     Uttal på alla ord:
         fixa admin panel på varje ord
         kunna låta någon spela in sin röst
         sparar in fil i backenden
         lägg till soundUrl attribut
+    ordlista fixa med enter inte kunna klicka in bara musen funkar, ta bort lista bredvid, visa nästa ord knapp
+    LOGIN should be form element so enter sends data
+    statistic förbättra
+    lägg till nivåer på kunskap
 
-    visa lista på ord bredvid sökningen
     fixa swish rekommendation / free coffee
     email confirmation, forgot password (resend)
-    LOGIN should be form element so enter sends data
-
-
-production
-    create droplet
-    add nginx
-    add docker compose
-    add docker containers code
-    link domain name to server
-    add https
+    production
+        create droplet
+        add nginx
+        add docker compose
+        add docker containers code
+        link domain name to server
+        add https
 
 
 

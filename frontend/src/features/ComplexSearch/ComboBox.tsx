@@ -43,6 +43,7 @@ export function ComboBox<
   return (
     <AriaComboBox
       {...props}
+      aria-label={label || "Sökresultat"}
       className={composeTailwindRenderProps(
         props.className,
         "group flex flex-col gap-1 ",
@@ -67,6 +68,7 @@ export function ComboBox<
       <Popover className="w-(--trigger-width)" placement="bottom end">
         <ListBox
           items={items}
+          aria-label="Sökresultat"
           className="outline-0 bg-white p-1  text-black max-h-[400px] overflow-auto "
         >
           {children}

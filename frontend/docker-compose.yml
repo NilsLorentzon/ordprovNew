@@ -1,0 +1,14 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /home/projects/ordprovNew/frontend/dist:/usr/src/app/dist
+    networks:
+      - ordprov
+
+networks:
+  ordprov:
+    external: true

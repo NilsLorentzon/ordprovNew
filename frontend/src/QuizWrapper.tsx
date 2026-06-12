@@ -1,111 +1,89 @@
-import { useQuery } from "@tanstack/react-query";
-import { axios } from "./lib/axios";
-import Quiz, { type WordDataQuizExtended } from "./Quiz";
 import { useState } from "react";
-import { v4 as uuid } from "uuid";
-// export interface WordData {
-//   word: string;
-//   wordList: {
-//     listName: string;
-//     category: string;
-//   }[];
-//   partsOfSpeech: {
-//     partOfSpeech: string;
-//     conjugationsList: string[];
-//     definitions: {
-//       shortDefinition: string;
-//       wikiDefinition: string;
-//       definition: string;
-//       longDefinition: string;
-//     }[];
-//     // frequency: number;
-//   }[];
-//   definition: string;
-//   sentences: string[];
-// }
-export interface Repetition {
-  userId: string;
-  word: string;
-}
-export interface WordDataQuiz {
-  word: string;
-  definitions: {
-    shortDefinition: string;
-    definition: string;
-    longDefinition: string;
-  };
-  partsOfSpeech: string[];
-  sentences: string[];
-  alternatives: { word: string; definition: string }[];
-  generatedTime: Date;
-}
+import QuizMultipleChoiceWrapper from "./QuizMultipleChoiceWrapper";
+import ControlledSelect from "./Components/ControlledSelect";
+import { useNavigate } from "react-router-dom";
+import { routePaths } from "./routes/MainRoutes";
+
 export default function QuizWrapper() {
-  const {
-    data: wordData,
-    isLoading: isWordDataLoading,
-    refetch: refetchWordData,
-  } = useQuery({
-    queryKey: ["words"],
-    queryFn: (): Promise<WordDataQuiz[]> => axios.get(`word/prov`),
-    refetchOnWindowFocus: false,
-    onSuccess: (data: WordDataQuiz[]) => {
-      // setWords(
-      //   data.map((wordObj) => ({
-      //     ...wordObj,
-      //     answer: wordObj.definitions.shortDefinition,
-      //     correctAnswer: wordObj.definitions.shortDefinition,
-      //     generatedTime: currentTime,
-      //     answeredTime: currentTime,
-      //     showInfo: true,
-      //   })),
-      // );
-      // if (words.length === 0) {
-      //   return;
-      // }
-      setWords(
-        data.map((wordObj) => ({
-          ...wordObj,
-          answer: "",
-          correctAnswer: wordObj.definitions.shortDefinition,
-          generatedTime: new Date(wordObj.generatedTime),
-          answeredTime: new Date(wordObj.generatedTime),
-          showInfo: true,
-        })),
-      );
-    },
-  });
-  const { data: repetitions, isLoading: isRepetitionsLoading } = useQuery({
-    enabled: wordData !== undefined && wordData.length > 0,
-    queryKey: ["repetitions"],
-    queryFn: (): Promise<Repetition[]> =>
-      axios.post(`repetition`, {
-        words: wordData?.map((word) => word.word) || [],
-      }),
-  });
+  // get parameters from url
+  const urlParams = new URLSearchParams(window.location.search);
+  const quizIdFromUrl = urlParams.get("start");
+  const navigate = useNavigate();
+  const [isQuizStarted, setIsQuizStarted] = useState(quizIdFromUrl !== null);
+  const [amountOfQuestions, setAmountOfQuestions] = useState(10);
+  const [questionType, setQuestionType] = useState("multipleChoice");
 
-  const currentTime = new Date();
-
-  const [words, setWords] = useState<WordDataQuizExtended[]>([]);
-  const [quizId, setQuizId] = useState(uuid());
-  const updateQuizId = () => {
-    setQuizId(uuid());
-  };
-  if (
-    isWordDataLoading ||
-    wordData === undefined ||
-    isRepetitionsLoading ||
-    repetitions === undefined ||
-    words.length === 0
-  ) {
-    return <div className=""></div>;
+  if (!isQuizStarted) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <div className="rounded-md bg-white border shadow-md border-black/20 p-8 max-w-xl w-full">
+          <h2 className="text-2xl tracking-tight font-medium mb-4 text-black">
+            Provinställningar
+          </h2>
+          <div className="w-full flex gap-4">
+            <ControlledSelect
+              label="Antal frågor"
+              options={[
+                { label: "5", value: 5 },
+                { label: "10", value: 10 },
+                { label: "20", value: 20 },
+                // { label: "50", value: 50 },
+              ]}
+              value={amountOfQuestions}
+              onChange={(option, action) => {
+                // console.log("Selected option:", option);
+                // console.log("Action meta:", action);
+                setAmountOfQuestions(option.value);
+              }}
+            />
+            {/* <ControlledSelect
+              label="Ordlista (fler kommer senare)"
+              options={[
+                { label: "Alla ord", value: "all" },
+                { label: "Tidigare högskoleprov", value: "hp" },
+                { label: "Gamla ordprovslistan", value: "oldOrdprov" },
+              ]}
+              value={"hp"}
+              onChange={(option, action) => {
+                console.log("Selected option:", option);
+                console.log("Action meta:", action);
+              }}
+            /> */}
+            <ControlledSelect
+              label="Provtyp"
+              options={[
+                { label: "Flervalsfrågor (standard)", value: "multipleChoice" },
+                {
+                  label: "Skriv definition (avancerad)",
+                  value: "writeDefinition",
+                },
+              ]}
+              value={"multipleChoice"}
+              onChange={(option, action) => {
+                // console.log("Selected option:", option);
+                // console.log("Action meta:", action);
+                setQuestionType(option.value);
+              }}
+            />
+          </div>
+          <div className="flex justify-end mt-8">
+            <button
+              className="px-4 py-2 bg-p-200 text-white text-xl rounded-lg hover:bg-p-200 hover:scale-110 transition duration-300"
+              onClick={() => {
+                navigate(
+                  `${routePaths.provStart}?antal=${amountOfQuestions}&typ=${questionType}`,
+                );
+                setIsQuizStarted(true);
+              }}
+            >
+              {" "}
+              Starta prov
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
-  return (
-    <Quiz
-      updateQuizId={updateQuizId}
-      words={words}
-      repetitions={repetitions}
-      refetchWordData={refetchWordData}
-      setWords={setWords}
-    />
-  );
+
+  return <QuizMultipleChoiceWrapper />;
 }

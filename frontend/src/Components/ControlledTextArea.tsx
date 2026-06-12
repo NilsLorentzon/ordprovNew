@@ -22,7 +22,7 @@ export default function ControlledTextArea({ label, onChange, value }: Props) {
       <textarea
         className="block
          w-full
-        rounded-md bg-[#e8f0fe] p-2.5 text-black border-black/30 border-1
+        rounded-md bg-[#f2f7ff] p-2.5 text-black border-black/30 border-1
          placeholder-gray-400
         focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-400"
         spellCheck={false}

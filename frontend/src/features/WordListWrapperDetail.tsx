@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { axios } from "../lib/axios";
 import { PartOfSpeech } from "../Quiz";
 import { Link, useParams } from "react-router-dom";
+import type { Word } from "../types/types";
 
 // export interface WordList {
 //   word: string;
@@ -9,17 +10,6 @@ import { Link, useParams } from "react-router-dom";
 //   definition: string;
 // }
 
-export interface Word {
-  word: string;
-  createdTime: Date;
-  definitions: {
-    definition: string;
-    shortDefinition: string;
-    longDefinition: string;
-  };
-  sentences: string[];
-  partsOfSpeech: string[];
-}
 export default function WordListWrapperDetail() {
   const { word: wordParam } = useParams();
   const { data: word, isLoading: isWordListLoading } = useQuery({

@@ -36,13 +36,13 @@ export default function ControlledSelectMultiple({
     }),
     multiValueLabel: (provided: any) => ({
       ...provided,
-      color: "white", 
+      color: "white",
       backgroundColor: "hsl(250, 45%, 10%)", // change based on value
     }),
     option: (provided: any, state: any) => ({
       ...provided,
       color: "black",
-      backgroundColor: state.isFocused ? "#e8f0fe" : null,
+      backgroundColor: state.isFocused ? "#f2f7ff" : null,
       // backgroundColor: "red",
     }),
     singleValue: (provided: any, state: any) => ({
@@ -64,7 +64,7 @@ export default function ControlledSelectMultiple({
       // borderColor: "gray",
       borderWidth: "0px",
       color: "white",
-      backgroundColor: state.isDisabled ? "rgb(36 33 45)" : "#e8f0fe",
+      backgroundColor: state.isDisabled ? "rgb(36 33 45)" : "#f2f7ff",
       borderRadius: "4px",
     }),
     menu: ({ ...css }) => ({
@@ -77,7 +77,9 @@ export default function ControlledSelectMultiple({
   return (
     <div className={clsx("w-full", wrapperClassName || "")}>
       <label
-        className={clsx("mb-1 inline-block px-1 first-letter:capitalize text-lg  ")}
+        className={clsx(
+          "mb-1 inline-block px-1 first-letter:capitalize text-lg  ",
+        )}
       >
         {label}
         <span className="p-1 pb-1 inline-block -translate-y-0.5 relative ">

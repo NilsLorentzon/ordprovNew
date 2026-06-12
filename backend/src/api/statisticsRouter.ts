@@ -26,28 +26,65 @@ statisticsRouter.get("/", authenticateToken, async (req, res) => {
   const allWordsLength = await WordModel.countDocuments();
 
   // find total count of all unique words that the user has answered correctly in QuestionModel
-  const allCorrectlyAnswered = await QuestionModel.find(
+
+  //sort by answeredTime
+  // const correctlyAnsweredWords = await QuestionModel.find(
+  //   {
+  //     userId: currentUser.userId,
+  //     isCorrect: true,
+  //   },
+  //   { word: 1, answeredTime: 1 },
+  // )
+  // .sort({ answeredTime: -1 })
+  //   .distinct("word")
+  //   .exec();
+
+  const correctlyAnsweredWords = await QuestionModel.aggregate([
     {
-      userId: currentUser.userId,
-      isCorrect: true,
+      $match: {
+        userId: currentUser.userId,
+        isCorrect: true,
+      },
     },
     {
-      word: 1,
+      // Sort everything by newest first before grouping
+      $sort: { answeredTime: -1 },
     },
-  )
-    .distinct("word")
-    .exec();
+    {
+      // Group by the word to eliminate duplicates
+      $group: {
+        _id: "$word",
+        // Since it's already sorted, $first grabs the latest time
+        latestAnswered: { $first: "$answeredTime" },
+      },
+    },
+    {
+      // Sort the final unique groups by that latest time
+      $sort: { latestAnswered: -1 },
+    },
+    {
+      // Optional: Reshape the output to just give you an array of strings
+      $project: {
+        _id: 0,
+        word: "$_id",
+      },
+    },
+  ]);
+
+  // Mapping it makes it a clean array of strings: ["apple", "banana", ...]
+  const uniqueWordsList = correctlyAnsweredWords.map((item) => item.word);
 
   // select last 10 answers from QuestionModel based on answeredTime and return them in the response
   const latestAnswers = await QuestionModel.find({ userId: currentUser.userId })
     .sort({ answeredTime: -1 })
-    .limit(10)
+    .limit(100)
     .exec();
 
   const statisticsData = {
-    totalCorrectlyAnsweredWords: allCorrectlyAnswered.length,
-    totalWords: allWordsLength,
-    last10: {
+    amountOfCorrectlyAnsweredWords: uniqueWordsList.length,
+    correctlyAnsweredWords: uniqueWordsList, //.map((q) => q.word),
+    totalAmountOfWords: allWordsLength,
+    last100: {
       correctAnswers: latestAnswers.filter((q) => q.isCorrect).length,
       totalAnswers: latestAnswers.length,
       answeredQuestions: latestAnswers.map((q) => ({
