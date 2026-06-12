@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import type { Repetition } from "../QuizWrapper";
 import { axios } from "../lib/axios";
 import WordList from "./WordList";
 import { useParams } from "react-router-dom";

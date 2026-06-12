@@ -61,3 +61,7 @@ Extra ord
     Facktermer: Ord från specifika ämnesområden som juridik, medicin, teknik etc.
     Lånord: Ord som har sitt ursprung i andra språk men används i svenska.
     Ordspråk och idiomatiska uttryck: Uttryck vars betydelse inte kan förstås bokstavligen utan genom att känna till deras etablerade användning. Mer om detta kommer i lektionen om idiomatiska uttryck.
+
+
+
+docker compose down; docker compose build; docker compose up;

@@ -16,10 +16,10 @@ COPY . .
 # USER node
 
 # Change ownership of app directory to node (UID 1000)
-RUN chown -R node:node /usr/src/app
+# RUN chown -R node:node /usr/src/app
 
 # Switch to node user (UID 1000)
-USER node
+# USER node
 
 EXPOSE 3000
 
