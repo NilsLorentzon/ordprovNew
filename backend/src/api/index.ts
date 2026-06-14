@@ -4,6 +4,7 @@ import testRouter from "./scripts/testRouter";
 import authenticationRouter, {
   authenticateAdminToken,
   authenticateToken,
+  bearerAuthentication,
 } from "./authenticationRouter";
 import repetitionRouter from "./scripts/repetitionRouter";
 import answerRouter from "./answerRouter";
@@ -12,12 +13,13 @@ import statisticsRouter from "./statisticsRouter";
 import wordRouter from "./wordRouter";
 import reportRouter from "./reportRouter";
 import adminDashboardRouter from "./admin/adminDashboardRouter";
+import wikiRouter from "./scripts/wikiRouter";
 // import emailRouter from "./emailRouter";
 
 const apiRouter = express.Router();
 
 // apiRouter.use("/test", testRouter);
-// apiRouter.use("/wiki", wikiRouter);
+apiRouter.use("/wiki", bearerAuthentication, wikiRouter);
 // apiRouter.use("/repetition", repetitionRouter);
 // apiRouter.use("/saldo", saldoRouter);
 // apiRouter.use("/email", emailRouter);

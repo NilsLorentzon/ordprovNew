@@ -94,7 +94,16 @@ export async function authenticateAdminToken(req, res, next) {
     next();
   });
 }
-
+export function bearerAuthentication(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) {
+  if (req.headers.authorization !== `Bearer ${process.env.BEARER_TOKEN || ""}`) {
+    return res.status(401).send("Unauthorized");
+  }
+  next();
+}
 authenticationRouter.post("/signup", async (req, res) => {
   const zodValidator = z.object({
     email: z.string().email(),
