@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { PartOfSpeech } from "../../Quiz";
 import { ComboBox, ComboBoxItem } from "./ComboBox";
 
 interface Props {

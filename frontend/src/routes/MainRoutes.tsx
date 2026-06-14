@@ -1,19 +1,19 @@
-import { lazy } from "react";
+import { useRoutes } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import StartPage from "../StartPage.tsx";
-import QuizWrapper from "../QuizWrapper.tsx";
-import LoginPage from "../features/LoginPage.tsx";
-import SettingsPage from "../features/SettingsPage.tsx";
-import SignupPage from "../features/SignupPage.tsx";
-import InformationPage from "../InformationPage.tsx";
-import RepetitionPage from "../features/RepetitionPage.tsx";
-import StatisticsPageWrapper from "../features/StatisticsPageWrapper.tsx";
-import WordListWrapperDetail from "../features/WordListWrapperDetail.tsx";
+import StartPage from "../features/Pages/StartPage.tsx";
+import QuizWrapper from "../features/Quiz/QuizWrapper.tsx";
+import LoginPage from "../features/Pages/LoginPage.tsx";
+import SignupPage from "../features/Pages/SignupPage.tsx";
+import InformationPage from "../features/Pages/InformationPage.tsx";
+import StatisticsPageWrapper from "../features/Pages/StatisticsPageWrapper.tsx";
 import WordListWrapper from "../features/WordListWrapper.tsx";
-import ReportPage from "../features/ReportPage.tsx";
-import QuizMultipleChoiceWrapper from "../QuizMultipleChoiceWrapper.tsx";
+import ReportPage from "../features/Pages/ReportPage.tsx";
+import QuizMultipleChoiceWrapper from "../features/Quiz/QuizMultipleChoiceWrapper.tsx";
+import DonationPage from "../features/Pages/DonationPage.tsx";
+import MainRoutesWrapper from "./MainRoutesWrapper.tsx";
+import AdminPage from "../features/Pages/AdminPage.tsx";
 
-const MainRoutesWrapper = lazy(() => import("./MainRoutesWrapper.tsx"));
+// const MainRoutesWrapper = lazy(() => import("./MainRoutesWrapper.tsx"));
 
 export const routePaths = {
   start: "/",
@@ -22,12 +22,12 @@ export const routePaths = {
   provStart: "/prov/start",
   ordlista: "/ordlista/tidigare-högskoleprov",
   ordlistaDetail: "/ordlista/tidigare-högskoleprov/:word",
-  // settings: "/settings",
-  // repetition: "/repetition",
+  donation: "/donation",
   login: "/login",
   signup: "/signup",
-  statistics: "/statistics",
   report: "/felanmälan",
+  statistics: "/statistics",
+  admin: "/admin",
 };
 
 export const mainRoutes = [
@@ -59,10 +59,10 @@ export const mainRoutes = [
         path: routePaths.ordlista,
         element: <WordListWrapper />,
       },
-      // {
-      //   path: routePaths.settings,
-      //   element: <SettingsPage />,
-      // },
+      {
+        path: routePaths.donation,
+        element: <DonationPage />,
+      },
       {
         path: routePaths.login,
         element: <LoginPage />,
@@ -75,13 +75,13 @@ export const mainRoutes = [
         path: routePaths.statistics,
         element: <StatisticsPageWrapper />,
       },
-      // {
-      //   path: routePaths.repetition,
-      //   element: <RepetitionPage />,
-      // },
       {
         path: routePaths.report,
         element: <ReportPage />,
+      },
+      {
+        path: routePaths.admin,
+        element: <AdminPage />,
       },
 
       { path: "/*", element: <Navigate to={routePaths.start} /> },
@@ -90,3 +90,8 @@ export const mainRoutes = [
     ],
   },
 ];
+
+export default function MainRoutes() {
+  const element = useRoutes(mainRoutes);
+  return element;
+}

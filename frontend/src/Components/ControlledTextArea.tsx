@@ -4,8 +4,10 @@ interface Props {
   label?: string;
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
+  rows?: number;
 }
-export default function ControlledTextArea({ label, onChange, value }: Props) {
+export default function ControlledTextArea({ label, onChange, value, disabled=false, rows=5 }: Props) {
   const [hasFocus, setHasFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   useEffect(() => {
@@ -24,8 +26,9 @@ export default function ControlledTextArea({ label, onChange, value }: Props) {
          w-full
         rounded-md bg-[#f2f7ff] p-2.5 text-black border-black/30 border-1
          placeholder-gray-400
-        focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-400"
+        focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-200"
         spellCheck={false}
+        disabled={disabled}
         // onChange={(e) => onChange(e.target.value)}
         // value={value}
         onChange={(e) => setCurrentValue(e.target.value)}
@@ -36,7 +39,7 @@ export default function ControlledTextArea({ label, onChange, value }: Props) {
         }}
         onFocus={() => setHasFocus(true)}
         value={hasFocus ? currentValue : value}
-        rows={5}
+        rows={rows}
         maxLength={1000}
       />
     </div>

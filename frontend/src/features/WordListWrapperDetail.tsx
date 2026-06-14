@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { axios } from "../lib/axios";
-import { PartOfSpeech } from "../Quiz";
 import { Link, useParams } from "react-router-dom";
 import type { Word } from "../types/types";
+import { PartOfSpeech } from "./Quiz/Quiz";
 
 // export interface WordList {
 //   word: string;

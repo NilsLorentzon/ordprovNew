@@ -3,19 +3,12 @@ import { axios } from "../lib/axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers/AuthenticationProvider";
-import BookmarkIcon from "../assets/SVG/BookmarkIcon";
 import { queryClient } from "../lib/react-query";
-import { MoreVertical } from "lucide-react";
-import SpeakerIcon from "../assets/SVG/SpeakerIcon";
-import { Menu, MenuItem, MenuTrigger } from "../Components/Menu";
-import { Button } from "../Components/Button";
-import { PartOfSpeech } from "../Quiz";
-import clsx from "clsx";
 import Example from "./ComplexSearch/Example";
-import { routePaths } from "../routes/MainRoutes";
 import ListIcon from "../assets/SVG/ListIcon";
 import type { Word } from "../types/types";
 import WordCard from "./WordCard";
+import { routePaths } from "../routes/MainRoutes";
 
 interface Props {
   // repetitions: Repetition[];

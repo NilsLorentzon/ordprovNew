@@ -27,7 +27,7 @@ export default function BaseModal({
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <div
         className={clsx(
-          " bg-black/40  sm:p-6 p-2 py-16",
+          " bg-black/40  sm:p-6 p-2 py-16  h-full min-h-full overflow-auto",
         )}
       >
         <div className="w-full">

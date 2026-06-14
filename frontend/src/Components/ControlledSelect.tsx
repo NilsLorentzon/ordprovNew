@@ -55,7 +55,7 @@ export default function ControlledSelect({
       // borderWidth: state.isDisabled ? "0px" : "1px",
       // borderColor: "gray",
       // borderWidth: "0px",
-      border: "2px solid black",
+      // border: "1px solid black ",
       color: "black",
       backgroundColor: "#f2f7ff",
 

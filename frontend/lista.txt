@@ -1,8 +1,7 @@
-Done
-    kunna anmäla fel
-    sitemap
-    fixa samma definition 2 gånger i quiz
-    kom verb med substantiv på provet
+Before release:
+        fixa admin dashboard
+    fixa så att .png bilder syns
+
 
 TODO
     Uttal på alla ord:
@@ -10,20 +9,9 @@ TODO
         kunna låta någon spela in sin röst
         sparar in fil i backenden
         lägg till soundUrl attribut
-    ordlista fixa med enter inte kunna klicka in bara musen funkar, ta bort lista bredvid, visa nästa ord knapp
+
     LOGIN should be form element so enter sends data
-    statistic förbättra
-    lägg till nivåer på kunskap
-
-    fixa swish rekommendation / free coffee
-    email confirmation, forgot password (resend)
-    production
-        create droplet
-        add nginx
-        add docker compose
-        add docker containers code
-        link domain name to server
-        add https
+    forgot password (resend)
 
 
 
@@ -34,21 +22,11 @@ TODO
 
 
 
-
-backlog:
-    start sida på quiz fliken, antal ord, random / spaced repetition / ordlista / quiztyp
 
 AI arbete:
     definition och 10 exempel meningar för alla 2000 ord.
     gruppering Hallig-Wartburg!! system or Roget’s Thesaurus
     utöka med gamla ordprovs orden
-
-
-
-logga in
-    kunna bokmärka ord
-    spara ord användaren har quizat på
-    få quiz på ord man failat förut eller bokmärkta ord
 
 Extra ord
     utöka med de hp ord som inte kom med i första batchen

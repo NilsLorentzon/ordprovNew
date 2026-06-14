@@ -13,7 +13,6 @@ export interface Repetition {
 
 export interface Word {
   word: string;
-  createdTime: Date;
   definitions: {
     definition: string;
     shortDefinition: string;
@@ -21,6 +20,8 @@ export interface Word {
   };
   sentences: string[];
   partsOfSpeech: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface WordDataQuiz {
@@ -33,7 +34,9 @@ export interface WordDataQuiz {
   partsOfSpeech: string[];
   sentences: string[];
   alternatives: { word: string; definition: string }[];
-  generatedTime: Date;
+  createdAt: string;
+  updatedAt: string;
+  answeredAt: string;
 }
 
 export interface WordDataQuizExtended extends WordDataQuiz {
@@ -48,3 +51,13 @@ export interface WordDataQuizExtended extends WordDataQuiz {
 }
 
 export type QuizTypes = "multipleChoice" | "writeDefinition";
+
+export interface AdminData {
+  verifiedUsers: {
+    userId: string;
+    email: string;
+    userName: string;
+    lastRequest: Date;
+  }[];
+  amountOfVerifiedUsers: number;
+}

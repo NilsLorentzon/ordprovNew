@@ -17,14 +17,14 @@ axios.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (error.response) {
-      if (error.response.status === 401) {
+      if (error.response.status === 401 || error.response.status === 403) {
         localStorage.removeItem("token");
-        // console.log("401 error", error.response);
-        // const data = error.response.data;
-        // if (data?.reload !== false) {
-        // go to /login
-        // window.location.href = "/login";
-        // }
+        console.log("401 or 403 error", error.response);
+        const data = error.response.data;
+        if (data?.reload !== false) {
+          // go to /login
+          window.location.href = "/login";
+        }
       }
     }
     return Promise.reject(error);

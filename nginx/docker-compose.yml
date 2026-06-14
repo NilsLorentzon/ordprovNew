@@ -7,13 +7,12 @@ services:
       - 443:443
     volumes:
       - ./index.html:/etc/nginx/index.html
-      - ./cert.pem:/etc/nginx/cert.pem
-      - ./global.pass:/etc/nginx/global.pass
+      # - ./cert.pem:/etc/nginx/cert.pem
+      # - ./global.pass:/etc/nginx/global.pass
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./privatekey.key:/etc/nginx/privatekey.key
-      - /home/azureuser/project/cpq/backend/data/production/images:/usr/share/nginx/images
+      # - ./privatekey.key:/etc/nginx/privatekey.key
       - /home/projects/ordprovNew/frontend/dist:/usr/share/nginx/frontend/dist
-      - ./nginx.conf:/etc/nginx/nginx.conf  # Your config file
+      # - ./nginx.conf:/etc/nginx/nginx.conf  # Your config file
       - /etc/letsencrypt:/etc/letsencrypt   # <-- Mount the certificates here
     networks:
       - ordprov

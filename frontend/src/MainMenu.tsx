@@ -3,18 +3,15 @@
 import { clsx } from "clsx";
 import React, { useContext, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { routePaths } from "./routes/MainRoutes";
 import OwlIcon from "./assets/SVG/OwlIcon";
 import HouseIcon from "./assets/SVG/HouseIcon";
 import QuizIcon from "./assets/SVG/QuizIcon";
 import ListIcon from "./assets/SVG/ListIcon";
-// import CogIcon from "./assets/SVG/CogIcon";
 import LoginIcon from "./assets/SVG/LoginIcon";
 import { AuthContext } from "./providers/AuthenticationProvider";
-import { signout } from "./features/LoginPage";
+import { signout } from "./features/Pages/LoginPage";
 import StatisticsIcon from "./assets/SVG/StatisticsIcon";
 import CreateAccountIcon from "./assets/SVG/CreateAccountIcon";
-// import BookmarkNormalIcon from "./assets/SVG/BookmarkNormalIcon";
 import SideMenuIcon from "./assets/SVG/SideMenuIcon";
 import useClickOutside from "./hooks/useClickOutside";
 import { motion } from "motion/react";
@@ -22,6 +19,8 @@ import { useIsMobile } from "./hooks/useIsMobile";
 import { Menu, MenuItem, MenuTrigger } from "./Components/Menu";
 import { Button } from "./Components/Button";
 import { MoreVertical } from "lucide-react";
+import DonateIcon from "./assets/SVG/DonateIcon";
+import { routePaths } from "./routes/MainRoutes";
 
 interface Props {
   children: React.ReactNode;
@@ -47,19 +46,9 @@ const MainMenu = ({ children }: Props) => {
       </div>
     </div>
   );
-  // return (
-  //   <>
-  //     <div className="hidden md:block h-full">
-  //       <WebMenu>{children}</WebMenu>
-  //     </div>
-  //     <div className="block md:hidden h-full">
-  //       <MobileMenu>{children}</MobileMenu>
-  //     </div>
-  //   </>
-  // );
+
 };
 const WebMenu = () => {
-  // const [isOpen, setIsOpen] = useState(true);
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -131,6 +120,17 @@ const WebMenu = () => {
             >
               <ListIcon className="w-5 h-5 fill-white inline-block mr-2" />
               <div className="h-full leading-4 text-sm">Ordlista</div>
+            </div>
+          </Link>
+          <Link to={`${routePaths.donation}`} className=" ">
+            <div
+              className={clsx(
+                "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-1 flex items-end",
+                currentPath.includes("donation") && "bg-p-300",
+              )}
+            >
+              <DonateIcon className="w-5 h-5 fill-white inline-block mr-2" />
+              <div className="h-full leading-4 text-sm">Donation</div>
             </div>
           </Link>
 
@@ -206,20 +206,20 @@ const WebMenu = () => {
                     <MoreVertical className="w-5 h-5 stroke-white " />
                   </Button>
                   <Menu className="bg-amber-300">
-                    <MenuItem
+                    {/* <MenuItem
                       onAction={() => {
                         // signout();
                         // setIsOpen(false);
                       }}
                     >
                       Profil inställningar
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem
                       onAction={() => {
                         signout();
                       }}
                     >
-                      logga ut{" "}
+                      Logga ut{" "}
                     </MenuItem>
                   </Menu>
                 </MenuTrigger>
@@ -359,10 +359,25 @@ const MobileMenu = () => {
                 <div className="h-full leading-4 text-md">Ordlista</div>
               </div>
             </Link>
+            <Link
+              to={`${routePaths.donation}`}
+              className=" "
+              onClick={() => setIsOpen(false)}
+            >
+              <div
+                className={clsx(
+                  "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-1 flex items-end",
+                  currentPath.includes("donation") && "bg-p-300",
+                )}
+              >
+                <DonateIcon className="w-5 h-5 fill-white inline-block mr-2" />
+                <div className="h-full leading-4 text-sm">Donation</div>
+              </div>
+            </Link>
 
             {auth.email && (
               <>
-                <div className="text-white text-lg mt-8 pl-1 mb-2">
+                {/* <div className="text-white text-lg mt-8 pl-1 mb-2">
                   Mina Sidor
                 </div>
                 <Link
@@ -377,9 +392,9 @@ const MobileMenu = () => {
                     )}
                   >
                     <StatisticsIcon className="w-5 h-5 fill-white inline-block mr-2" />
-                    <div className="h-full leading-4 text-md">Statistik</div>
+                    <div className="h-full leading-4 text-md">Historik</div>
                   </div>
-                </Link>
+                </Link> */}
                 <Link
                   to={`${routePaths.statistics}`}
                   className=" "
@@ -392,7 +407,7 @@ const MobileMenu = () => {
                     )}
                   >
                     <StatisticsIcon className="w-5 h-5 fill-white inline-block mr-2" />
-                    <div className="h-full leading-4 text-md">Historik</div>
+                    <div className="h-full leading-4 text-md">Statistik</div>
                   </div>
                 </Link>
               </>
@@ -452,21 +467,19 @@ const MobileMenu = () => {
                       <MoreVertical className="w-5 h-5 stroke-white " />
                     </Button>
                     <Menu className="bg-amber-300">
-                      <MenuItem
+                      {/* <MenuItem
                         onAction={() => {
-                          // signout();
-                          // setIsOpen(false);
                         }}
                       >
                         Profil inställningar
-                      </MenuItem>
+                      </MenuItem> */}
                       <MenuItem
                         onAction={() => {
                           signout();
                           setIsOpen(false);
                         }}
                       >
-                        logga ut{" "}
+                        Logga ut{" "}
                       </MenuItem>
                     </Menu>
                   </MenuTrigger>

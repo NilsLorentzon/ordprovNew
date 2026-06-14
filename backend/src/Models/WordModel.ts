@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import { z } from "zod";
-export const WordValidation = z.object({
+const WordValidation = z.object({
   word: z.string(),
-  createdTime: z.coerce.date(),
   definitions: z.object({
     shortDefinition: z.string(),
     definition: z.string(),
@@ -10,13 +9,16 @@ export const WordValidation = z.object({
   }),
   sentences: z.array(z.string()),
   partsOfSpeech: z.array(z.string()),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
   
 });
 
 export type Word = z.infer<typeof WordValidation>;
+
+
 const wordSchema = new mongoose.Schema<Word>({
   word:  {type: String, unique: true},
-  createdTime: Date,
   definitions: {
     shortDefinition: String,
     definition: String,
@@ -24,6 +26,8 @@ const wordSchema = new mongoose.Schema<Word>({
   },
   sentences: [String],
   partsOfSpeech: [String],
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
 
 wordSchema.index({ word: 1 });

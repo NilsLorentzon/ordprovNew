@@ -1,4 +1,9 @@
 User-agent: *
 Disallow: /statistics/
+Disallow: /admin/
+Disallow: /inlärning/
+Disallow: /prov/start
+
+
 
 Sitemap: https://www.ordprov.com/sitemap.xml

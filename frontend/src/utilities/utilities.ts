@@ -102,3 +102,15 @@ export function createNumberList(n: number) {
   }
   return list;
 }
+export function dateFormatter(currentDate: Date) {
+  const date = currentDate
+
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + date.getDate()).slice(-2);
+  const hours = ("0" + date.getHours()).slice(-2);
+  const minutes = ("0" + date.getMinutes()).slice(-2);
+
+  const formattedString = `${year}-${month}-${day} \u00A0 ${hours}:${minutes}`;
+  return formattedString;
+}

@@ -1,20 +1,7 @@
 @import "tailwindcss";
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
-/* :root {
-   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-  font: var(--sans);
-} */
+
 @theme {
-  /* --color-p-100: oklch(0.98 0.04 113.22); */
-
-  /* // hexcode function */
-
   --color-p-100: #03045e;
-  /* --color-p-150: #12245e; */
   --color-p-200: #023e8a;
   --color-p-300: #0077b6;
   --color-p-400: #0096c7;
@@ -36,9 +23,6 @@
     white-space: nowrap;
     width: 1px;
   }
-  /* .shadow-main {
-    @apply shadow-md shadow-black/40;
-  } */
 }
 
 html,
@@ -77,17 +61,7 @@ body {
 button {
   cursor: pointer;
 }
-/*  */
-/* width */
-/* ::-webkit-scrollbar {
-  width: 8px;
-  height: 4px;
-}
-::-webkit-scrollbar-track {
-  background: #ffffff;
-}
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #ffffff;
   /* background: hsl(252, 92%, 85%); */
@@ -97,21 +71,9 @@ button {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(257, 100%, 69%);
-} */
-:root {
+}
+/* :root {
   --p0: #ffffff;
-
-  /*reverse the order */
-  /* --p1: #caf0f8;
-  --p2: #ade8f4;
-  --p3: #90e0ef;
-  --p4: #48cae4;
-  --p5: #00b4d8;
-  --p6: #0096c7;
-  --p7: #0077b6;
-  --p8: #023e8a;
-  --p9: #03045e; */
-
   --p1: #03045e;
   --p2: #023e8a;
   --p3: #0077b6;
@@ -131,24 +93,9 @@ button {
   --a2: hsl(252, 92%, 85%);
   --a3: hsl(253, 42%, 44%);
   --a4: hsl(246, 38%, 22%);
-}
+} */
 
-.purpleBold b {
-  color: var(--a2);
-}
-.paddingParagraph p {
-  padding-bottom: 16px;
-}
-.redStrong strong {
-  color: orange;
-}
-
-.rawList ul {
-  list-style-type: disc;
-  padding-left: 16px;
-  padding-bottom: 16px;
-}
-
+/* 
 @keyframes reverse-spin {
   to {
     transform: rotate(-360deg);
@@ -157,124 +104,4 @@ button {
 .reverse-spin {
   animation: reverse-spin 2s linear infinite;
 }
-
-.imageSize img {
-  width: 400px;
-  height: auto;
-  object-fit: fill;
-  border-radius: 8px;
-  margin: 4px 0px 12px 0px;
-  /* border: 2px solid grey; */
-  /* background-color: white; */
-}
-/* :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-} */
+ */

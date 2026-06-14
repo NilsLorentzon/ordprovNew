@@ -3,8 +3,8 @@ import type { Word } from "../types/types";
 import { MoreVertical } from "lucide-react";
 import { Menu, MenuItem, MenuTrigger } from "../Components/Menu";
 import { Button } from "../Components/Button";
-import { PartOfSpeech } from "../Quiz";
 import clsx from "clsx";
+import { PartOfSpeech } from "./Quiz/Quiz";
 import { routePaths } from "../routes/MainRoutes";
 
 export default function WordCard({ wordData }: { wordData: Word }) {

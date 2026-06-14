@@ -1,20 +1,15 @@
 import mongoose from "mongoose";
 import { z } from "zod";
-import { UserValidator } from "./UserModel";
 
-export const ReportValidator = z.object({
-//   userId: z.string(),
-  // limit to 100 characters
-  title: z.string().max(100),
-  content: z.string().min(10).max(1000),
-  //   createdAt: z.string(),
-});
-export const ReportValidatorModel = z.object({
+const ReportValidatorModel = z.object({
   userId: z.string(),
-  // limit to 100 characters
   title: z.string().max(100),
   content: z.string().min(10).max(1000),
   createdAt: z.date(),
+});
+export const ReportSanitation = z.object({
+  title: z.string().max(100),
+  content: z.string().min(10).max(1000),
 });
 
 export type Report = z.infer<typeof ReportValidatorModel>;

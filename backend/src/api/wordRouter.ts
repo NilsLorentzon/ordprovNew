@@ -1,26 +1,15 @@
 import express, { NextFunction } from "express";
-import axios from "axios";
-import puppeteer from "puppeteer";
-import fs from "fs";
-import * as cheerio from "cheerio";
-import { authenticateToken } from "./loginRouter";
-import { QuestionModel } from "../Models/QuestionModel";
-import { WordModel } from "../Models/WordModel";
+import { Word, WordModel } from "../Models/WordModel";
 import { z } from "zod";
-import { WordDataQuiz } from "./wikiRouter";
+import { WordDataQuiz } from "../types/types";
 
 const wordRouter = express.Router();
 
 wordRouter.get("/", async (req, res) => {
-  // const currentUser = (req as any).currentUser;
-  // if (!currentUser) {
-  //   return res.status(401).json({ error: "Unauthorized" });
-  // }
   const wordList = await WordModel.find(
     {},
     {
       word: 1,
-      // "definitions.shortDefinition": 1,
       partsOfSpeech: 1,
     },
   );
@@ -30,7 +19,6 @@ wordRouter.get("/", async (req, res) => {
   }
   return res.json(wordList);
 });
-// queryFn: (): Promise<WordDataQuiz[]> => axios.get(`word/prov?antal=${amountOfQuestions}&typ=${questionType}`),
 
 wordRouter.get("/prov", async (req, res) => {
   const wordList = await WordModel.find({}).lean();
@@ -38,15 +26,35 @@ wordRouter.get("/prov", async (req, res) => {
     return res.status(404).json({ error: "No words found" });
   }
 
-  const validationSchema = z.object({
-    antal: z.string().transform((val) => parseInt(val)),
-    typ: z.enum(["multipleChoice", "writeDefinition"]),
-  });
-  const validationResult = validationSchema.safeParse(req.query);
-  if (!validationResult.success) {
-    return res.status(400).json({ error: "Invalid query parameters" });
-  }
-  const { antal: amount, typ: quizType } = validationResult.data;
+  // const validationSchema = z.object({
+  //   antal: z.string(),
+  //   // .transform((val) => Math.max(1, Math.min(parseInt(val), 2), 50)),
+  //   typ: z.enum(["multipleChoice", "writeDefinition"]),
+  //   alternativ: z.string(),
+  // });
+  // const validationResult = validationSchema.safeParse(req.query);
+
+  // if (!validationResult.success) {
+  //   return res.status(400).json({ error: "Invalid query parameters" });
+  // }
+  // const {
+  //   antal: nonProcessedAmount,
+  //   // typ: quizType,
+  //   alternativ: nonProcessedAlternativeAmount,
+  // } = validationResult.data;
+
+  const nonProcessedAmount = req.query.antal ? String(req.query.antal) : "2";
+  const nonProcessedAlternativeAmount = req.query.alternativ
+    ? String(req.query.alternativ)
+    : "2";
+  const quizType =
+    req.query.typ === "writeDefinition" ? "writeDefinition" : "multipleChoice";
+
+  const amountValue = parseInt(nonProcessedAmount) || 2;
+  const amount = Math.max(2, Math.min(amountValue, 50));
+
+  const alternativeAmountValue = parseInt(nonProcessedAlternativeAmount) || 2;
+  const alternativeAmount = Math.max(4, Math.min(alternativeAmountValue, 10));
 
   const wordListQuiz: WordDataQuiz[] = wordList
     .map((word) => ({
@@ -54,13 +62,14 @@ wordRouter.get("/prov", async (req, res) => {
       definitions: word.definitions,
       partsOfSpeech: word.partsOfSpeech,
       sentences: word.sentences,
-      createdTime: word.createdTime,
       alternatives: [],
-      generatedTime: new Date(),
+      createdAt: new Date(),
+      answeredAt: new Date(),
+      updatedAt: word.updatedAt,
     }))
     .sort(() => 0.5 - Math.random());
 
-  const generatedTime = new Date();
+  const createdAt = new Date();
 
   const selectedWords = wordListQuiz.slice(0, amount).map((word) => {
     const randomPartOfSpeech = word.partsOfSpeech[0];
@@ -68,7 +77,8 @@ wordRouter.get("/prov", async (req, res) => {
     return {
       ...word,
       alternatives: [] as { word: string; definition: string }[],
-      generatedTime: generatedTime,
+      createdAt: createdAt,
+      answeredAt: createdAt,
       partOfSpeech: randomPartOfSpeech,
     };
   });
@@ -99,7 +109,7 @@ wordRouter.get("/prov", async (req, res) => {
 
     const selectedAlternatives = alternativesForPartOfSpeech
       .sort(() => 0.5 - Math.random())
-      .slice(0, 4);
+      .slice(0, alternativeAmount - 1);
 
     word.alternatives = [
       { word: word.word, definition: word.definitions.shortDefinition },
@@ -118,10 +128,6 @@ wordRouter.get("/prov", async (req, res) => {
 });
 
 wordRouter.get("/:word", async (req, res) => {
-  // const currentUser = (req as any).currentUser;
-  // if (!currentUser) {
-  //   return res.status(401).json({ error: "Unauthorized" });
-  // }
   const zodValidation = z.string();
   const validationResult = zodValidation.safeParse(req.params.word);
   if (!validationResult.success) {
@@ -133,7 +139,6 @@ wordRouter.get("/:word", async (req, res) => {
   if (!wordList) {
     return res.json(undefined);
   }
-
   res.json(wordList);
 });
 

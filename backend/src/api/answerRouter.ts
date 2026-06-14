@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { v4 as uuid } from "uuid";
 import { UserModel } from "../Models/UserModel";
-import { authenticateToken } from "./loginRouter";
+import { authenticateToken } from "./authenticationRouter";
 import { z } from "zod";
 import { QuestionModel } from "../Models/QuestionModel";
 import { RepetitionModel } from "../Models/RepetitionModel";
@@ -18,18 +18,18 @@ const answerRouter = express.Router();
 answerRouter.post("/", authenticateToken, async (req, res) => {
   const zodValidation = z.object({
     // userId: z.string(),
-    word: z.string(),
+    word: z.string().max(100),
     alternativeWords: z.array(
       z.object({
-        word: z.string(),
-        definition: z.string(),
+        word: z.string().max(100),
+        definition: z.string().max(100),
       }),
     ),
-    correctAnswer: z.string(),
-    answer: z.string(),
+    correctAnswer: z.string().max(100),
+    answer: z.string().max(100),
     isCorrect: z.boolean(),
-    generatedTime: z.coerce.date(),
-    answeredTime: z.coerce.date(),
+    quizType: z.enum(["multipleChoice", "writeDefinition"]),
+    writenDefinitionAnswer: z.string().max(500),
   });
   const validationResult = zodValidation.safeParse(req.body);
   if (!validationResult.success) {
@@ -46,8 +46,8 @@ answerRouter.post("/", authenticateToken, async (req, res) => {
   await upgradeKnowledgeLevel({
     userId: questionDocument.userId,
     word: questionDocument.word,
-    quizType: "multipleChoice",
-    isCorrect: true,
+    quizType: questionDocument.quizType,
+    isCorrect: questionDocument.isCorrect,
   });
   // if (questionDocument.isCorrect === false) {
   //   RepetitionModel.findOneAndUpdate(
