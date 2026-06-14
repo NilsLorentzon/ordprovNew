@@ -2,7 +2,7 @@ import "dotenv/config";
 import express, { type Request, type Response } from "express";
 import { Resend } from "resend";
 import fs from "fs";
-import { UserModel } from "../Models/UserModel";
+import { UserModel } from "../../Models/UserModel";
 // import { Webhook } from "svix";
 
 const emailRouter = express.Router();
