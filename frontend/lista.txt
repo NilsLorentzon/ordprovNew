@@ -1,11 +1,20 @@
 DONE:
     unfocus when search entering on wordlist
-    Aria label 
-    scroll button
+    Aria label scroll button
     bird image på bekräftelse mejlet
-    
+    text på utveckling
+    checkbox
+    more bottom margin
+    black text?
+
 TODO:
+    verification failed message when everything works
+    ändra img till svg owl
     fixa med word och shortdescription på alternativ
+    
+
+FELANMÄLAN:
+ hunsa fel på exempel mening
 
 
 
@@ -51,3 +60,5 @@ Extra ord
 
 
 docker compose down; docker compose build; docker compose up;
+
+Tolitaeger1

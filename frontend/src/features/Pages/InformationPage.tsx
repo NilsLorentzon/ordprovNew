@@ -61,7 +61,7 @@ function InformationPage() {
               Hemsidan är fortfarande under utveckling och idag finns endast
               2000 ord tillgängliga. Jag jobbar kontinuerligt med att lägga till
               fler ord och förbättra definitionerna. Jag jobbar också på att
-              implementera fler funktioner som kan hjälpa dig inlärningen och
+              implementera fler funktioner som kan hjälpa dig med inlärningen och
               göra upplevelsen ännu bättre.
             </p>
           </div>

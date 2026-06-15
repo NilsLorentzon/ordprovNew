@@ -19,7 +19,7 @@ function StartPage() {
           <a
             href="https://en.wikipedia.org/wiki/Spaced_repetition"
             aria-label="Spaced repetition"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+            className="text-blue-400 hover:underline font-medium"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -49,13 +49,13 @@ function StartPage() {
         <div className="flex flex-col justify-between max-w-2xl ">
           <div className="flex items-center flex-col">
             <h1 className=" max-[370px]:text-4xl text-5xl lg:px-4 px-2 text-center tracking-tight font-medium text-[#222222]">
-              Öka ditt ordförråd och <span className="text-p-400">spika </span>{" "}
+              Öka ditt ordförråd och <span className="text-p-300">spika </span>{" "}
               ORD-delen på högskoleprovet
             </h1>
-            <h3 className="px-4 pt-2 text-center font-medium tracking-wider text-p-200">
+            <h2 className="px-4 pt-2 text-center font-medium tracking-wider text-p-200">
               10 000 utvalda ord inför högskoleprovet &ndash; interaktiva quiz
               med detaljerade definitioner och exempelmeningar.
-            </h3>
+            </h2>
             <button
               aria-label="Starta provet"
               className="mt-8 px-6 py-3 bg-p-200 text-white text-2xl rounded-lg hover:bg-p-200 hover:scale-110 transition duration-300"
@@ -114,16 +114,16 @@ function StartPage() {
       </div>
 
       <div
-        className="w-full h-full px-4 bg-slate-50 dark:bg-slate-800 relative justify-center flex items-center "
+        className="w-full h-full px-4 bg-slate-800 relative justify-center flex items-center "
         id="features-section"
       >
         <div className="w-full m-auto max-w-md lg:pl-4 flex flex-col items-start">
-          <h2 className="text-3xl sm:text-4xl mb-10 font-medium  text-slate-900 dark:text-white text-left">
+          <h2 className="text-3xl sm:text-4xl mb-10 font-medium  text-white text-left">
             Varför Ordprov.com?
           </h2>
 
           {/* Features List */}
-          <ul className="space-y-5 text-base sm:text-lg text-slate-600 dark:text-slate-300 w-full">
+          <ul className="space-y-5 text-base sm:text-lg text-slate-300 w-full">
             {features.map((feature) => (
               <li key={feature.id} className="flex items-start gap-3">
                 {/* Checkmark Icon */}
@@ -145,7 +145,7 @@ function StartPage() {
                 <span
                   className={
                     feature.highlight
-                      ? "font-medium text-slate-900 dark:text-white"
+                      ? "font-medium text-white"
                       : ""
                   }
                 >
@@ -163,6 +163,7 @@ function StartPage() {
         >
           <button
             className="p-4"
+            aria-label="Scrolla ner"
             // scroll one full viewport height down on click
             onClick={() => {
               const nextSection = document.querySelector("#signup-section");
@@ -181,11 +182,11 @@ function StartPage() {
       >
         <div className="flex flex-col justify-between max-w-sm text-center relative">
           <div className="flex items-center flex-col ">
-            <h4 className=" text-xl lg:px-4 px-2 text-center font-medium text-[#222222]">
+            <h2 className=" text-xl lg:px-4 px-2 text-center font-medium text-[#222222]">
               <span className=" font-bold text-2xl">{daysDiff}</span> dagar och{" "}
               <span className=" font-bold text-2xl">{hoursDiff}</span> timmar
               kvar till Högskoleprovet &ndash; börja plugga idag!
-            </h4>
+            </h2>
             {auth.email ? (
               <button
                 aria-label="Starta provet"

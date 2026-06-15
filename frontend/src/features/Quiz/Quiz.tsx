@@ -14,6 +14,9 @@ import { routePaths } from "../../routes/MainRoutes";
 import { Menu, MenuItem, MenuTrigger } from "../../Components/Menu";
 import CogIcon from "../../assets/SVG/CogIcon";
 import { axios } from "../../lib/axios";
+import ScrollButton from "../../Components/ScrollButton";
+import CheckCircleIcon from "../../assets/SVG/CheckCircleIcon";
+import CheckSmallAnimateIcon from "../../assets/SVG/CheckSmallAnimateIcon";
 // import CogIcon from "./assets/SVG/CogIcon";
 
 interface QuizProps {
@@ -304,16 +307,22 @@ function Quiz({
                               <span className="">
                                 {alternative.definition}{" "}
                               </span>
-                              {/* <div className="">
-                            {wordObj.answer !== "" &&
-                              wrongAnswer &&
-                              wordObj.correctAnswer ===
-                                alternative.definition && (
-                                <div className="">
-                                  <CheckCircleIcon className="h-7 w-7 fill-green-600" />
-                                </div>
-                              )}
-                          </div> */}
+                              <div className="">
+                                {wordObj.answer !== "" &&
+                                  alternative.definition ===
+                                    wordObj.correctAnswer && (
+                                    <div className="" aria-label="Rätt svar">
+                                      <CheckSmallIcon className="h-6 w-6 fill-green-800 scale-150 -mr-1 " />
+                                    </div>
+                                  )}
+                                {/* {wordObj.answer !== "" &&
+                                  wordObj.answer !== wordObj.correctAnswer &&
+                                  alternative.definition === wordObj.answer && (
+                                    <div className="" aria-label="Fel svar">
+                                      <CrossSmallIcon className="h-6 w-6 fill-black scale-150 -mr-1 " />
+                                    </div>
+                                  )} */}
+                              </div>
                             </div>
                           </button>
                         </li>
@@ -433,7 +442,7 @@ function Quiz({
                       animate={{
                         opacity: 1,
                         height: "auto", // Automatically calculates the full content height
-                        transition: { duration: 0.5, ease: "easeIn" }, // "slowly" expand
+                        transition: { duration: 0.3, ease: "easeIn" }, // "slowly" expand
                       }}
                       style={{ overflow: "hidden" }} // Crucial to hide content while expanding
                       // exit={{ opacity: 0, height: 0 }}
@@ -524,6 +533,27 @@ function Quiz({
         .filter(
           (wordObj, index) => index <= lastAnsweredIndex + 1 || index === 0,
         )}
+      <div className="mb-30"></div>
+      {
+        // atleast 1 question answered and not all questions answered
+        lastAnsweredIndex >= 0 && lastAnsweredIndex < amountOfQuestions - 1 && (
+          <div className="md:hidden fixed -bottom-2 -right-2 z-20">
+            <ScrollButton
+              isAnimated={false}
+              onClick={() => {
+                const mainContent = document.getElementById("main-content");
+                // scroll all the way to the bottom of the page
+                if (mainContent) {
+                  mainContent.scrollTo({
+                    top: mainContent.scrollHeight,
+                    behavior: "smooth",
+                  });
+                }
+              }}
+            />
+          </div>
+        )
+      }
       <div className="fixed top-16 md:top-4  right-2 md:right-8 z-20">
         <div className=" bg-p-200 p-1.5 py-1 rounded-md">
           <div className="flex items-center gap-0 ">

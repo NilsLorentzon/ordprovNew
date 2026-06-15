@@ -27,7 +27,7 @@ export function ListBox<T extends object>({
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "outline-0 p-1 w-50 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-lg ",
+        "outline-0 p-1 w-50 bg-neutral-900 border border-neutral-700 rounded-lg ",
       )}
     >
       {children}
@@ -41,11 +41,11 @@ export const itemStyles = tv({
   variants: {
     isSelected: {
       false:
-        "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 pressed:bg-neutral-100 dark:hover:bg-neutral-800 dark:pressed:bg-neutral-800 -outline-offset-2",
-      true: "bg-blue-600 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white dark:outline-white forced-colors:outline-[HighlightText]",
+        "text-neutral-300 hover:bg-neutral-800 pressed:bg-neutral-800 -outline-offset-2",
+      true: "bg-blue-600 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white forced-colors:outline-[HighlightText]",
     },
     isDisabled: {
-      true: "text-neutral-300 dark:text-neutral-600 forced-colors:text-[GrayText]",
+      true: "text-neutral-600 forced-colors:text-[GrayText]",
     },
   },
 });
@@ -70,11 +70,11 @@ export const dropdownItemStyles = tv({
   base: "group flex items-center gap-4 cursor-default select-none py-2 pl-3 pr-3 selected:pr-1 rounded-lg outline outline-0 text-sm forced-color-adjust-none no-underline [&[href]]:cursor-pointer [-webkit-tap-highlight-color:transparent]",
   variants: {
     isDisabled: {
-      false: "text-neutral-900 dark:text-neutral-100",
-      true: "text-neutral-300 dark:text-neutral-600 forced-colors:text-[GrayText]",
+      false: "text-neutral-100",
+      true: "text-neutral-600 forced-colors:text-[GrayText]",
     },
     isPressed: {
-      true: "bg-neutral-100 dark:bg-neutral-800",
+      true: "bg-neutral-800",
     },
     isFocused: {
       true: "bg-p-400 cursor-pointer text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
@@ -84,7 +84,7 @@ export const dropdownItemStyles = tv({
     {
       isFocused: false,
       isOpen: true,
-      className: "bg-neutral-100 dark:bg-neutral-700/60",
+      className: "bg-neutral-700/60",
     },
   ],
 });
@@ -123,7 +123,7 @@ export function DropdownSection<T extends object>(
 ) {
   return (
     <ListBoxSection className="first:-mt-1.25 after:content-[''] after:block after:h-1.25 last:after:hidden">
-      <Header className="text-sm font-semibold text-neutral-500 dark:text-neutral-300 px-4 py-1 truncate sticky -top-1.25 -mt-px -mx-1 z-10 bg-neutral-100/60 dark:bg-neutral-700/60 backdrop-blur-md supports-[-moz-appearance:none]:bg-neutral-100 border-y border-y-neutral-200 dark:border-y-neutral-700 [&+*]:mt-1">
+      <Header className="text-sm font-semibold text-neutral-300 px-4 py-1 truncate sticky -top-1.25 -mt-px -mx-1 z-10 bg-neutral-700/60 backdrop-blur-md supports-[-moz-appearance:none]:bg-neutral-100 border-y border-y-neutral-700 [&+*]:mt-1">
         {props.title}
       </Header>
       <Collection items={props.items}>{props.children}</Collection>
