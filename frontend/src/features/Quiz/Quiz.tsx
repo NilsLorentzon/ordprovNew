@@ -142,7 +142,7 @@ function Quiz({
   };
   return (
     <div className="m-auto md:p-8 md:pt-18 pt-18 py-2 max-w-3xl relative">
-      <div className="pl-6 mt-2">
+      <div className="pl-3 mt-2">
         <h1 className="text-2xl font-bold mb-2">Prov</h1>
         {quizType === "multipleChoice" && (
           <p className="text-md text-black tracking-wide mb-4">

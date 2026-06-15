@@ -131,7 +131,7 @@ authenticationRouter.post("/signup", async (req, res) => {
 
   // email logic #########################################################################################
 
-  const from = process.env.EMAIL_FROM || "nils@ordprov.com";
+  const from = process.env.EMAIL_FROM || "no-reply@ordprov.com";
   const API_URL = process.env.API_URL || "http://localhost:3000/api";
 
   const confirmationEmailHtml = fs

@@ -95,9 +95,13 @@ export default function WordList({
               <Example
                 filterText={filterText}
                 setFilterText={setFilterText}
-                setCurrentWord={(word: string) =>
-                  navigate(`${routePaths.ordlista}/${word}`)
-                }
+                setCurrentWord={(word: string) => {
+                  navigate(`${routePaths.ordlista}/${word}`);
+                  // unfocus search input when word is clicked
+                  if (document.activeElement instanceof HTMLElement) {
+                    document.activeElement.blur();
+                  }
+                }}
                 wordList={searchList}
               />
             </div>

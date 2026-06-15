@@ -13,7 +13,7 @@ RUN npm install
 COPY . .
 
 # Fix permissions so node user can access the directory
-# RUN chown -R node:node /usr/src/app
+RUN chown -R node:node /usr/src/app
 # RUN find /usr/src/app -mindepth 1 -not -path "/usr/src/app/data*" -exec chown -R node:node {} +
 
 # Switch to node user

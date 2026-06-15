@@ -1,16 +1,24 @@
-Before release:
-        fixa admin dashboard
-    fixa så att .png bilder syns
+DONE:
+    unfocus when search entering on wordlist
+    Aria label 
+    scroll button
+    bird image på bekräftelse mejlet
+    
+TODO:
+    fixa med word och shortdescription på alternativ
 
 
-TODO
+
+
+NICE TO HAVE:
+
+
     Uttal på alla ord:
         fixa admin panel på varje ord
         kunna låta någon spela in sin röst
         sparar in fil i backenden
         lägg till soundUrl attribut
 
-    LOGIN should be form element so enter sends data
     forgot password (resend)
 
 

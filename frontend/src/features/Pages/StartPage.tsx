@@ -73,12 +73,38 @@ function StartPage() {
           className="absolute bg-p-100 rounded-full bottom-4 right-4 w-12 h-12 flex justify-center items-center"
         >
           <button
-            className="p-4"
+            className="p-4 hidden md:block"
+            aria-label="Scrolla ner"
             // scroll one full viewport height down on click
             onClick={() => {
               const nextSection = document.querySelector("#features-section");
+              const main = document.querySelector("#main-content");
               if (nextSection) {
                 nextSection.scrollIntoView({ behavior: "smooth" });
+              }
+            }}
+          >
+            <ScrollArrowIcon className="fill-white w-8 h-8" />
+          </button>
+          <button
+            className="p-4 md:hidden block"
+            aria-label="Scrolla ner"
+            // scroll one full viewport height down on click
+            onClick={() => {
+              const nextSection = document.querySelector("#features-section");
+              const main = document.querySelector("#main-content");
+              if (nextSection) {
+                const offset = 56;
+                const elementPosition = nextSection.getBoundingClientRect().top;
+                const offsetPosition =
+                  elementPosition + window.pageYOffset - offset;
+                if (main) {
+                  main.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth",
+                  });
+                }
+                // nextSection.scrollIntoView({ behavior: "smooth" });
               }
             }}
           >

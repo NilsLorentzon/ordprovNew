@@ -126,7 +126,7 @@ export default function SignupPage() {
             <h2 className="text-lg font-medium">
               Ett bekräftelsemail har skickats till{" "}
               <span className="text-p-400">{email}</span> med instruktioner för
-              att aktivera ditt konto.
+              att aktivera ditt konto. Mejlet kan ha hamnat i skräpposten.
             </h2>
           </div>
         )}
