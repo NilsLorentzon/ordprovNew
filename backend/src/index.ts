@@ -5,7 +5,7 @@ import express, { Express } from "express";
 import cors from "cors";
 import apiRouter from "./api";
 import "./db/db";
-import { injectUser } from "./api/authenticationRouter";
+import { injectStorageUser, injectUser } from "./api/authenticationRouter";
 
 const app: Express = express();
 
@@ -14,6 +14,7 @@ app.use(helmet());
 app.use(express.json({ limit: "50mb" }));
 
 app.use(injectUser);
+app.use(injectStorageUser);
 app.use("/api", apiRouter);
 
 const PORT = 3000;

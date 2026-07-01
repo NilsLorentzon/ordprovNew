@@ -7,19 +7,6 @@ import { UserModel, UserTokenValidator } from "../Models/UserModel";
 import { z } from "zod";
 import { Resend } from "resend";
 
-const birdData = [
-  {
-    species: "species here",
-    birds: [
-      {
-        name: "name here",
-        latinName: "latin name here",
-        letter: "letter here",
-      }
-    ]
-  }
-]
-
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const authenticationRouter = express.Router();
@@ -45,6 +32,7 @@ export async function injectUser(req: Request, res, next) {
       userDocument.lastRequest = new Date();
       await userDocument.save();
       (req as any).currentUser = userDocument;
+      (req as any).currentUserId = userDocument.userId;
       next();
       return;
     }
@@ -52,6 +40,17 @@ export async function injectUser(req: Request, res, next) {
     next();
     return;
   }
+  next();
+}
+export async function injectStorageUser(req: Request, res, next) {
+  const authHeader = req.headers["x-user-storage-id"];
+  const token = authHeader;
+  const valid = z.string().uuid().safeParse(token);
+  if (!valid.success) {
+    next();
+    return;
+  }
+  (req as any).currentStorageUserId = valid.data;
   next();
 }
 
@@ -99,7 +98,9 @@ export function bearerAuthentication(
   res: express.Response,
   next: express.NextFunction,
 ) {
-  if (req.headers.authorization !== `Bearer ${process.env.BEARER_TOKEN || ""}`) {
+  if (
+    req.headers.authorization !== `Bearer ${process.env.BEARER_TOKEN || ""}`
+  ) {
     return res.status(401).send("Unauthorized");
   }
   next();
@@ -196,7 +197,7 @@ authenticationRouter.get("/verify-email", async (req, res) => {
         .send("<h1>Invalid Request</h1><p>Verification token is missing.</p>");
     }
     const user = await UserModel.findOne({ verificationToken: token });
-    if (!user) {
+    if (!user || user.isVerified) {
       return res
         .status(400)
         .send(
@@ -204,23 +205,9 @@ authenticationRouter.get("/verify-email", async (req, res) => {
         );
     }
 
-    // 4. Update status and clear the token data
     user.isVerified = true;
-    user.verificationToken = ""; // Clear the token to prevent reuse
-
-    // Save the changes back to MongoDB
     await user.save();
 
-    // 5. Respond to the browser
-    // Option A: Send clean, styled HTML directly
-    // res.send(`
-    //   <div style="font-family: sans-serif; text-align: center; margin-top: 50px;">
-    //     <h1 style="color: #2e7d32;">Email Verified!</h1>
-    //     <p>Your email has been successfully verified. You can close this window and log in.</p>
-    //   </div>
-    // `);
-
-    // Option B: Redirect straight to your React/Vue/Frontend login page
     res.redirect(`${process.env.BASE_FRONTEND_URL}/login`);
   } catch (error) {
     console.error("Mongoose Verification Error:", error);
