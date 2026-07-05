@@ -12,8 +12,10 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       # - ./privatekey.key:/etc/nginx/privatekey.key
       - /home/projects/ordprovNew/frontend/dist:/usr/share/nginx/frontend/dist
+      - /home/projects/sverigesgeografi/frontend/dist:/usr/share/nginx/sverigesgeografi/dist
+      - /home/projects/magictracker/frontend/dist:/usr/share/nginx/magictracker/dist
       # - ./nginx.conf:/etc/nginx/nginx.conf  # Your config file
-      - /etc/letsencrypt:/etc/letsencrypt   # <-- Mount the certificates here
+      - /etc/letsencrypt:/etc/letsencrypt # <-- Mount the certificates here
     networks:
       - ordprov
 
