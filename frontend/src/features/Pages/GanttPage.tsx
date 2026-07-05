@@ -1,777 +1,313 @@
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from 'react'
 
-interface GanttRow {
-  rowId: string;
-  name: string;
-  start: Date | null;
-  laborType: "installation" | "maintenance" | "documentation";
-  laborTypePercentage: number;
-  amountOfWorkers: number;
-  relativeTo: string | null;
-  offsetAmount: number; // baseline in hours
-  disabledDates: string[];
-  // Configurations for hours mapping per row (optional overrides)
-  hoursPerWeek?: number;
-  hoursPerMonth?: number;
+type Frequency = 'daily' | 'weekly' | 'monthly' | 'yearly'
+
+type Chore = {
+  id: string
+  title: string
+  frequency: Frequency
+  weekday?: number // 0-6 for weekly
+  dayOfMonth?: number // 1-31 for monthly
+  monthDay?: { month: number; day: number } // for yearly: month 0-11
+  assignedTo?: string
 }
 
-interface Gantt {
-  rows: GanttRow[];
+const STORAGE_KEY = 'household.choreState.v1'
+
+function formatDate(d: Date) {
+  return d.toISOString().slice(0, 10)
 }
 
-export default function GanttPage() {
-  const [viewMode, setViewMode] = useState<"week" | "month">("week");
+function addDays(d: Date, days: number) {
+  const n = new Date(d)
+  n.setDate(n.getDate() + days)
+  return n
+}
 
-  const laborHours = {
-    installation: 81,
-    maintenance: 40,
-    documentation: 61,
-  };
+function startOfMonth(d: Date) {
+  return new Date(d.getFullYear(), d.getMonth(), 1)
+}
 
-  const [data, setData] = useState<Gantt>({
-    rows: [
-      {
-        rowId: "1",
-        name: "Pre Installation guys",
-        start: new Date(2026, 5, 1),
-        laborType: "installation",
-        laborTypePercentage: 0.5,
-        amountOfWorkers: 1,
-        relativeTo: null,
-        disabledDates: [],
-        offsetAmount: 0,
-      },
-      {
-        rowId: "2",
-        name: "Completion of installation",
-        start: null,
-        laborType: "installation",
-        laborTypePercentage: 0.5,
-        amountOfWorkers: 1,
-        relativeTo: "1",
-        disabledDates: [],
-        offsetAmount: 0,
-      },
-      {
-        rowId: "3",
-        name: "Maintenance",
-        start: null,
-        laborType: "maintenance",
-        laborTypePercentage: 1,
-        amountOfWorkers: 1,
-        relativeTo: "2",
-        disabledDates: [],
-        offsetAmount: 0,
-      },
-      {
-        rowId: "4",
-        name: "Documentation",
-        start: null,
-        laborType: "documentation",
-        laborTypePercentage: 1,
-        amountOfWorkers: 1,
-        relativeTo: "3",
-        disabledDates: [],
-        offsetAmount: 40, // 40 hours offset (e.g., 1 standard work week)
-      },
-    ],
-  });
+function endOfMonth(d: Date) {
+  return new Date(d.getFullYear(), d.getMonth() + 1, 0)
+}
 
-  const formatDateForInput = (date: Date | null): string => {
-    if (!date) return "";
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
+const defaultMembers = ['Alice', 'Bob']
 
-  const parseDateFromInput = (value: string): Date | null => {
-    if (!value) return null;
-    return new Date(`${value}T00:00:00`);
-  };
+const DEFAULT_CHORES: Chore[] = [
+  // Daily
+  { id: 'd-wash-dishes', title: 'Wash dishes', frequency: 'daily', assignedTo: 'Alice' },
+  { id: 'd-make-bed', title: 'Make bed', frequency: 'daily', assignedTo: 'Bob' },
+  { id: 'd-tidy-living', title: 'Tidy living room', frequency: 'daily', assignedTo: 'Shared' },
+  { id: 'd-feed-plants', title: 'Water plants', frequency: 'daily', assignedTo: 'Alice' },
+  // Weekly
+  { id: 'w-vacuum', title: 'Vacuum apartment', frequency: 'weekly', weekday: 6, assignedTo: 'Bob' },
+  { id: 'w-change-sheets', title: 'Change bed sheets', frequency: 'weekly', weekday: 0, assignedTo: 'Alice' },
+  { id: 'w-clean-bath', title: 'Clean bathroom', frequency: 'weekly', weekday: 6, assignedTo: 'Bob' },
+  { id: 'w-trash', title: 'Take out trash', frequency: 'weekly', weekday: 5, assignedTo: 'Alice' },
+  // Monthly
+  { id: 'm-clean-fridge', title: 'Clean fridge', frequency: 'monthly', dayOfMonth: 1, assignedTo: 'Bob' },
+  { id: 'm-pay-bills', title: 'Pay bills / rent', frequency: 'monthly', dayOfMonth: 1, assignedTo: 'Alice' },
+  { id: 'm-windows', title: 'Clean windows', frequency: 'monthly', dayOfMonth: 15, assignedTo: 'Shared' },
+  // Yearly
+  { id: 'y-declutter', title: 'Declutter closet', frequency: 'yearly', monthDay: { month: 6, day: 1 }, assignedTo: 'Shared' },
+  { id: 'y-deep-oven', title: 'Deep clean oven', frequency: 'yearly', monthDay: { month: 0, day: 1 }, assignedTo: 'Shared' },
+  { id: 'y-battery', title: 'Replace smoke detector batteries', frequency: 'yearly', monthDay: { month: 9, day: 1 }, assignedTo: 'Shared' },
+]
 
-  const toDateKey = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
+export default function Household() {
+  const [members, setMembers] = useState<string[]>(defaultMembers)
+  const [today, setToday] = useState(new Date())
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [selectedMember, setSelectedMember] = useState<string>('All')
+  const [loaded, setLoaded] = useState(false)
 
-  const getCellStartDate = (cellIndex: number): Date => {
-    const today = new Date(2026, 5, 23);
-    const date = new Date(today);
+  // persisted state: completed map and postponed map and chore assignments
+  const [completed, setCompleted] = useState<Record<string, string[]>>({})
+  const [postponedTo, setPostponedTo] = useState<Record<string, string[]>>({})
+  const [chores, setChores] = useState<Chore[]>(DEFAULT_CHORES)
 
-    if (viewMode === "week") {
-      date.setDate(date.getDate() + cellIndex * 7);
-    } else {
-      date.setMonth(date.getMonth() + cellIndex);
-      date.setDate(1);
-    }
-
-    return date;
-  };
-
-  const getCellDateKey = (cellIndex: number): string =>
-    toDateKey(getCellStartDate(cellIndex));
-
-  const getCellIndexFromDateKey = (dateKey: string): number | null => {
-    const cellDate = parseDateFromInput(dateKey);
-    if (!cellDate) return null;
-
-    const base = new Date(2026, 5, 23);
-
-    if (viewMode === "week") {
-      const diffMs = cellDate.getTime() - base.getTime();
-      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-      return Math.floor(diffDays / 7);
-    }
-
-    return (
-      (cellDate.getFullYear() - base.getFullYear()) * 12 +
-      (cellDate.getMonth() - base.getMonth())
-    );
-  };
-
-  const updateRow = (rowId: string, updater: (row: GanttRow) => GanttRow) => {
-    setData((prev) => ({
-      rows: prev.rows.map((row) => (row.rowId === rowId ? updater(row) : row)),
-    }));
-  };
-
-  const addRow = () => {
-    setData((prev) => {
-      const maxNumericId = prev.rows.reduce((max, row) => {
-        const parsed = Number(row.rowId);
-        return Number.isFinite(parsed) ? Math.max(max, parsed) : max;
-      }, 0);
-
-      const newRowId = String(maxNumericId + 1);
-      const lastRow = prev.rows[prev.rows.length - 1] || null;
-
-      const newRow: GanttRow = {
-        rowId: newRowId,
-        name: `New Task ${newRowId}`,
-        start: null,
-        laborType: "installation",
-        laborTypePercentage: 1,
-        amountOfWorkers: 1,
-        relativeTo: lastRow ? lastRow.rowId : null,
-        offsetAmount: 0,
-        disabledDates: [],
-      };
-
-      return { rows: [...prev.rows, newRow] };
-    });
-  };
-
-  const getHeaderParts = (
-    cellIndex: number,
-  ): { primaryLabel: string; secondaryLabel: string } => {
-    const today = new Date(2026, 5, 23); // Current date: June 23, 2026
-
-    if (viewMode === "week") {
-      const weekStartDate = new Date(today);
-      weekStartDate.setDate(weekStartDate.getDate() + cellIndex * 7);
-      const weekEndDate = new Date(weekStartDate);
-      weekEndDate.setDate(weekEndDate.getDate() + 6);
-
-      const monthNames = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      const startMonth = monthNames[weekStartDate.getMonth()];
-      const endMonth = monthNames[weekEndDate.getMonth()];
-      const startDay = weekStartDate.getDate();
-      const endDay = weekEndDate.getDate();
-
-      const secondaryLabel =
-        weekStartDate.getMonth() === weekEndDate.getMonth()
-          ? `${startMonth} ${startDay} - ${endDay}`
-          : `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
-
-      return {
-        primaryLabel: `W${cellIndex + 1}`,
-        secondaryLabel,
-      };
-    }
-
-    const monthDate = new Date(today);
-    monthDate.setMonth(monthDate.getMonth() + cellIndex);
-
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    const monthName = monthNames[monthDate.getMonth()];
-    const year = monthDate.getFullYear();
-
-    return {
-      primaryLabel: `M${cellIndex + 1}`,
-      secondaryLabel: `${monthName} ${year}`,
-    };
-  };
-
-  // Calculate the grid layout dynamically
-  const { computedRows, totalGridCells } = useMemo(() => {
-    const DEFAULT_HOURS_PER_WEEK = 40;
-    const DEFAULT_HOURS_PER_MONTH = 160;
-
-    // 1. Map rows for quick lookup
-    const rowMap = new Map<string, GanttRow>();
-    data.rows.forEach((row) => rowMap.set(row.rowId, row));
-
-    // Memoize resolved timeline items to handle dependencies recursively
-    const cache = new Map<
-      string,
-      {
-        startCell: number;
-        durationCells: number;
-        workCells: number[];
-        totalLaborHours: number;
-        effectiveHoursPerCell: number;
+  // load from localStorage
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        setMembers(parsed.members ?? defaultMembers)
+        setCompleted(parsed.completed ?? {})
+        setPostponedTo(parsed.postponedTo ?? {})
+        setChores(parsed.chores ?? DEFAULT_CHORES)
+        setSelectedMember(parsed.selectedMember ?? 'All')
       }
-    >();
-
-    function resolveRow(rowId: string): {
-      startCell: number;
-      durationCells: number;
-      workCells: number[];
-      totalLaborHours: number;
-      effectiveHoursPerCell: number;
-    } {
-      if (cache.has(rowId)) return cache.get(rowId)!;
-
-      const row = rowMap.get(rowId);
-      if (!row) {
-        return {
-          startCell: 0,
-          durationCells: 0,
-          workCells: [],
-          totalLaborHours: 0,
-          effectiveHoursPerCell: 0,
-        };
-      }
-
-      // Determine hours conversion factor for this row
-      const hoursPerCell =
-        viewMode === "week"
-          ? row.hoursPerWeek || DEFAULT_HOURS_PER_WEEK
-          : row.hoursPerMonth || DEFAULT_HOURS_PER_MONTH;
-      const workers = Math.max(1, row.amountOfWorkers || 1);
-      const effectiveHoursPerCell = hoursPerCell * workers;
-
-      // Calculate total work hours allocated to this row
-      const totalLaborHours =
-        laborHours[row.laborType] * row.laborTypePercentage;
-      const baseDurationCells = Math.ceil(
-        totalLaborHours / effectiveHoursPerCell,
-      );
-
-      let startCell = 0;
-
-      if (row.relativeTo) {
-        // Parent row dependency
-        const parentTimeline = resolveRow(row.relativeTo);
-        const parentEndCell =
-          parentTimeline.startCell + parentTimeline.durationCells;
-
-        // Convert offset from hours to grid cells (rounding up)
-        const offsetCells = Math.ceil(row.offsetAmount / hoursPerCell);
-        startCell = parentEndCell + offsetCells;
-      } else {
-        // Root nodes without relative context start at 0
-        const offsetCells = Math.ceil(row.offsetAmount / hoursPerCell);
-        startCell = offsetCells;
-      }
-
-      // Build an explicit sequence of work cells that skips holidays.
-      const disabledCellSet = new Set(
-        row.disabledDates
-          .map((dateKey) => getCellIndexFromDateKey(dateKey))
-          .filter(
-            (cellIndex): cellIndex is number =>
-              cellIndex !== null && cellIndex >= 0,
-          ),
-      );
-
-      const workCells: number[] = [];
-      let cursor = startCell;
-      let remainingWorkCells = baseDurationCells;
-
-      while (remainingWorkCells > 0) {
-        if (!disabledCellSet.has(cursor)) {
-          workCells.push(cursor);
-          remainingWorkCells -= 1;
-        }
-        cursor += 1;
-      }
-
-      const durationCells = Math.max(0, cursor - startCell);
-
-      const result = {
-        startCell,
-        durationCells,
-        workCells,
-        totalLaborHours,
-        effectiveHoursPerCell,
-      };
-      cache.set(rowId, result);
-      return result;
+      setLoaded(true)
+    } catch (e) {
+      // ignore
+      setLoaded(true)
     }
+  }, [])
 
-    // Resolve calculations for all rows
-    const calculatedData = data.rows.map((row) => {
-      const timeline = resolveRow(row.rowId);
-      return {
-        ...row,
-        ...timeline,
-      };
-    });
+  useEffect(() => {
+    if (!loaded) return
+    const payload = { members, completed, postponedTo, chores, selectedMember }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+    } catch (e) {
+      // ignore quota errors
+    }
+  }, [members, completed, postponedTo, chores, selectedMember, loaded])
 
-    // Determine total grid size needed
-    const maxEndCell = calculatedData.reduce(
-      (max, row) => Math.max(max, row.startCell + row.durationCells),
-      10, // Minimum default grid columns
-    );
+  function isChoreScheduledOn(chore: Chore, date: Date) {
+    const weekday = date.getDay()
+    const day = date.getDate()
+    const month = date.getMonth()
+    if (chore.frequency === 'daily') return true
+    if (chore.frequency === 'weekly') return chore.weekday === weekday
+    if (chore.frequency === 'monthly') return chore.dayOfMonth === day
+    if (chore.frequency === 'yearly') return chore.monthDay?.month === month && chore.monthDay?.day === day
+    return false
+  }
 
-    return {
-      computedRows: calculatedData,
-      totalGridCells: maxEndCell + 2, // Extra padding cells for visual comfort
-    };
-  }, [data, viewMode]);
+  function choresForDate(date: Date) {
+    const dateKey = formatDate(date)
+    const base = chores.filter((c) => isChoreScheduledOn(c, date))
+    const postponed = postponedTo[dateKey] ?? []
+    const postponedChores = chores.filter((c) => postponed.includes(c.id))
+    // Avoid duplicates
+    const all = [...base, ...postponedChores]
+    const uniq = all.filter((v, i, a) => a.findIndex((x) => x.id === v.id) === i)
+    if (selectedMember === 'All') return uniq
+    if (selectedMember === 'Shared') return uniq.filter((c) => (c.assignedTo ?? 'Shared') === 'Shared')
+    return uniq.filter((c) => (c.assignedTo ?? 'Shared') === selectedMember)
+  }
+
+  function toggleDone(choreId: string, date: Date) {
+    const k = formatDate(date)
+    setCompleted((prev) => {
+      const list = new Set(prev[choreId] ?? [])
+      const key = k
+      if (list.has(key)) list.delete(key)
+      else list.add(key)
+      return { ...prev, [choreId]: Array.from(list) }
+    })
+  }
+
+  function postpone(choreId: string, date: Date) {
+    const from = formatDate(date)
+    const next = formatDate(addDays(date, 1))
+    setPostponedTo((prev) => {
+      const nextList = new Set(prev[next] ?? [])
+      nextList.add(choreId)
+      // also remove any postponed marker from 'from' if present
+      const fromList = new Set(prev[from] ?? [])
+      fromList.delete(choreId)
+      const copy = { ...prev, [next]: Array.from(nextList) }
+      if (fromList.size) copy[from] = Array.from(fromList)
+      else delete copy[from]
+      return copy
+    })
+    // also uncheck if was checked for original date
+    setCompleted((prev) => {
+      const copy = { ...prev }
+      const arr = (copy[choreId] ?? []).filter((d) => d !== from)
+      copy[choreId] = arr
+      return copy
+    })
+  }
+
+  const monthMatrix = useMemo(() => {
+    const start = startOfMonth(selectedDate)
+    const end = endOfMonth(selectedDate)
+    const startWeekday = start.getDay()
+    const days: (Date | null)[] = []
+    for (let i = 0; i < startWeekday; i++) days.push(null)
+    for (let d = 1; d <= end.getDate(); d++) days.push(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), d))
+    while (days.length % 7 !== 0) days.push(null)
+    const weeks: (Date | null)[][] = []
+    for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7))
+    return weeks
+  }, [selectedDate, chores, postponedTo, completed])
+
+  function changeMemberName(index: number, name: string) {
+    setMembers((prev) => {
+      const old = prev[index]
+      const next = prev.map((x, i) => (i === index ? name : x))
+      // also update any chores assigned to the old name
+      setChores((cs) => cs.map((c) => (c.assignedTo === old ? { ...c, assignedTo: name } : c)))
+      return next
+    })
+  }
+
+  function changeAssigned(choreId: string, name: string) {
+    setChores((prev) => prev.map((c) => (c.id === choreId ? { ...c, assignedTo: name } : c)))
+  }
+
+  function clearMonth() {
+    if (!confirm('Clear all completed and postponed data for this month?')) return
+    const start = startOfMonth(selectedDate)
+    const end = endOfMonth(selectedDate)
+    const keysToRemove = new Set<string>()
+    for (let d = new Date(start); d <= end; d = addDays(d, 1)) keysToRemove.add(formatDate(d))
+    setCompleted((prev) => {
+      const out: Record<string, string[]> = {}
+      for (const [choreId, dates] of Object.entries(prev)) {
+        out[choreId] = dates.filter((dt) => !keysToRemove.has(dt))
+      }
+      return out
+    })
+    setPostponedTo((prev) => {
+      const out: Record<string, string[]> = {}
+      for (const [dt, list] of Object.entries(prev)) if (!keysToRemove.has(dt)) out[dt] = list
+      return out
+    })
+  }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto font-sans bg-gray-50 rounded-xl shadow-sm">
-      {/* Settings Card */}
-      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-        <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">Gantt Settings</h2>
-            <p className="text-sm text-gray-500">
-              Configure view mode and all task parameters before the schema.
-            </p>
-          </div>
-          <div className="bg-gray-200 p-1 rounded-lg flex space-x-1 w-fit">
-            <button
-              onClick={() => setViewMode("week")}
-              className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
-                viewMode === "week"
-                  ? "bg-white shadow-sm text-blue-600"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              Weekly
-            </button>
-            <button
-              onClick={() => setViewMode("month")}
-              className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
-                viewMode === "month"
-                  ? "bg-white shadow-sm text-blue-600"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              Monthly
-            </button>
-          </div>
-        </div>
-
-        <div className="mb-5 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-700">Rows</h3>
-          <button
-            onClick={addRow}
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
-          >
-            Add Row
-          </button>
-        </div>
-
-        <div className="space-y-4 max-h-130 overflow-y-auto pr-1">
-          {data.rows.map((row) => (
-            <div
-              key={row.rowId}
-              className="rounded-lg border border-gray-200 bg-gray-50 p-4"
-            >
-              <div className="mb-3 text-sm font-semibold text-gray-700">
-                Row ID: {row.rowId}
-              </div>
-
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-                <label className="text-sm text-gray-700">
-                  <span className="mb-1 block">Name</span>
-                  <input
-                    value={row.name}
-                    onChange={(event) =>
-                      updateRow(row.rowId, (current) => ({
-                        ...current,
-                        name: event.target.value,
-                      }))
-                    }
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                  />
-                </label>
-
-                <label className="text-sm text-gray-700">
-                  <span className="mb-1 block">Start Date</span>
-                  <input
-                    type="date"
-                    value={formatDateForInput(row.start)}
-                    onChange={(event) =>
-                      updateRow(row.rowId, (current) => ({
-                        ...current,
-                        start: parseDateFromInput(event.target.value),
-                      }))
-                    }
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                  />
-                </label>
-
-                <label className="text-sm text-gray-700">
-                  <span className="mb-1 block">Labor Type</span>
-                  <select
-                    value={row.laborType}
-                    onChange={(event) =>
-                      updateRow(row.rowId, (current) => ({
-                        ...current,
-                        laborType: event.target.value as GanttRow["laborType"],
-                      }))
-                    }
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm bg-white"
-                  >
-                    <option value="installation">installation</option>
-                    <option value="maintenance">maintenance</option>
-                    <option value="documentation">documentation</option>
-                  </select>
-                </label>
-
-                <label className="text-sm text-gray-700">
-                  <span className="mb-1 block">Labor Type Percentage</span>
-                  <input
-                    type="number"
-                    min={0}
-                    max={1}
-                    step={0.05}
-                    value={row.laborTypePercentage}
-                    onChange={(event) =>
-                      updateRow(row.rowId, (current) => ({
-                        ...current,
-                        laborTypePercentage: Number(event.target.value) || 0,
-                      }))
-                    }
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                  />
-                </label>
-
-                <label className="text-sm text-gray-700">
-                  <span className="mb-1 block">Amount of Workers</span>
-                  <input
-                    type="number"
-                    min={1}
-                    step={1}
-                    value={row.amountOfWorkers}
-                    onChange={(event) =>
-                      updateRow(row.rowId, (current) => ({
-                        ...current,
-                        amountOfWorkers: Math.max(
-                          1,
-                          Math.floor(Number(event.target.value) || 1),
-                        ),
-                      }))
-                    }
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                  />
-                </label>
-
-                <label className="text-sm text-gray-700">
-                  <span className="mb-1 block">Relative To</span>
-                  <select
-                    value={row.relativeTo || ""}
-                    onChange={(event) =>
-                      updateRow(row.rowId, (current) => ({
-                        ...current,
-                        relativeTo: event.target.value || null,
-                      }))
-                    }
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm bg-white"
-                  >
-                    <option value="">None</option>
-                    {data.rows
-                      .filter((candidate) => candidate.rowId !== row.rowId)
-                      .map((candidate) => (
-                        <option key={candidate.rowId} value={candidate.rowId}>
-                          {candidate.rowId} - {candidate.name}
-                        </option>
-                      ))}
-                  </select>
-                </label>
-
-                <label className="text-sm text-gray-700">
-                  <span className="mb-1 block">Offset Amount (hours)</span>
-                  <input
-                    type="number"
-                    min={0}
-                    step={1}
-                    value={row.offsetAmount}
-                    onChange={(event) =>
-                      updateRow(row.rowId, (current) => ({
-                        ...current,
-                        offsetAmount: Number(event.target.value) || 0,
-                      }))
-                    }
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                  />
-                </label>
-
-                <label className="text-sm text-gray-700">
-                  <span className="mb-1 block">
-                    Disabled Dates (comma separated)
-                  </span>
-                  <input
-                    value={row.disabledDates.join(",")}
-                    onChange={(event) => {
-                      const parsed = event.target.value
-                        .split(",")
-                        .map((value) => value.trim())
-                        .filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value));
-
-                      updateRow(row.rowId, (current) => ({
-                        ...current,
-                        disabledDates: parsed,
-                      }));
-                    }}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                    placeholder="e.g. 2026-12-25,2027-01-01"
-                  />
-                </label>
-
-                <label className="text-sm text-gray-700">
-                  <span className="mb-1 block">Hours Per Week (optional)</span>
-                  <input
-                    type="number"
-                    min={1}
-                    step={1}
-                    value={row.hoursPerWeek ?? ""}
-                    onChange={(event) =>
-                      updateRow(row.rowId, (current) => ({
-                        ...current,
-                        hoursPerWeek: event.target.value
-                          ? Number(event.target.value)
-                          : undefined,
-                      }))
-                    }
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                  />
-                </label>
-
-                <label className="text-sm text-gray-700">
-                  <span className="mb-1 block">Hours Per Month (optional)</span>
-                  <input
-                    type="number"
-                    min={1}
-                    step={1}
-                    value={row.hoursPerMonth ?? ""}
-                    onChange={(event) =>
-                      updateRow(row.rowId, (current) => ({
-                        ...current,
-                        hoursPerMonth: event.target.value
-                          ? Number(event.target.value)
-                          : undefined,
-                      }))
-                    }
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                  />
-                </label>
-              </div>
+    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', padding: 18 }}>
+      <style>{`
+        .pink-page { background: linear-gradient(180deg,#fff0f6 0%, #fffaf8 100%); border-radius: 12px; padding: 16px }
+        .accent { color: #ff6fa3 }
+        .btn { background: #ff6fa3; color: white; border-radius: 8px; padding: 6px 10px; border: none }
+        .cell { border-radius: 8px; padding: 8px; cursor: pointer }
+        .cell:hover { background: #ffe6f0 }
+        .today { box-shadow: inset 0 0 0 2px #ffb2d0 }
+        .checked { text-decoration: line-through; opacity: 0.7 }
+      `}</style>
+      <div className="pink-page">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+          <h2 style={{ margin: 0 }} className="accent">Household Chores</h2>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <button className="btn" onClick={() => setSelectedDate(addDays(selectedDate, -30))}>◀</button>
+            <div style={{ minWidth: 220, textAlign: 'center', fontWeight: 600 }}>
+              {selectedDate.toLocaleString(undefined, { month: 'long', year: 'numeric' })}
             </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mb-4">
-        <h3 className="text-xl font-bold text-gray-800">
-          Labor Hour Gantt Schema
-        </h3>
-        <p className="text-sm text-gray-500">
-          Hours based calculations rounded up to nearest grid block
-        </p>
-      </div>
-
-      {/* Grid Container */}
-      <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white">
-        <div className="min-w-200">
-          {/* Header Row */}
-          <div
-            className="grid border-b border-gray-200 bg-gray-100 text-gray-600"
-            style={{
-              gridTemplateColumns: `240px repeat(${totalGridCells}, minmax(100px, 1fr))`,
-              gridTemplateRows: "auto auto",
-            }}
-          >
-            <div className="row-span-2 flex items-center p-3 border-r border-gray-200 sticky left-0 bg-gray-100 z-20 font-semibold uppercase tracking-wider shadow-[6px_0_8px_-6px_rgba(0,0,0,0.12)]">
-              Task Details
-            </div>
-            {Array.from({ length: totalGridCells }).map((_, index) => {
-              const { primaryLabel } = getHeaderParts(index);
-
-              return (
-                <div
-                  key={`primary-${index}`}
-                  className="bg-gray-100 py-2 px-1 text-center border-r border-b border-gray-200 last:border-r-0 text-xs font-semibold uppercase tracking-wider"
-                >
-                  {primaryLabel}
-                </div>
-              );
-            })}
-            {Array.from({ length: totalGridCells }).map((_, index) => {
-              const { secondaryLabel } = getHeaderParts(index);
-
-              return (
-                <div
-                  key={`secondary-${index}`}
-                  className="bg-gray-100 py-2 px-2 text-center border-r border-gray-200 last:border-r-0 text-[11px] font-medium leading-tight"
-                >
-                  {secondaryLabel}
-                </div>
-              );
-            })}
+            <button className="btn" onClick={() => setSelectedDate(addDays(selectedDate, 30))}>▶</button>
+            <button style={{ background: '#fff', border: '1px solid #ffb6cc', color: '#ff3b8f', borderRadius: 8, padding: '6px 10px' }} onClick={() => setSelectedDate(new Date())}>Today</button>
+            <select value={selectedMember} onChange={(e) => setSelectedMember(e.target.value)} style={{ marginLeft: 8, padding: 6, borderRadius: 8 }}>
+              <option value="All">All</option>
+              {members.map((m) => <option key={m} value={m}>{m}</option>)}
+              <option value="Shared">Shared</option>
+            </select>
           </div>
+        </div>
 
-          {/* Data Rows */}
-          <div className="divide-y divide-gray-100">
-            {computedRows.map((row) => {
-              const currentLaborHours =
-                laborHours[row.laborType] * row.laborTypePercentage;
-
-              return (
-                <div
-                  key={row.rowId}
-                  className="grid hover:bg-gray-50 transition-colors items-center"
-                  style={{
-                    gridTemplateColumns: `240px repeat(${totalGridCells}, minmax(100px, 1fr))`,
-                  }}
-                >
-                  {/* Fixed Left Info Section */}
-                  <div className="p-3 border-r border-gray-200 sticky left-0 bg-white z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
-                    <div className="font-medium text-gray-800 truncate">
-                      {row.name}
-                    </div>
-                    <div className="text-[11px] text-gray-400 capitalize flex items-center justify-between mt-1">
-                      <span>
-                        {row.laborType} ({row.laborTypePercentage * 100}%)
-                      </span>
-                      <span className="font-mono text-gray-500 font-semibold">
-                        {currentLaborHours} hrs / {row.amountOfWorkers} workers
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Dynamic Grid Body */}
-                  {Array.from({ length: totalGridCells }).map((_, index) => {
-                    const isWorkCell = row.workCells.includes(index);
-                    const cellDateKey = getCellDateKey(index);
-                    const isDisabled = row.disabledDates.includes(cellDateKey);
-                    const workCellPosition = row.workCells.indexOf(index);
-
-                    let completedHoursInCell = 0;
-                    if (workCellPosition >= 0) {
-                      const alreadyCompleted =
-                        workCellPosition * row.effectiveHoursPerCell;
-                      completedHoursInCell = Math.max(
-                        0,
-                        Math.min(
-                          row.effectiveHoursPerCell,
-                          row.totalLaborHours - alreadyCompleted,
-                        ),
-                      );
-                    }
-
-                    // Choose dynamic color palette based on labor type
-                    const colorMap = {
-                      installation: "bg-blue-500 border-blue-600",
-                      maintenance: "bg-emerald-500 border-emerald-600",
-                      documentation: "bg-amber-500 border-amber-600",
-                    };
-
+        <div style={{ display: 'flex', gap: 16, marginTop: 12 }}>
+          <div style={{ width: 560 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 6, marginBottom: 6 }}>
+              {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((d) => <div key={d} style={{ textAlign: 'center', fontSize: 12, color: '#a63b6e' }}>{d}</div>)}
+            </div>
+            <div style={{ display: 'grid', gap: 8 }}>
+              {monthMatrix.map((week, i) => (
+                <div key={i} style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 6 }}>
+                  {week.map((day, j) => {
+                    if (!day) return <div key={j} />
+                    const key = formatDate(day)
+                    const scheduled = choresForDate(day)
                     return (
-                      <div
-                        key={index}
-                        className={`group h-full min-h-13 border-r border-gray-100 last:border-0 flex items-center justify-center py-1 px-0 relative transition-all ${
-                          isDisabled ? "bg-red-100" : ""
-                        }`}
-                      >
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateRow(row.rowId, (current) => {
-                              const exists =
-                                current.disabledDates.includes(cellDateKey);
-                              return {
-                                ...current,
-                                disabledDates: exists
-                                  ? current.disabledDates.filter(
-                                      (date) => date !== cellDateKey,
-                                    )
-                                  : [...current.disabledDates, cellDateKey],
-                              };
-                            })
-                          }
-                          title={
-                            isDisabled
-                              ? `Remove holiday: ${cellDateKey}`
-                              : `Add holiday: ${cellDateKey}`
-                          }
-                          className={`group-hover:visible invisible absolute right-1 top-1 z-10 h-3.5 w-3.5 rounded-full border text-[9px] leading-none flex items-center justify-center ${
-                            isDisabled
-                              ? "border-red-400 bg-red-200 text-red-700"
-                              : "border-gray-300 bg-white text-gray-400 hover:text-red-500 hover:border-red-300"
-                          }`}
-                        >
-                          {isDisabled ? "-" : "+"}
-                        </button>
-
-                        {isWorkCell && (
-                          <div
-                            className={`w-full h-4/5 rounded shadow-sm border text-[10px] font-bold text-white flex items-center justify-center select-none relative ${
-                              isDisabled
-                                ? "bg-red-300 border-red-400 text-red-900"
-                                : colorMap[row.laborType]
-                            }`}
-                            title={`${row.name}: ${cellDateKey}`}
-                          >
-                            <span className="absolute bottom-0.5 right-1 text-[9px] leading-none font-medium text-white/90">
-                              {completedHoursInCell}h/
-                              {viewMode === "week" ? "w" : "m"}
-                            </span>
-                          </div>
-                        )}
+                      <div key={j} className={`cell ${formatDate(today) === key ? 'today' : ''}`} onClick={() => setSelectedDate(day)} style={{ minHeight: 72, border: '1px solid rgba(255,90,140,0.12)', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div style={{ fontSize: 13, padding: 6 }}>{day.getDate()}</div>
+                          <div style={{ fontSize: 11, padding: 6, color: '#ff6fa3' }}>{scheduled.length}</div>
+                        </div>
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', padding: 6 }}>
+                          {scheduled.slice(0,4).map((c) => <div key={c.id} style={{ background: c.assignedTo === members[0] ? '#ffd4e6' : c.assignedTo === members[1] ? '#ffecec' : '#fff0f6', color: '#9b2a52', borderRadius: 6, padding: '2px 6px', fontSize: 11 }}>{c.title}</div>)}
+                        </div>
                       </div>
-                    );
+                    )
                   })}
                 </div>
-              );
-            })}
+              ))}
+            </div>
+          </div>
+
+          <div style={{ flex: 1, minWidth: 360 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <div style={{ fontSize: 14, color: '#a31b53' }}>{selectedDate.toDateString()}</div>
+                <div style={{ fontSize: 12, color: '#6b2437' }}>{choresForDate(selectedDate).length} chores</div>
+              </div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button className="btn" onClick={() => clearMonth()}>Clear month</button>
+              </div>
+            </div>
+
+            <div style={{ marginTop: 12 }}>
+              {choresForDate(selectedDate).map((c) => {
+                const done = (completed[c.id] ?? []).includes(formatDate(selectedDate))
+                const postponed = (postponedTo[formatDate(selectedDate)] ?? []).includes(c.id)
+                return (
+                  <div key={c.id} style={{ display: 'flex', gap: 8, alignItems: 'center', padding: 8, borderRadius: 8, background: '#fff', marginBottom: 8 }}>
+                    <input id={c.id} type="checkbox" checked={done} onChange={() => toggleDone(c.id, selectedDate)} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ fontWeight: 600 }} className={done ? 'checked' : ''}>{c.title}</div>
+                        <div style={{ fontSize: 12, color: '#b04a73' }}>{c.frequency}</div>
+                      </div>
+                      <div style={{ display: 'flex', gap: 8, marginTop: 6, alignItems: 'center' }}>
+                        <select value={c.assignedTo} onChange={(e) => changeAssigned(c.id, e.target.value)} style={{ padding: '6px', borderRadius: 6 }}>
+                          {[...members, 'Shared'].map((m) => <option key={m} value={m}>{m}</option>)}
+                        </select>
+                        <button onClick={() => postpone(c.id, selectedDate)} style={{ background: '#fff', border: '1px solid #ffd3e6', color: '#ff6fa3', padding: '6px 8px', borderRadius: 6 }}>Postpone 1d</button>
+                        {postponed && <span style={{ color: '#9b2a52', fontSize: 13 }}>Postponed here</span>}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+              {choresForDate(selectedDate).length === 0 && <div style={{ padding: 16, background: '#fff', borderRadius: 8 }}>No chores scheduled</div>}
+            </div>
+
+            <div style={{ marginTop: 18 }}>
+              <h4 style={{ margin: '8px 0', color: '#a31b53' }}>Household members</h4>
+              <div style={{ display: 'flex', gap: 8 }}>
+                {members.map((m, i) => (
+                  <input key={i} value={m} onChange={(e) => changeMemberName(i, e.target.value)} style={{ padding: 8, borderRadius: 8 }} />
+                ))}
+                <button onClick={() => setMembers((s) => [...s, `Person ${s.length + 1}`])} style={{ padding: 8, borderRadius: 8, background: '#fff', border: '1px solid #ffd3e6', color: '#ff6fa3' }}>Add</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -12,6 +12,9 @@ import QuizMultipleChoiceWrapper from "../features/Quiz/QuizMultipleChoiceWrappe
 import DonationPage from "../features/Pages/DonationPage.tsx";
 import MainRoutesWrapper from "./MainRoutesWrapper.tsx";
 import AdminPage from "../features/Pages/AdminPage.tsx";
+import LearningPageWrapper from "../features/Pages/LearningPageWrapper.tsx";
+import LearningHub from "../features/Pages/LearningHub.tsx";
+import ChemistryPage from "../features/Pages/GanttPage.tsx";
 
 // const MainRoutesWrapper = lazy(() => import("./MainRoutesWrapper.tsx"));
 
@@ -28,6 +31,9 @@ export const routePaths = {
   report: "/felanmälan",
   statistics: "/statistics",
   admin: "/admin",
+  learning: "/learning",
+  learningStart: "/learning/start",
+  chemistry: "/chemistry",
 };
 
 export const mainRoutes = [
@@ -82,6 +88,18 @@ export const mainRoutes = [
       {
         path: routePaths.admin,
         element: <AdminPage />,
+      },
+      {
+        path: routePaths.learning,
+        element: <LearningHub />,
+      },
+      {
+        path: routePaths.learningStart,
+        element: <LearningPageWrapper />,
+      },
+      {
+        path: routePaths.chemistry,
+        element: <ChemistryPage />,
       },
 
       { path: "/*", element: <Navigate to={routePaths.start} /> },

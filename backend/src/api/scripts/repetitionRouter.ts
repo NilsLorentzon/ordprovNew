@@ -7,14 +7,13 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { v4 as uuid } from "uuid";
 import { UserModel } from "../../Models/UserModel";
-import { authenticateToken } from "../authenticationRouter";
 import { z } from "zod";
 import { QuestionModel } from "../../Models/QuestionModel";
 import { RepetitionModel } from "../../Models/RepetitionModel";
 
 const repetitionRouter = express.Router();
 
-repetitionRouter.post("/word", authenticateToken, async (req, res) => {
+repetitionRouter.post("/word", async (req, res) => {
   const currentUser = (req as any).currentUser;
   if (!currentUser) {
     return res.status(401).json({ error: "Unauthorized" });

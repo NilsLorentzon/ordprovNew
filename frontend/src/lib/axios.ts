@@ -1,6 +1,6 @@
 import { API_URL } from "../config";
-import Axios from "axios";
-import type { AxiosRequestConfig } from "axios";
+import Axios, { type AxiosRequestConfig } from "axios";
+import { v4 as uuid } from "uuid";
 
 function authRequestInterceptor(config: AxiosRequestConfig) {
   config.headers = config.headers ?? {};
@@ -33,6 +33,17 @@ axios.interceptors.response.use(
 
 function setBearerTokenInHeader(headers: AxiosRequestConfig["headers"]) {
   const token = localStorage.getItem("token");
+  const userStorageId = localStorage.getItem("userStorageId");
+  if (userStorageId && headers) {
+    headers["x-user-storage-id"] = userStorageId;
+  } else {
+    if (userStorageId === null && headers) {
+      const newUserStorageId = uuid();
+      localStorage.setItem("userStorageId", newUserStorageId);
+      headers["x-user-storage-id"] = newUserStorageId;
+    }
+  }
+
   if (token && headers) {
     headers["authorization"] = `Bearer ${token}`;
   }

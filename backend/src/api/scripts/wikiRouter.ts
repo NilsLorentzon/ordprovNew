@@ -5,7 +5,6 @@ import fs from "fs";
 import * as cheerio from "cheerio";
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
-import { authenticateToken } from "../authenticationRouter";
 import { Word, WordModel } from "../../Models/WordModel";
 import { WordData, WordDataQuiz } from "../../types/types";
 const wikiRouter = express.Router();
@@ -800,7 +799,6 @@ const generateWordDataStructureOnDataset = () => {
 
 wikiRouter.get(
   "/word-list",
-  // authenticateToken,
   async (req, res) => {
     const wordDataList = generateWordDataStructureOnDataset();
     const words = wordDataList.map((w) => ({
@@ -816,7 +814,6 @@ wikiRouter.get(
 
 wikiRouter.get(
   "/save-to-db",
-  // authenticateToken,
   async (req, res) => {
     const wordDataList = generateWordDataStructureOnDataset();
     const generatedDataFile = fs.readFileSync(
@@ -825,7 +822,7 @@ wikiRouter.get(
     );
     const generatedData: Record<string, GenerateRequestBody> =
       JSON.parse(generatedDataFile);
-    const createdTime = new Date();
+    const createdAt = new Date();
 
     const wordsExtended: Word[] = wordDataList.map((wordData) => {
       if (generatedData[wordData.word]) {
@@ -839,8 +836,8 @@ wikiRouter.get(
           },
           sentences: generatedData[wordData.word].sentences,
           partsOfSpeech: wordData.partsOfSpeech.map((pos) => pos.partOfSpeech),
-          createdAt: createdTime,
-          updatedAt: createdTime,
+          createdAt: createdAt,
+          updatedAt: createdAt,
         };
       } else {
         return {
@@ -865,8 +862,8 @@ wikiRouter.get(
             "Växter absorberar koldioxid ur luften som en viktig del i fotosyntesen.",
           ],
           partsOfSpeech: wordData.partsOfSpeech.map((pos) => pos.partOfSpeech),
-          createdAt: createdTime,
-          updatedAt: createdTime,
+          createdAt: createdAt,
+          updatedAt: createdAt,
         };
       }
     });
@@ -889,7 +886,7 @@ wikiRouter.get(
 
 wikiRouter.get(
   "/generate-WordData-structure-on-dataset",
-  // authenticateToken,
+  // ,
   async (req, res) => {
     const wordDataList = generateWordDataStructureOnDataset();
     const generatedDataFile = fs.readFileSync(
@@ -903,7 +900,7 @@ wikiRouter.get(
       if (generatedData[wordData.word]) {
         return {
           word: wordData.word,
-          createdTime: new Date(),
+          // createdTime: new Date(),
           definitions: {
             shortDefinition:
               wordData.partsOfSpeech[0].definitions[0].shortDefinition,

@@ -37,40 +37,7 @@ export default function QuizWrapper() {
                 setAmountOfQuestions(option.value);
               }}
             />
-            {/* <ControlledSelect
-              label="Ordlista (fler kommer senare)"
-              options={[
-                { label: "Alla ord", value: "all" },
-                { label: "Tidigare högskoleprov", value: "hp" },
-                { label: "Gamla ordprovslistan", value: "oldOrdprov" },
-              ]}
-              value={"hp"}
-              onChange={(option, action) => {
-                console.log("Selected option:", option);
-                console.log("Action meta:", action);
-              }}
-            /> */}
             <ControlledSelect
-              label="Provtyp"
-              options={[
-                { label: "Flervalsfrågor (standard)", value: "multipleChoice" },
-                {
-                  label: "Skriv definition (avancerad)",
-                  value: "writeDefinition",
-                },
-              ]}
-              value={questionType}
-              onChange={(option, action) => {
-                // console.log("Selected option:", option);
-                // console.log("Action meta:", action);
-                console.log("Selected question type:", option.value);
-                setQuestionType(option.value);
-              }}
-            />
-          </div>
-          {questionType === "multipleChoice" && (
-            <div className="w-full flex gap-4 mt-4">
-              <ControlledSelect
                 label="Antal Alternativ"
                 options={[
                   { label: "4", value: 4 },
@@ -86,9 +53,43 @@ export default function QuizWrapper() {
                   setAlternativesAmount(option.value);
                 }}
               />
+            {/* <ControlledSelect
+              label="Ordlista (fler kommer senare)"
+              options={[
+                { label: "Alla ord", value: "all" },
+                { label: "Tidigare högskoleprov", value: "hp" },
+                { label: "Gamla ordprovslistan", value: "oldOrdprov" },
+              ]}
+              value={"hp"}
+              onChange={(option, action) => {
+                console.log("Selected option:", option);
+                console.log("Action meta:", action);
+              }}
+            /> */}
+            {/* <ControlledSelect
+              label="Provtyp"
+              options={[
+                { label: "Flervalsfrågor (standard)", value: "multipleChoice" },
+                {
+                  label: "Skriv definition (avancerad)",
+                  value: "writeDefinition",
+                },
+              ]}
+              value={questionType}
+              onChange={(option, action) => {
+                // console.log("Selected option:", option);
+                // console.log("Action meta:", action);
+                console.log("Selected question type:", option.value);
+                setQuestionType(option.value);
+              }}
+            /> */}
+          </div>
+          {/* {questionType === "multipleChoice" && (
+            <div className="w-full flex gap-4 mt-4">
+              
               <div className="w-full"></div>
             </div>
-          )}
+          )} */}
           <div className="flex justify-end mt-8">
             <button
               className="px-4 py-2 bg-p-200 text-white text-xl rounded-lg hover:bg-p-200 hover:scale-110 transition duration-300"

@@ -20,12 +20,12 @@ statisticsRouter.get("/", async (req, res) => {
       },
     },
     {
-      $sort: { answeredTime: -1 },
+      $sort: { answeredAt: -1 },
     },
     {
       $group: {
         _id: "$word",
-        latestAnswered: { $first: "$answeredTime" },
+        latestAnswered: { $first: "$answeredAt" },
       },
     },
     {
@@ -63,12 +63,14 @@ statisticsRouter.get("/", async (req, res) => {
     lastInfinity: {
       correctAnswers: latestAnswers.filter((q) => q.isCorrect).length,
       totalAnswers: latestAnswers.length,
-      answeredQuestions: latestAnswers.map((q) => ({
-        word: q.word,
-        isCorrect: q.isCorrect,
-        correctAnswer: q.correctAnswer,
-        userAnswer: q.answer,
-      })).slice(0, 100),
+      answeredQuestions: latestAnswers
+        .map((q) => ({
+          word: q.word,
+          isCorrect: q.isCorrect,
+          correctAnswer: q.correctAnswer,
+          userAnswer: q.answer,
+        }))
+        .slice(0, 100),
     },
     knowledgeLevelStatistics,
   };

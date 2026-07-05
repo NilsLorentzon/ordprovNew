@@ -1,7 +1,7 @@
 export default function OwlIcon({ ...args }) {
   return (
     <svg viewBox="25 55 100 100" xmlns="http://www.w3.org/2000/svg" {...args}>
-    {/* <svg viewBox="-20 0 190 190" xmlns="http://www.w3.org/2000/svg" {...args}> */}
+      {/* <svg viewBox="-20 0 190 190" xmlns="http://www.w3.org/2000/svg" {...args}> */}
       <path
         fillRule="evenodd"
         clipRule="evenodd"

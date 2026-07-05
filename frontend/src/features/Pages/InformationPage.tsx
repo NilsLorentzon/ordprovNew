@@ -50,7 +50,24 @@ function InformationPage() {
               Ordprov.com är skapad av mig, Nils. Jag har alltid älskat det
               svenska språket och att lära mig nya ord. Jag ville skapa en
               resurs som kunde hjälpa mig och förhoppningsvis många andra att
-              förbättra sitt ordförråd på ett roligt och effektivt sätt.
+              förbättra sitt ordförråd på ett roligt och effektivt sätt. du
+              hittar de flesta av mina hemsidor på{" "}
+              <button
+                className="
+              pointer-events-auto
+              cursor-pointer
+              px-1 py-1
+            "
+                onClick={() => {
+                  window.open("https://kunskapskapitalet.se", "_blank");
+                }}
+              >
+                <span className="tracking-wide">Kunskaps</span>
+                <span style={{ color: "#2bd99f" }} className="">
+                  kapitalet
+                </span>
+                <span className="text-sm">.se</span>
+              </button>
             </p>
           </div>
         </div>
@@ -61,8 +78,8 @@ function InformationPage() {
               Hemsidan är fortfarande under utveckling och idag finns endast
               2000 ord tillgängliga. Jag jobbar kontinuerligt med att lägga till
               fler ord och förbättra definitionerna. Jag jobbar också på att
-              implementera fler funktioner som kan hjälpa dig med inlärningen och
-              göra upplevelsen ännu bättre.
+              implementera fler funktioner som kan hjälpa dig med inlärningen
+              och göra upplevelsen ännu bättre.
             </p>
           </div>
         </div>

@@ -13,10 +13,11 @@ import { Button } from "../../Components/Button";
 import { routePaths } from "../../routes/MainRoutes";
 import { Menu, MenuItem, MenuTrigger } from "../../Components/Menu";
 import CogIcon from "../../assets/SVG/CogIcon";
-import { axios } from "../../lib/axios";
 import ScrollButton from "../../Components/ScrollButton";
 import CheckCircleIcon from "../../assets/SVG/CheckCircleIcon";
 import CheckSmallAnimateIcon from "../../assets/SVG/CheckSmallAnimateIcon";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import { axios } from "../../lib/axios";
 // import CogIcon from "./assets/SVG/CogIcon";
 
 interface QuizProps {
@@ -48,8 +49,11 @@ function Quiz({
   // amountOfQuestions,
   quizType,
 }: QuizProps) {
+  // const value = useLocalStorage();
+  // console.log("local storage value in quiz component", value);
   const amountOfQuestions = words.length;
   const { auth } = useContext(AuthContext);
+  const storageData = useLocalStorage();
   // const updateMutation = useMutation(
   //   ["currentWord"],
   //   (wordData: WordDataQuizExtended) => {
@@ -66,7 +70,7 @@ function Quiz({
   const sendQuizAnswerMutation = useMutation(
     ["quiz", "answer"],
     (questionAnswer: QuestionAnswer) => {
-      return axios.post(`answer`, questionAnswer);
+      return axios.post(`question`, questionAnswer);
     },
     {
       onSuccess: () => {
@@ -77,6 +81,17 @@ function Quiz({
       },
     },
   );
+
+  const sendQuizAnswer = (questionAnswer: QuestionAnswer) => {
+    if (!auth.email) {
+      storageData.setNewQuestion({
+        ...questionAnswer,
+        createdAt: new Date(),
+        userId: storageData.storageData.userStorageId,
+      });
+    }
+    sendQuizAnswerMutation.mutate(questionAnswer);
+  };
   // const repetitionUpdateMutation = useMutation(
   //   ["repetitions", "word"],
   //   ({
@@ -286,20 +301,20 @@ function Quiz({
                               wordObj.showInfo = true;
                               setWords([...words]);
 
-                              if (auth.email) {
-                                sendQuizAnswerMutation.mutate({
-                                  word: wordObj.word,
-                                  alternativeWords: wordObj.alternatives,
-                                  answer: alternative.definition,
-                                  correctAnswer: wordObj.correctAnswer,
-                                  isCorrect:
-                                    alternative.definition ===
-                                    wordObj.correctAnswer,
-                                  answeredAt: new Date(),
-                                  quizType: "multipleChoice",
-                                  writenDefinitionAnswer: "",
-                                });
-                              }
+                              // if (auth.email) {
+                              sendQuizAnswer({
+                                word: wordObj.word,
+                                alternativeWords: wordObj.alternatives,
+                                answer: alternative.definition,
+                                correctAnswer: wordObj.correctAnswer,
+                                isCorrect:
+                                  alternative.definition ===
+                                  wordObj.correctAnswer,
+                                answeredAt: new Date(),
+                                quizType: "multipleChoice",
+                                writenDefinitionAnswer: "",
+                              });
+                              // }
                             }}
                             disabled={wordObj.answer !== ""}
                           >
@@ -379,19 +394,19 @@ function Quiz({
                               wordObj.writenDefinitionIsCorrect = false;
                               wordObj.showDefinition = true;
                               setWords([...words]);
-                              if (auth.email) {
-                                sendQuizAnswerMutation.mutate({
-                                  word: wordObj.word,
-                                  alternativeWords: [],
-                                  answer: "",
-                                  correctAnswer: wordObj.correctAnswer,
-                                  isCorrect: false,
-                                  answeredAt: new Date(),
-                                  quizType: "writeDefinition",
-                                  writenDefinitionAnswer:
-                                    wordObj.writenDefinitionText,
-                                });
-                              }
+                              // if (auth.email) {
+                              sendQuizAnswer({
+                                word: wordObj.word,
+                                alternativeWords: [],
+                                answer: "",
+                                correctAnswer: wordObj.correctAnswer,
+                                isCorrect: false,
+                                answeredAt: new Date(),
+                                quizType: "writeDefinition",
+                                writenDefinitionAnswer:
+                                  wordObj.writenDefinitionText,
+                              });
+                              // }
                             }}
                             disabled={wordObj.writenDefinitionSubmited}
                           >
@@ -410,19 +425,19 @@ function Quiz({
                               wordObj.writenDefinitionIsCorrect = true;
                               wordObj.showDefinition = true;
                               setWords([...words]);
-                              if (auth.email) {
-                                sendQuizAnswerMutation.mutate({
-                                  word: wordObj.word,
-                                  alternativeWords: [],
-                                  answer: "",
-                                  correctAnswer: wordObj.correctAnswer,
-                                  isCorrect: true,
-                                  answeredAt: new Date(),
-                                  quizType: "writeDefinition",
-                                  writenDefinitionAnswer:
-                                    wordObj.writenDefinitionText,
-                                });
-                              }
+                              // if (auth.email) {
+                              sendQuizAnswer({
+                                word: wordObj.word,
+                                alternativeWords: [],
+                                answer: "",
+                                correctAnswer: wordObj.correctAnswer,
+                                isCorrect: true,
+                                answeredAt: new Date(),
+                                quizType: "writeDefinition",
+                                writenDefinitionAnswer:
+                                  wordObj.writenDefinitionText,
+                              });
+                              // }
                             }}
                             disabled={wordObj.writenDefinitionSubmited}
                           >

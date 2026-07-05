@@ -1,5 +1,4 @@
 import express from "express";
-import { authenticateToken } from "./authenticationRouter";
 import { ReportModel, ReportSanitation } from "../Models/ReportModel";
 
 const reportRouter = express.Router();

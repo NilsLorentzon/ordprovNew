@@ -1,3 +1,16 @@
+Gantt implementation
+each row data comes from laborHours and the amount of hours in that row is calculated from the labor type combined with the percentage
+offsets and all values will use hours as baseline
+two modes, week mode or month mode
+should be entirely grid based with each cell either being per week or month
+amount of hours per week and month can be configured for each row
+each cell should be full because we round up all values to the nearest month or week
+
+
+
+
+
+
 DONE:
     unfocus when search entering on wordlist
     Aria label scroll button
@@ -7,11 +20,13 @@ DONE:
     more bottom margin
     black text?
 
-TODO:
+CHECK:
     verification failed message when everything works
+
+TODO:
     ändra img till svg owl
     fixa med word och shortdescription på alternativ
-    
+
 
 FELANMÄLAN:
  hunsa fel på exempel mening
