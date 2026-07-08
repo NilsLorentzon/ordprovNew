@@ -25,7 +25,7 @@ export const routePaths = {
   provStart: "/prov/start",
   ordlista: "/ordlista/tidigare-högskoleprov",
   ordlistaDetail: "/ordlista/tidigare-högskoleprov/:word",
-  donation: "/donation",
+  // donation: "/donation",
   login: "/login",
   signup: "/signup",
   report: "/felanmälan",
@@ -33,7 +33,7 @@ export const routePaths = {
   admin: "/admin",
   learning: "/learning",
   learningStart: "/learning/start",
-  chemistry: "/chemistry",
+  // chemistry: "/chemistry",
 };
 
 export const mainRoutes = [
@@ -61,22 +61,22 @@ export const mainRoutes = [
         path: routePaths.ordlistaDetail,
         element: <WordListWrapper />,
       },
-      {
-        path: routePaths.ordlista,
-        element: <WordListWrapper />,
-      },
-      {
-        path: routePaths.donation,
-        element: <DonationPage />,
-      },
-      {
-        path: routePaths.login,
-        element: <LoginPage />,
-      },
-      {
-        path: routePaths.signup,
-        element: <SignupPage />,
-      },
+      // {
+      //   path: routePaths.ordlista,
+      //   element: <WordListWrapper />,
+      // },
+      // {
+      //   path: routePaths.donation,
+      //   element: <DonationPage />,
+      // },
+      // {
+      //   path: routePaths.login,
+      //   element: <LoginPage />,
+      // },
+      // {
+      //   path: routePaths.signup,
+      //   element: <SignupPage />,
+      // },
       {
         path: routePaths.statistics,
         element: <StatisticsPageWrapper />,
@@ -97,10 +97,10 @@ export const mainRoutes = [
         path: routePaths.learningStart,
         element: <LearningPageWrapper />,
       },
-      {
-        path: routePaths.chemistry,
-        element: <ChemistryPage />,
-      },
+      // {
+      //   path: routePaths.chemistry,
+      //   element: <ChemistryPage />,
+      // },
 
       { path: "/*", element: <Navigate to={routePaths.start} /> },
       { path: "*", element: <Navigate to={routePaths.start} /> },

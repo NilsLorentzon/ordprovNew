@@ -146,7 +146,7 @@ export default function StatisticsPageWrapper() {
         {/* <div className="">
           <BarGraphCopy />
         </div> */}
-        <div className="p-4 sm:p-8 bg-white rounded-md  shadow-md border border-black/20 max-w-md sm:max-w-sm  w-full">
+        {/* <div className="p-4 sm:p-8 bg-white rounded-md  shadow-md border border-black/20 max-w-md sm:max-w-sm  w-full">
           <h2 className="text-2xl font-medium tracking-tight mb-4">
             Kunskapsnivå för alla ord
           </h2>
@@ -201,7 +201,7 @@ export default function StatisticsPageWrapper() {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
         <div className="p-4 sm:p-8 bg-white rounded-md  shadow-md border border-black/20 max-w-md sm:max-w-sm  w-full">
           <h2 className="text-2xl font-medium tracking-tight mb-4">
             Andel rätta svar
@@ -255,7 +255,7 @@ export default function StatisticsPageWrapper() {
             </div>
           </div>
         </div>
-        {!auth.email && (
+        {/* {!auth.email && (
           <div className="p-4 sm:p-8 bg-white rounded-md  shadow-md border border-black/20 max-w-md sm:max-w-sm  w-full">
             <h2 className="text-2xl font-medium tracking-tight mb-2">
               Se mer statistik
@@ -277,7 +277,7 @@ export default function StatisticsPageWrapper() {
               </div>
             )}
           </div>
-        )}
+        )} */}
 
         {/* <div className="p-4 sm:p-8 bg-white rounded-md  shadow-md border border-black/20 max-w-md sm:max-w-sm  w-full">
           <h2 className="text-2xl font-medium tracking-tight mb-4">

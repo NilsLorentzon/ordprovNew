@@ -86,7 +86,7 @@ export default function WordList({
   return (
     <div className="p-0 pt-8  sm:p-8  min-h-full ">
       <div className="p-2 max-w-3xl mx-auto  rounded-md border border-black/0 h-full">
-        <div className="p-8 lg:px-16 px-0 flex flex-col items-center gap-2">
+        {/* <div className="p-8 lg:px-16 px-0 flex flex-col items-center gap-2">
           <h2 className="text-2xl text-center sm:text-3xl font-medium lg:tracking-tight mb-4">
             Ordlista för alla gamla ord från högskoleprovet
           </h2>
@@ -97,7 +97,6 @@ export default function WordList({
                 setFilterText={setFilterText}
                 setCurrentWord={(word: string) => {
                   navigate(`${routePaths.ordlista}/${word}`);
-                  // unfocus search input when word is clicked
                   if (document.activeElement instanceof HTMLElement) {
                     document.activeElement.blur();
                   }
@@ -105,14 +104,8 @@ export default function WordList({
                 wordList={searchList}
               />
             </div>
-            {/* <button
-              className="absolute right-0 top-1/2 -translate-y-1/2 p-2"
-              aria-label="Visa alla ord"
-            >
-              <ListIcon className="w-5 h-5 fill-black" />
-            </button> */}
           </div>
-        </div>
+        </div> */}
         <div className="my-6"></div>
         {wordData && (
           <div

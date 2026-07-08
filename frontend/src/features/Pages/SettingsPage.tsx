@@ -9,7 +9,7 @@ export default function SettingsPage() {
         Quiz-inställningar
       </h2>
 
-      <div className="w-full flex gap-4">
+      <div className="w-full max-w-56 gap-4">
         <ControlledSelect
           label="Antal frågor"
           options={[
@@ -23,7 +23,7 @@ export default function SettingsPage() {
             console.log("Action meta:", action);
           }}
         />
-        <ControlledSelect
+        {/* <ControlledSelect
           label="ordlista"
           options={[
             { label: "Alla ord", value: "all" },
@@ -35,7 +35,7 @@ export default function SettingsPage() {
             console.log("Selected option:", option);
             console.log("Action meta:", action);
           }}
-        />
+        /> */}
       </div>
       <div className="my-4"></div>
       <ControlledSelectMultiple

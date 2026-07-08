@@ -1,13 +1,13 @@
 import express from "express";
 import { Router, Request, Response } from "express";
-import { fsrs, createEmptyCard, Rating, Card } from "ts-fsrs";
 import { LearningModel } from "../Models/LearningModel";
 import { WordModel } from "../Models/WordModel";
 import { authenticateToken } from "./authenticationRouter";
 import { z } from "zod";
+import { fsrs, createEmptyCard, Rating, Card } from "ts-fsrs";
 
-const learningRouter = express.Router();
 const scheduler = fsrs();
+const learningRouter = express.Router();
 
 const amountOfNewCardsPerDay = 1;
 

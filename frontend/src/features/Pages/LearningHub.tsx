@@ -117,29 +117,19 @@ export default function LearningHub() {
         </ul>
 
         <div className="flex gap-2 justify-end">
-          {auth.email ? (
-            <button
-              type="submit"
-              className="bg-p-100 text-white px-4 py-2 rounded"
-              onClick={() => {
-                initMutation.mutate({
-                  amountOfWordsPerDay: 20,
-                  wordList: "hp",
-                  learningMode: "onlyWord",
-                });
-              }}
-            >
-              Starta inlärning
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="bg-p-100 text-white px-4 py-2 rounded"
-              onClick={() => navigate("/login")}
-            >
-              Logga in
-            </button>
-          )}
+          <button
+            type="submit"
+            className="bg-p-100 text-white px-4 py-2 rounded"
+            onClick={() => {
+              initMutation.mutate({
+                amountOfWordsPerDay: 20,
+                wordList: "hp",
+                learningMode: "onlyWord",
+              });
+            }}
+          >
+            Starta inlärning
+          </button>
         </div>
       </div>
 

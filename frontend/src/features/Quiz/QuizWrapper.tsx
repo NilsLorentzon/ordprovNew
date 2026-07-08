@@ -17,11 +17,11 @@ export default function QuizWrapper() {
   if (!isQuizStarted) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <div className="rounded-md bg-white border shadow-md border-black/20 p-8 max-w-xl w-full">
+        <div className="rounded-md bg-white border shadow-md border-black/20 p-8 max-w-md w-full">
           <h2 className="text-2xl tracking-tight font-medium mb-4 text-black">
             Provinställningar
           </h2>
-          <div className="w-full flex gap-4">
+          <div className="w-full max-w-44 ">
             <ControlledSelect
               label="Antal frågor"
               options={[
@@ -37,6 +37,7 @@ export default function QuizWrapper() {
                 setAmountOfQuestions(option.value);
               }}
             />
+            <div className="my-4"></div>
             <ControlledSelect
                 label="Antal Alternativ"
                 options={[
