@@ -315,8 +315,8 @@ export default function WordStageQuiz() {
               </p>
               {forecast[0].count > 0 && (
                 <p className="text-xs text-amber-600 mb-2">
-                  Tips: du har {forecast[0].count} ord idag — repetera dem
-                  innan du lägger till mer.
+                  Tips: du har {forecast[0].count} ord idag — repetera dem innan
+                  du lägger till mer.
                 </p>
               )}
               <button

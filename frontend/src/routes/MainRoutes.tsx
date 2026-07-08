@@ -30,7 +30,7 @@ export const routePaths = {
   // donation: "/donation",
   login: "/login",
   signup: "/signup",
-  report: "/felanmälan",
+  report: "/felrapport",
   statistics: "/statistics",
   admin: "/admin",
   learning: "/learning",

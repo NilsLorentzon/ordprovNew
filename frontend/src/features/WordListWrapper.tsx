@@ -66,6 +66,12 @@ export default function WordListWrapper() {
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
+        {matchedWord && (
+          <link
+            rel="canonical"
+            href={`https://ordprov.com/ordlista/tidigare-högskoleprov/${encodeURIComponent(matchedWord.word)}`}
+          />
+        )}
       </Helmet>
 
       <WordList

@@ -192,6 +192,140 @@ function StartPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Feature detail cards ────────────────────────────────────────────────── */}
+      <div className="bg-white py-16 px-4">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 text-center">
+            Allt du behöver för att spika ORD-delen
+          </h2>
+          <p className="text-slate-500 text-center mb-12 text-lg leading-relaxed">
+            Ordprov.com kombinerar en komplett ordlista med smarta
+            inlärningsverktyg &ndash; helt gratis, utan konto och utan annonser.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {[
+              {
+                title: "10 000+ ord med djupgående definitioner",
+                body: "Varje ord presenteras med en tydlig definition, ordklass och upp till 10 exempelmeningar så att du förstår hur ordet används i rätt sammanhang.",
+              },
+              {
+                title: "Högskoleprovsliknande flervalsfrågor",
+                body: "Öva med quiz i samma format som ORD-delen. Välj antal frågor och svarsalternativ efter din nivå och fördjupa dig i varje ords definition efter att du svarat.",
+              },
+              {
+                title: "Spaced repetition – minns orden på lång sikt",
+                body: "FSRS-algoritmen räknar ut exakt när du är på väg att glömma ett ord och schemalägger repetitioner automatiskt. Effektivare än att plugga utan system.",
+              },
+              {
+                title: "Kursplan – lär dig i din egna takt",
+                body: "Lås upp etapper med 20 ord i taget. Kursplanen säkerställer att du håller repetitionerna à jour innan du introducerar nya ord.",
+              },
+              {
+                title: "Gratis – inget konto, inga annonser",
+                body: "Du behöver varken registrera dig eller betala. Inga annonser, inga cookies och ingen datainsamling – nu eller i framtiden.",
+              },
+              {
+                title: "Utvalda ord från riktiga högskoleprov",
+                body: "Alla ord är noggrant utvalda utifrån historiska högskoleprov och frekvensdata för att maximera dina chanser att möta dem på ORD-delen.",
+              },
+            ].map(({ title, body }) => (
+              <div
+                key={title}
+                className="bg-slate-50 rounded-xl p-6 border border-slate-200"
+              >
+                <h3 className="text-base font-semibold text-slate-900 mb-2">
+                  {title}
+                </h3>
+                <p className="text-slate-600 text-sm leading-relaxed">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── How it works ────────────────────────────────────────────────────── */}
+      <div className="bg-slate-50 py-16 px-4">
+        <div className="max-w-xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-12 text-center">
+            Kom igång på under en minut
+          </h2>
+          <ol className="space-y-8">
+            {[
+              {
+                title: "Välj quiz eller kursplan",
+                body: "Starta ett prov direkt för att testa dina nuvarande kunskaper, eller börja med kursplanen för strukturerad inlärning med spaced repetition.",
+              },
+              {
+                title: "Lär dig ord med kontext",
+                body: "Varje ord presenteras med en fullständig definition och exempelmeningar. Du förstår inte bara vad ordet betyder – du ser hur det används på riktigt.",
+              },
+              {
+                title: "Repetera smart och håll orden",
+                body: "5 minuter om dagen räcker. Algoritmen håller koll på vilka ord du behöver repetera och när – du behöver bara följa planen.",
+              },
+            ].map(({ title, body }, i) => (
+              <li key={title} className="flex items-start gap-5">
+                <div className="w-9 h-9 rounded-full bg-p-100 text-white flex items-center justify-center text-base font-bold shrink-0 mt-0.5">
+                  {i + 1}
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-1">
+                    {title}
+                  </h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    {body}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
+      {/* ── FAQ ───────────────────────────────────────────────────────────── */}
+      <div className="bg-white py-16 px-4" id="faq">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-10 text-center">
+            Vanliga frågor
+          </h2>
+          <dl className="space-y-6">
+            {[
+              {
+                q: "Kostar det något att använda Ordprov.com?",
+                a: "Nej, Ordprov.com är helt gratis. Det finns inga betalda funktioner, inga annonser och ingen betalfäll – aldrig.",
+              },
+              {
+                q: "Behöver jag skapa ett konto?",
+                a: "Nej. Du kan börja träna direkt utan att registrera dig eller lämna ifrån dig någon personlig information.",
+              },
+              {
+                q: "Hur många ord finns det på Ordprov.com?",
+                a: "Ordprov.com har över 10 000 ord noggrant utvalda för att täcka vad som typiskt dyker upp i ORD-delen på Högskoleprovet.",
+              },
+              {
+                q: "Vad är spaced repetition och varför är det effektivt?",
+                a: "Spaced repetition är en inlärningsmetod som visar ord igen precis innan du är på väg att glömma dem. Forskning visar att det är ett av de effektivaste sätten att bygga ett långsiktigt ordförråd. Ordprov.com använder FSRS – en av de modernaste spaced repetition-algoritmerna.",
+              },
+              {
+                q: "Hur skiljer sig Ordprov.com från en vanlig ordlista?",
+                a: "En vanlig ordlista ger dig bara en förklaring. Ordprov.com ger varje ord en detaljerad definition, ordklass och flera exempelmeningar i autentiska sammanhang – och du lär dig med quiz och spaced repetition, inte bara genom att titta.",
+              },
+              {
+                q: "Hur lång tid tar det att förbereda sig inför ORD-delen?",
+                a: "Med Ordprov.com och 5–10 minuter daglig träning kan du introducera och befästa hundratals nya ord på några månader. Konsistens är viktigare än långa pluggsessioner.",
+              },
+            ].map(({ q, a }) => (
+              <div key={q} className="border-b border-slate-200 pb-6">
+                <dt className="text-base font-semibold text-slate-900 mb-2">
+                  {q}
+                </dt>
+                <dd className="text-slate-600 text-sm leading-relaxed">{a}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
     </div>
   );
 }

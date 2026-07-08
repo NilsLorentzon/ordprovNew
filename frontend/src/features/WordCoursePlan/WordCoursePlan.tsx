@@ -301,7 +301,13 @@ export default function WordCoursePlan() {
                 {nextStage.name}
               </p>
               <button
-                onClick={handleUnlock}
+                onClick={() => {
+                  handleUnlock();
+                  const mainContent = document.getElementById("main-content");
+                  if (mainContent) {
+                    mainContent.scrollTo(0, 0);
+                  }
+                }}
                 className="w-full bg-p-100 hover:bg-p-200 active:bg-p-300 text-white font-semibold py-3 rounded-xl text-sm transition-colors"
               >
                 Lås upp och börja

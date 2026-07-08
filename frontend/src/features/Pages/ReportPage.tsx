@@ -30,7 +30,7 @@ export default function ReportPage() {
   return (
     <div className="h-full w-full justify-center flex items-center px-2">
       <div className="mb-8 border-black/20 border-1 rounded-md bg-white p-4 md:shadow-md w-full max-w-2xl ">
-        <h2 className="text-2xl font-medium tracking-tight mb-4">Felanmälan</h2>
+        <h2 className="text-2xl font-medium tracking-tight mb-4">felrapport</h2>
         <ControlledInput
           label="Titel"
           value={title}
