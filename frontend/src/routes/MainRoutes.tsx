@@ -15,6 +15,8 @@ import AdminPage from "../features/Pages/AdminPage.tsx";
 import LearningPageWrapper from "../features/Pages/LearningPageWrapper.tsx";
 import LearningHub from "../features/Pages/LearningHub.tsx";
 import ChemistryPage from "../features/Pages/GanttPage.tsx";
+import WordCoursePlan from "../features/WordCoursePlan/WordCoursePlan.tsx";
+import WordStageQuiz from "../features/WordCoursePlan/WordStageQuiz.tsx";
 
 // const MainRoutesWrapper = lazy(() => import("./MainRoutesWrapper.tsx"));
 
@@ -33,6 +35,8 @@ export const routePaths = {
   admin: "/admin",
   learning: "/learning",
   learningStart: "/learning/start",
+  wordCoursePlan: "/kursplan-ord",
+  wordCoursePlanStage: "/kursplan-ord/etapp/:stageId",
   // chemistry: "/chemistry",
 };
 
@@ -96,6 +100,14 @@ export const mainRoutes = [
       {
         path: routePaths.learningStart,
         element: <LearningPageWrapper />,
+      },
+      {
+        path: routePaths.wordCoursePlan,
+        element: <WordCoursePlan />,
+      },
+      {
+        path: routePaths.wordCoursePlanStage,
+        element: <WordStageQuiz />,
       },
       // {
       //   path: routePaths.chemistry,

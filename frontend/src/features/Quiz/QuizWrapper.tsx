@@ -39,21 +39,21 @@ export default function QuizWrapper() {
             />
             <div className="my-4"></div>
             <ControlledSelect
-                label="Antal Alternativ"
-                options={[
-                  { label: "4", value: 4 },
-                  { label: "5", value: 5 },
-                  { label: "6", value: 6 },
-                  { label: "7", value: 7 },
-                  { label: "8", value: 8 },
-                  { label: "9", value: 9 },
-                  { label: "10", value: 10 },
-                ]}
-                value={alternativesAmount}
-                onChange={(option, action) => {
-                  setAlternativesAmount(option.value);
-                }}
-              />
+              label="Antal Alternativ"
+              options={[
+                { label: "4", value: 4 },
+                { label: "5", value: 5 },
+                { label: "6", value: 6 },
+                { label: "7", value: 7 },
+                { label: "8", value: 8 },
+                { label: "9", value: 9 },
+                { label: "10", value: 10 },
+              ]}
+              value={alternativesAmount}
+              onChange={(option, action) => {
+                setAlternativesAmount(option.value);
+              }}
+            />
             {/* <ControlledSelect
               label="Ordlista (fler kommer senare)"
               options={[

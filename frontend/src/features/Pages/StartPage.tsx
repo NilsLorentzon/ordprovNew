@@ -32,7 +32,7 @@ function StartPage() {
     { id: 5, text: "Full koll på din statistik och dina framsteg" },
     {
       id: 6,
-      text: "Helt gratis att använda och att skapa konto",
+      text: "Helt gratis att använda ",
       highlight: true,
     },
   ];
@@ -143,11 +143,7 @@ function StartPage() {
 
                 {/* Feature Text */}
                 <span
-                  className={
-                    feature.highlight
-                      ? "font-medium text-white"
-                      : ""
-                  }
+                  className={feature.highlight ? "font-medium text-white" : ""}
                 >
                   {feature.text}
                 </span>
@@ -187,23 +183,14 @@ function StartPage() {
               <span className=" font-bold text-2xl">{hoursDiff}</span> timmar
               kvar till Högskoleprovet &ndash; börja plugga idag!
             </h2>
-            {auth.email ? (
-              <button
-                aria-label="Starta provet"
-                className="mt-8 px-6 py-3 bg-p-200 text-white text-2xl rounded-lg hover:bg-p-200 hover:scale-110 transition duration-300"
-                onClick={() => navigate(routePaths.provStart)}
-              >
-                Starta prov
-              </button>
-            ) : (
-              <button
-                aria-label="Skapa konto"
-                className="mt-8 px-6 py-3 bg-p-200 text-white text-2xl rounded-lg hover:bg-p-200 hover:scale-110 transition duration-300"
-                onClick={() => navigate(routePaths.signup)}
-              >
-                Skapa konto
-              </button>
-            )}
+
+            <button
+              aria-label="Till kursplan"
+              className="mt-8 px-6 py-3 bg-p-200 text-white text-2xl rounded-lg hover:bg-p-200 hover:scale-110 transition duration-300"
+              onClick={() => navigate(routePaths.wordCoursePlan)}
+            >
+              Till kursplan
+            </button>
           </div>
         </div>
       </div>

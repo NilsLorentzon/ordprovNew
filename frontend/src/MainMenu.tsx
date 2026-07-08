@@ -152,7 +152,7 @@ const WebMenu = () => {
 
           {/* {auth.email && ( */}
 
-          <Link to={`${routePaths.learning}`} className=" ">
+          {/* <Link to={`${routePaths.learning}`} className=" ">
             <div
               className={clsx(
                 "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-1 flex items-end",
@@ -161,6 +161,17 @@ const WebMenu = () => {
             >
               <LearningIcon className="w-5 h-5 fill-white inline-block mr-2 scale-110" />
               <div className="h-full leading-4 text-sm">Inlärning </div>
+            </div>
+          </Link> */}
+          <Link to={`${routePaths.wordCoursePlan}`} className=" ">
+            <div
+              className={clsx(
+                "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-1 flex items-end",
+                currentPath.startsWith(routePaths.wordCoursePlan) && "bg-p-300",
+              )}
+            >
+              <LearningIcon className="w-5 h-5 fill-white inline-block mr-2 scale-110" />
+              <div className="h-full leading-4 text-sm">Kursplan</div>
             </div>
           </Link>
           <Link to={`${routePaths.statistics}`} className=" ">
@@ -412,7 +423,7 @@ const MobileMenu = () => {
                 </Link>
               </>
             )} */}
-            <Link
+            {/* <Link
               to={`${routePaths.learning}`}
               className=" "
               onClick={() => setIsOpen(false)}
@@ -425,6 +436,22 @@ const MobileMenu = () => {
               >
                 <LearningIcon className="w-5 h-5 fill-white inline-block mr-2" />
                 <div className="h-full leading-4 text-md">Inlärning</div>
+              </div>
+            </Link> */}
+            <Link
+              to={`${routePaths.wordCoursePlan}`}
+              className=" "
+              onClick={() => setIsOpen(false)}
+            >
+              <div
+                className={clsx(
+                  "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-2 flex items-end",
+                  currentPath.startsWith(routePaths.wordCoursePlan) &&
+                    "bg-p-300",
+                )}
+              >
+                <LearningIcon className="w-5 h-5 fill-white inline-block mr-2" />
+                <div className="h-full leading-4 text-md">Kursplan</div>
               </div>
             </Link>
             <Link
