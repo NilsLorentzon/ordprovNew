@@ -8,6 +8,12 @@ import type {
   WordDataQuiz,
   WordDataQuizExtended,
 } from "../../types/types";
+
+export interface QuizSettings {
+  amountOfQuestions: number;
+  questionType: QuizTypes;
+  alternativesAmount: number;
+}
 // export interface WordData {
 //   word: string;
 //   wordList: {
@@ -34,21 +40,24 @@ import type {
 //   questionType: QuizTypes;
 // }
 export default function QuizMultipleChoiceWrapper() {
-  // get parameters from url
+  // get parameters from url (used as initial defaults only)
   const urlParams = new URLSearchParams(window.location.search);
-  const amountOfQuestions = urlParams.get("antal") || "10";
-  const questionType = urlParams.get("typ") || "multipleChoice";
-  const alternativesAmount = urlParams.get("alternativ") || "4";
+
+  const [settings, setSettings] = useState<QuizSettings>({
+    amountOfQuestions: parseInt(urlParams.get("antal") || "10"),
+    questionType: (urlParams.get("typ") || "multipleChoice") as QuizTypes,
+    alternativesAmount: parseInt(urlParams.get("alternativ") || "5"),
+  });
 
   const {
     data: wordData,
     isLoading: isWordDataLoading,
     refetch: refetchWordData,
   } = useQuery({
-    queryKey: ["words"],
+    queryKey: ["words", settings],
     queryFn: (): Promise<WordDataQuiz[]> =>
       axios.get(
-        `word/prov?antal=${amountOfQuestions}&typ=${questionType}${questionType === "multipleChoice" ? `&alternativ=${alternativesAmount}` : ""}`,
+        `word/prov?antal=${settings.amountOfQuestions}&typ=${settings.questionType}${settings.questionType === "multipleChoice" ? `&alternativ=${settings.alternativesAmount}` : ""}`,
       ),
     refetchOnWindowFocus: false,
     onSuccess: (data: WordDataQuiz[]) => {
@@ -56,7 +65,6 @@ export default function QuizMultipleChoiceWrapper() {
         data.map((wordObj) => ({
           ...wordObj,
           answer: "",
-          // answer: wordObj.definitions.shortDefinition,
           correctAnswer: wordObj.definitions.shortDefinition,
           showInfo: true,
           writenDefinitionText: "",
@@ -75,6 +83,11 @@ export default function QuizMultipleChoiceWrapper() {
     setQuizId(uuid());
   };
 
+  const applySettings = (newSettings: QuizSettings) => {
+    setWords([]);
+    setSettings(newSettings);
+  };
+
   if (isWordDataLoading || wordData === undefined || words.length === 0) {
     return <div className=""></div>;
   }
@@ -85,8 +98,9 @@ export default function QuizMultipleChoiceWrapper() {
       words={words}
       refetchWordData={refetchWordData}
       setWords={setWords}
-      // amountOfQuestions={parseInt(amountOfQuestions)}
-      quizType={questionType as QuizTypes}
+      quizType={settings.questionType}
+      settings={settings}
+      onApplySettings={applySettings}
     />
   );
 }

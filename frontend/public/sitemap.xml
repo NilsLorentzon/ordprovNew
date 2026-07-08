@@ -2,33 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ordprov.com</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-07-08</lastmod>
   </url>
   <url>
     <loc>https://ordprov.com/om-oss</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-07-08</lastmod>
   </url>
   <url>
     <loc>https://ordprov.com/prov</loc>
-    <lastmod>2026-06-14</lastmod>
-  </url>
-  <url>
-    <loc>https://ordprov.com/login</loc>
-    <lastmod>2026-06-14</lastmod>
-  </url>
-  <url>
-    <loc>https://ordprov.com/signup</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-07-08</lastmod>
   </url>
   <url>
     <loc>https://ordprov.com/felanmälan</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-07-08</lastmod>
   </url>
   <url>
-    <loc>https://ordprov.com/inlärning</loc>
-    <lastmod>2026-06-14</lastmod>
+    <loc>https://ordprov.com/kursplan-ord</loc>
+    <lastmod>2026-07-08</lastmod>
   </url>
-
         <url>
             <loc>https://ordprov.com/ordlista/tidigare-högskoleprov/kartell</loc>
             <lastmod>2026-06-07</lastmod>

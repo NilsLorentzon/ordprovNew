@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { MoreVertical } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import CheckSmallIcon from "../../assets/SVG/CheckSmallIcon";
 import CrossSmallIcon from "../../assets/SVG/CrossSmallIcon";
 import ControlledTextArea from "../../Components/ControlledTextArea";
@@ -18,6 +18,9 @@ import CheckCircleIcon from "../../assets/SVG/CheckCircleIcon";
 import CheckSmallAnimateIcon from "../../assets/SVG/CheckSmallAnimateIcon";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { axios } from "../../lib/axios";
+import BaseModal from "../../Components/BaseModal";
+import ControlledSelect from "../../Components/ControlledSelect";
+import type { QuizSettings } from "./QuizMultipleChoiceWrapper";
 // import CogIcon from "./assets/SVG/CogIcon";
 
 interface QuizProps {
@@ -28,6 +31,8 @@ interface QuizProps {
   updateQuizId: () => void;
   // amountOfQuestions: number;
   quizType: QuizTypes;
+  settings: QuizSettings;
+  onApplySettings: (newSettings: QuizSettings) => void;
 }
 
 interface QuestionAnswer {
@@ -48,12 +53,22 @@ function Quiz({
   updateQuizId,
   // amountOfQuestions,
   quizType,
+  settings,
+  onApplySettings,
 }: QuizProps) {
   // const value = useLocalStorage();
   // console.log("local storage value in quiz component", value);
   const amountOfQuestions = words.length;
   const { auth } = useContext(AuthContext);
   const storageData = useLocalStorage();
+
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [modalSettings, setModalSettings] = useState<QuizSettings>(settings);
+
+  const openSettings = () => {
+    setModalSettings({ ...settings });
+    setIsSettingsOpen(true);
+  };
   // const updateMutation = useMutation(
   //   ["currentWord"],
   //   (wordData: WordDataQuizExtended) => {
@@ -65,8 +80,6 @@ function Quiz({
   //     },
   //   },
   // );
-  const navigate = useNavigate();
-
   const sendQuizAnswerMutation = useMutation(
     ["quiz", "answer"],
     (questionAnswer: QuestionAnswer) => {
@@ -161,7 +174,16 @@ function Quiz({
   return (
     <div className="m-auto md:p-8 md:pt-18 pt-18 py-2 max-w-3xl relative">
       <div className="pl-3 mt-2">
-        <h1 className="text-2xl font-bold mb-2">Prov</h1>
+        <div className="flex items-center gap-2 mb-2">
+          <h1 className="text-2xl font-bold">Prov</h1>
+          <button
+            onClick={openSettings}
+            aria-label="Öppna provinställningar"
+            className="p-1 rounded-md hover:bg-gray-100 transition"
+          >
+            <CogIcon className="w-5 h-5 fill-black/50" />
+          </button>
+        </div>
         {quizType === "multipleChoice" && (
           <p className="text-md text-black tracking-wide mb-4">
             Välj rätt definition för alla {words.length} orden. Lycka till!
@@ -631,10 +653,9 @@ function Quiz({
           </div> */}
             <div className="w-full flex items-start gap-2">
               <button
-                onClick={() => {
-                  navigate(`${routePaths.prov}`);
-                }}
+                onClick={openSettings}
                 className="h-12 w-12 min-w-12 mt-2 p-2 flex items-center justify-center bg-p-100 text-white rounded-md hover:bg-p-200 transition duration-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                aria-label="Öppna provinställningar"
               >
                 <CogIcon className="w-6 h-6 fill-white" />
               </button>
@@ -648,6 +669,59 @@ function Quiz({
           </div>
         )}
       </div>
+      <BaseModal
+        isOpen={isSettingsOpen}
+        setIsOpen={setIsSettingsOpen}
+        title="Provinställningar"
+      >
+        <div className="p-4">
+          <div className="h-full w-full max-w-[320px]">
+            <ControlledSelect
+              label="Antal frågor"
+              options={[
+                { label: "5", value: 5 },
+                { label: "10", value: 10 },
+                { label: "20", value: 20 },
+              ]}
+              value={modalSettings.amountOfQuestions}
+              onChange={(option) => {
+                setModalSettings({
+                  ...modalSettings,
+                  amountOfQuestions: option.value,
+                });
+              }}
+            />
+            <div className="my-4"></div>
+            <ControlledSelect
+              label="Antal Alternativ"
+              options={[
+                { label: "4", value: 4 },
+                { label: "5", value: 5 },
+                { label: "8", value: 8 },
+                { label: "10", value: 8 },
+              ]}
+              value={modalSettings.alternativesAmount}
+              onChange={(option) => {
+                setModalSettings({
+                  ...modalSettings,
+                  alternativesAmount: option.value,
+                });
+              }}
+            />
+          </div>
+          <div className="h-full flex justify-end mt-6 pt-20">
+            <button
+              className="px-6 py-2.5 bg-p-200 text-white text-lg font-semibold rounded-xl hover:bg-p-300 transition duration-200"
+              onClick={() => {
+                onApplySettings(modalSettings);
+                setIsSettingsOpen(false);
+              }}
+            >
+              Starta nytt prov
+            </button>
+          </div>
+        </div>
+      </BaseModal>
     </div>
   );
 }

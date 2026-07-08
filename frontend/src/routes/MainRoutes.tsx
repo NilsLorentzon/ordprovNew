@@ -81,10 +81,10 @@ export const mainRoutes = [
       //   path: routePaths.signup,
       //   element: <SignupPage />,
       // },
-      {
-        path: routePaths.statistics,
-        element: <StatisticsPageWrapper />,
-      },
+      // {
+      //   path: routePaths.statistics,
+      //   element: <StatisticsPageWrapper />,
+      // },
       {
         path: routePaths.report,
         element: <ReportPage />,
@@ -93,14 +93,14 @@ export const mainRoutes = [
         path: routePaths.admin,
         element: <AdminPage />,
       },
-      {
-        path: routePaths.learning,
-        element: <LearningHub />,
-      },
-      {
-        path: routePaths.learningStart,
-        element: <LearningPageWrapper />,
-      },
+      // {
+      //   path: routePaths.learning,
+      //   element: <LearningHub />,
+      // },
+      // {
+      //   path: routePaths.learningStart,
+      //   element: <LearningPageWrapper />,
+      // },
       {
         path: routePaths.wordCoursePlan,
         element: <WordCoursePlan />,

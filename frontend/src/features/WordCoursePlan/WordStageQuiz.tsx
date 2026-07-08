@@ -177,9 +177,9 @@ export default function WordStageQuiz() {
 
   if (!isDailyMode && !stage) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center p-4">
-          <p className="text-black/50 mb-4">Etapp hittades inte.</p>
+          <p className="text-slate-700 mb-4">Etapp hittades inte.</p>
           <button
             onClick={() => navigate("/kursplan-ord")}
             className="text-p-100 underline text-sm"
@@ -193,23 +193,25 @@ export default function WordStageQuiz() {
 
   if (!initialized) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <p className="text-black/60">Laddar etapp...</p>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <p className="text-slate-700">Laddar etapp...</p>
       </div>
     );
   }
 
   if (!isDailyMode && !cpState.startedStageIds.includes(stageId)) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-white">
-        <div className="bg-black/5 border border-black/10 rounded-2xl p-6 w-full max-w-sm text-center">
-          <h2 className="text-xl font-bold mb-3 text-black">{stage?.name}</h2>
-          <p className="text-black/55 text-sm mb-5">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50">
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 w-full max-w-sm text-center shadow-md">
+          <h2 className="text-xl font-bold mb-3 text-slate-900">
+            {stage?.name}
+          </h2>
+          <p className="text-slate-700 text-sm mb-5">
             Den här etappen är inte upplåst ännu.
           </p>
           <button
             onClick={() => navigate("/kursplan-ord")}
-            className="w-full bg-p-100 hover:bg-p-200 text-white font-semibold py-3 rounded-xl text-sm"
+            className="w-full bg-slate-100 hover:bg-slate-200 text-slate-900 font-semibold py-3 rounded-xl text-sm"
           >
             Till kursplan
           </button>
@@ -220,19 +222,19 @@ export default function WordStageQuiz() {
 
   if (initialized && initialSize === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-white">
-        <div className="bg-black/5 border border-black/10 rounded-2xl p-6 w-full max-w-sm text-center">
-          <h2 className="text-xl font-bold mb-2 text-black">
-            {isDailyMode ? "Inga kort att öva idag!" : "Inga kort att öva!"}
+      <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50">
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 w-full max-w-sm text-center shadow-md">
+          <h2 className="text-xl font-bold mb-2 text-slate-900">
+            {isDailyMode ? "Inga ord att öva idag!" : "Inga ord att öva!"}
           </h2>
-          <p className="text-black/55 text-sm mb-5">
+          <p className="text-slate-700 text-sm mb-5">
             {isDailyMode
               ? "Kom tillbaka imorgon."
-              : "Inga fler kort att öva just nu."}
+              : "Inga fler ord att öva just nu."}
           </p>
           <button
             onClick={() => navigate("/kursplan-ord")}
-            className="w-full bg-black/10 hover:bg-black/15 text-black font-semibold py-3 rounded-xl text-sm"
+            className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-xl text-sm"
           >
             Till kursplan
           </button>
@@ -255,18 +257,18 @@ export default function WordStageQuiz() {
     };
 
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-white">
-        <div className="bg-white border border-black/10 rounded-2xl p-6 w-full max-w-sm shadow-md">
-          <h2 className="text-2xl font-bold mb-1 text-black">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50">
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 w-full max-w-sm shadow-lg">
+          <h2 className="text-2xl font-bold mb-1 text-slate-900">
             {isDailyMode ? "Dagens session klar!" : "Etapp klar!"}
           </h2>
-          <p className="text-black/50 text-sm mb-5">
-            Du övade {initialSize} kort.
+          <p className="text-slate-700 text-sm mb-5">
+            Du övade {initialSize} ord.
           </p>
 
           {/* Forecast */}
           <div className="mb-5">
-            <p className="text-xs text-black/40 uppercase tracking-wider mb-2">
+            <p className="text-xs text-slate-600 uppercase tracking-wider mb-2">
               Repetition — kommande 14 dagar
             </p>
             <div className="flex items-end gap-0.5 h-16">
@@ -284,36 +286,36 @@ export default function WordStageQuiz() {
                     {f.count > 0 && (
                       <span
                         className={`text-[10px] tabular-nums leading-none ${
-                          i === 0 ? "text-p-100" : "text-black/50"
+                          i === 0 ? "text-p-100" : "text-slate-600"
                         }`}
                       >
                         {f.count}
                       </span>
                     )}
                     <div
-                      className={`w-full rounded-sm ${i === 0 ? "bg-p-100" : "bg-black/20"}`}
+                      className={`w-full rounded-sm ${i === 0 ? "bg-p-100" : "bg-slate-200"}`}
                       style={{ height: `${h}%` }}
                     />
                   </div>
                 );
               })}
             </div>
-            <p className="text-xs text-black/40 text-center mt-1.5">
+            <p className="text-xs text-slate-600 text-center mt-1.5">
               {forecast[0].count > 0
-                ? `${forecast[0].count} kort att öva idag`
-                : "Inga fler kort att öva idag"}
+                ? `${forecast[0].count} ord att öva idag`
+                : "Inga fler ord att öva idag"}
             </p>
           </div>
 
           {nextStage && (
-            <div className="bg-black/5 rounded-xl p-3 mb-3">
-              <p className="text-xs text-black/40 mb-0.5">Nästa etapp</p>
-              <p className="text-sm text-black font-medium mb-2">
+            <div className="bg-slate-50 rounded-xl p-3 mb-3">
+              <p className="text-xs text-slate-500 mb-0.5">Nästa etapp</p>
+              <p className="text-sm text-slate-900 font-medium mb-2">
                 {nextStage.name}
               </p>
               {forecast[0].count > 0 && (
-                <p className="text-xs text-yellow-700/75 mb-2">
-                  Tips: du har {forecast[0].count} kort idag — repetera dem
+                <p className="text-xs text-amber-600 mb-2">
+                  Tips: du har {forecast[0].count} ord idag — repetera dem
                   innan du lägger till mer.
                 </p>
               )}
@@ -327,7 +329,7 @@ export default function WordStageQuiz() {
           )}
           <button
             onClick={() => navigate("/kursplan-ord")}
-            className="w-full bg-black/10 hover:bg-black/15 text-black font-semibold py-2.5 rounded-xl text-sm transition-colors"
+            className="w-full bg-slate-100 hover:bg-slate-200 text-slate-900 font-semibold py-2.5 rounded-xl text-sm transition-colors"
           >
             Till kursplan
           </button>
@@ -339,54 +341,54 @@ export default function WordStageQuiz() {
   // ── Main quiz view ────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* Top bar */}
-      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-black/10 px-4 py-2.5 flex items-center justify-between">
+      <div className="sticky top-0 z-10 bg-white border-b border-slate-200 shadow-sm px-4 py-2.5 flex items-center justify-between">
         <button
           onClick={() => navigate("/kursplan-ord")}
-          className="text-black/50 hover:text-black text-sm transition-colors"
+          className="text-slate-700 hover:text-slate-900 text-sm transition-colors"
         >
           ← Kursplan
         </button>
-        <span className="text-sm font-medium text-black/50 tabular-nums">
+        <span className="text-sm font-medium text-slate-600 tabular-nums">
           {progress}/{initialSize}
         </span>
       </div>
 
       {/* Card area */}
-      <div className="flex-1 flex flex-col items-center px-4 pt-6 pb-32 max-w-xl mx-auto w-full">
+      <div className="flex-1 flex flex-col items-center px-4 pt-6 pb-32 max-w-3xl mx-auto w-full">
         {currentCard && (
           <div className="w-full">
             {/* Word card */}
-            <div className="border border-black/20 rounded-xl bg-white shadow-sm p-6 mb-4 min-h-44">
-              <p className="text-xs text-black/40 uppercase tracking-widest mb-2">
+            <div className="border border-slate-200 rounded-xl bg-white shadow-md p-6 mb-4">
+              <p className="text-xs text-slate-500 uppercase tracking-widest mb-2">
                 Vad betyder
               </p>
-              <h2 className="text-3xl font-bold text-black mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-4">
                 {currentCard.word}
               </h2>
 
               {showAnswer && (
-                <div className="border-t border-black/10 pt-4 space-y-3">
+                <div className="border-t border-slate-200 pt-4">
                   {wordFetching ? (
-                    <p className="text-black/40 text-sm">Laddar...</p>
+                    <p className="text-slate-600 text-sm">Laddar...</p>
                   ) : wordDetail ? (
                     <>
-                      <div>
-                        <p className="text-xs text-black/40 uppercase tracking-widest mb-1">
+                      <div className="mb-4">
+                        <h4 className="text-lg font-medium mb-0.5 text-slate-900">
                           Definition
-                        </p>
-                        <p className="text-black/80 text-sm leading-relaxed">
+                        </h4>
+                        <div className="text-slate-800">
                           {wordDetail.definitions.definition}
-                        </p>
+                        </div>
                       </div>
                       {wordDetail.partsOfSpeech.length > 0 && (
-                        <div>
-                          <p className="text-xs text-black/40 uppercase tracking-widest mb-1">
+                        <div className="mb-4">
+                          <h4 className="text-lg font-medium mb-0.5 text-slate-900">
                             {wordDetail.partsOfSpeech.length > 1
                               ? "Ordklasser"
                               : "Ordklass"}
-                          </p>
+                          </h4>
                           <div className="flex flex-wrap gap-1">
                             {wordDetail.partsOfSpeech.map((pos, i) => (
                               <PartOfSpeech key={i} part={pos} />
@@ -396,15 +398,12 @@ export default function WordStageQuiz() {
                       )}
                       {wordDetail.sentences.length > 0 && (
                         <div>
-                          <p className="text-xs text-black/40 uppercase tracking-widest mb-1">
+                          <h4 className="text-lg font-medium mb-1 text-slate-900">
                             Exempelmeningar
-                          </p>
-                          <ul className="list-disc pl-4 space-y-1">
-                            {wordDetail.sentences.slice(0, 3).map((s, i) => (
-                              <li
-                                key={i}
-                                className="text-black/65 text-sm leading-relaxed"
-                              >
+                          </h4>
+                          <ul className="list-disc pl-4">
+                            {wordDetail.sentences.map((s, i) => (
+                              <li key={i} className="mb-2 text-slate-800">
                                 {s}
                               </li>
                             ))}
@@ -413,7 +412,7 @@ export default function WordStageQuiz() {
                       )}
                     </>
                   ) : (
-                    <p className="text-black/40 text-sm italic">
+                    <p className="text-slate-600 text-sm italic">
                       Ingen ytterligare information tillgänglig.
                     </p>
                   )}
@@ -425,11 +424,11 @@ export default function WordStageQuiz() {
       </div>
 
       {/* Bottom action bar — fixed */}
-      <div className="fixed bottom-0 left-0 md:left-60 right-0 z-20 bg-white/95 backdrop-blur border-t border-black/10 p-3 pb-6">
+      <div className="fixed bottom-0 left-0 md:left-60 right-0 z-20 bg-white border-t border-slate-200 shadow-[0_-2px_10px_rgba(0,0,0,0.06)] p-3 pb-6">
         <div className="max-w-xl mx-auto w-full">
           {showAnswer ? (
             <div>
-              <p className="text-center text-black/45 text-xs mb-3">
+              <p className="text-center text-slate-600 text-xs mb-3">
                 Hur väl kunde du ordet?
               </p>
               <div className="flex gap-2">

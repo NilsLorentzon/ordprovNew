@@ -104,7 +104,7 @@ export default function StatisticsPageWrapper() {
     return <div></div>;
   }
   return (
-    <div className="lg:p-8  h-full ">
+    <div className="lg:p-8 h-full bg-slate-50">
       <BaseModal
         isOpen={currentWordModal !== ""}
         setIsOpen={(value) => {
@@ -142,7 +142,7 @@ export default function StatisticsPageWrapper() {
           höja nivån på alla orden till 3 eller 4.
         </div>
       </BaseModal>
-      <div className=" sm:p-4 pt-16 flex gap-8 flex-wrap">
+      <div className=" sm:p-4 pt-16 flex gap-6 flex-wrap">
         {/* <div className="">
           <BarGraphCopy />
         </div> */}

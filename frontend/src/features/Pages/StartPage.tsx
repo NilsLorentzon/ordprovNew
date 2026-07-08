@@ -10,8 +10,8 @@ function StartPage() {
   const { auth } = useContext(AuthContext);
   const features = [
     { id: 1, text: "Detaljerade definitioner och exempelmeningar" },
-    { id: 2, text: "Ordlista med alla gamla ord från högskoleproven" },
-    { id: 3, text: "Interaktiva quiz med inlärning i fokus" },
+    { id: 2, text: "Kursplan för effektiv inlärning" },
+    { id: 3, text: "högskoleprovsliknande quiz" },
     {
       id: 4,
       text: (
@@ -29,10 +29,9 @@ function StartPage() {
         </>
       ),
     },
-    { id: 5, text: "Full koll på din statistik och dina framsteg" },
     {
       id: 6,
-      text: "Helt gratis att använda ",
+      text: "Helt gratis att använda och ingen reklam ",
       highlight: true,
     },
   ];
@@ -45,20 +44,20 @@ function StartPage() {
   const hoursDiff = Math.floor((timeDiff % (1000 * 3600 * 24)) / (1000 * 3600));
   return (
     <div className="min-h-full h-full">
-      <div className="h-full w-full justify-center flex items-center relative">
-        <div className="flex flex-col justify-between max-w-2xl ">
+      <div className="h-full w-full justify-center flex items-center relative bg-white">
+        <div className="flex flex-col justify-between max-w-2xl">
           <div className="flex items-center flex-col">
-            <h1 className=" max-[370px]:text-4xl text-5xl lg:px-4 px-2 text-center tracking-tight font-medium text-[#222222]">
+            <h1 className=" max-[370px]:text-4xl text-5xl lg:px-4 px-2 text-center tracking-tight font-semibold text-slate-900">
               Öka ditt ordförråd och <span className="text-p-300">spika </span>{" "}
               ORD-delen på högskoleprovet
             </h1>
-            <h2 className="px-4 pt-2 text-center font-medium tracking-wider text-p-200">
-              10 000 utvalda ord inför högskoleprovet &ndash; interaktiva quiz
+            <h2 className="px-4 pt-3 text-center font-medium tracking-wide text-slate-500 text-lg">
+              10 000 utvalda ord inför högskoleprovet &ndash; interaktiva quiz
               med detaljerade definitioner och exempelmeningar.
             </h2>
             <button
               aria-label="Starta provet"
-              className="mt-8 px-6 py-3 bg-p-200 text-white text-2xl rounded-lg hover:bg-p-200 hover:scale-110 transition duration-300"
+              className="mt-8 px-8 py-3.5 bg-p-200 text-white text-xl font-semibold rounded-xl hover:bg-p-300 hover:scale-105 transition duration-200 shadow-md"
               onClick={() => navigate(routePaths.provStart)}
             >
               Starta provet
@@ -173,20 +172,19 @@ function StartPage() {
         </motion.div>
       </div>
       <div
-        className="h-full w-full justify-center flex items-center  "
+        className="h-full w-full justify-center flex items-center bg-slate-50"
         id="signup-section"
       >
-        <div className="flex flex-col justify-between max-w-sm text-center relative">
-          <div className="flex items-center flex-col ">
-            <h2 className=" text-xl lg:px-4 px-2 text-center font-medium text-[#222222]">
+        <div className="flex flex-col justify-between max-w-sm text-center relative px-4 py-16">
+          <div className="flex items-center flex-col">
+            <h2 className=" text-xl lg:px-2 px-2 text-center font-medium text-[#222222]">
               <span className=" font-bold text-2xl">{daysDiff}</span> dagar och{" "}
               <span className=" font-bold text-2xl">{hoursDiff}</span> timmar
               kvar till Högskoleprovet &ndash; börja plugga idag!
             </h2>
-
             <button
               aria-label="Till kursplan"
-              className="mt-8 px-6 py-3 bg-p-200 text-white text-2xl rounded-lg hover:bg-p-200 hover:scale-110 transition duration-300"
+              className="mt-2 px-8 py-3.5 bg-p-200 text-white text-xl font-semibold rounded-xl hover:bg-p-300 hover:scale-105 transition duration-200 shadow-md"
               onClick={() => navigate(routePaths.wordCoursePlan)}
             >
               Till kursplan

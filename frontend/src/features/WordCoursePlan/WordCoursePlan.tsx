@@ -74,17 +74,17 @@ export default function WordCoursePlan() {
           {
             n: 1,
             title: "Visa svaret",
-            body: 'Varje kort visar ett ord. Tryck på "Visa svar" för att se definitionen och exempelmeningar.',
+            body: 'Tryck på "Visa svar" för att se definitionen och exempelmeningar.',
           },
           {
             n: 2,
-            title: "Betygsätt kortet",
+            title: "Betygsätt ordet",
             body: "Välj hur väl du kunde ordet (1–4). FSRS-algoritmen räknar ut när du ska se det igen.",
           },
           {
             n: 3,
             title: '"Öva nu" och 14-dagarsgrafen',
-            body: '"Öva nu" samlar alla dagens förfallna och nya kort från alla upplåsta etapper. Grafen visar hur många kort som förfaller varje dag.',
+            body: '"Öva nu" samlar alla dagens förfallna och nya ord från alla upplåsta etapper. Grafen visar hur många ord som förfaller varje dag.',
           },
           {
             n: 4,
@@ -97,15 +97,15 @@ export default function WordCoursePlan() {
               {s.n}
             </div>
             <div>
-              <p className="font-semibold text-black/80 mb-1">{s.title}</p>
-              <p className="text-black/55 leading-relaxed">{s.body}</p>
+              <p className="font-semibold text-slate-900 mb-1">{s.title}</p>
+              <p className="text-slate-700 leading-relaxed">{s.body}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="bg-black/5 border border-black/10 rounded-xl p-4">
-        <h3 className="font-semibold text-black/80 mb-3">Betygen 1–4</h3>
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <h3 className="font-semibold text-slate-900 mb-3">Betygen 1–4</h3>
         <div className="space-y-3">
           {[
             {
@@ -145,26 +145,33 @@ export default function WordCoursePlan() {
                 <span>{r.label}</span>
                 <span className="text-xs opacity-60">{r.sub}</span>
               </div>
-              <p className="text-black/60 leading-relaxed pt-1">{r.desc}</p>
+              <p className="text-slate-700 leading-relaxed pt-1">{r.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-black/5 border border-black/10 rounded-xl p-4">
-        <h3 className="font-semibold text-black/80 mb-1">
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <h3 className="font-semibold text-slate-900 mb-1">
           Låsa upp nästa etapp
         </h3>
-        <p className="text-black/55 leading-relaxed">
-          Knappen <strong>"Lås upp etapp"</strong> är bara aktiv när inga kort
+        <p className="text-slate-700 leading-relaxed">
+          Knappen <strong>"Lås upp etapp"</strong> är bara aktiv när inga ord
           förfaller idag. Det tvingar dig att hålla koll på repetitionerna innan
           du lägger till nytt material.
         </p>
       </div>
 
-      <div className="bg-black/5 border border-black/10 rounded-xl p-4">
-        <h3 className="font-semibold text-black/80 mb-1">Vad är FSRS?</h3>
-        <p className="text-black/55 leading-relaxed">
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <h3 className="font-semibold text-slate-900 mb-1">Nya ord</h3>
+        <p className="text-slate-700 leading-relaxed">
+          Första gången du övar på ett ord så kommer det köas om samma runda
+          fram tills att du markerar det som enkelt.
+        </p>
+      </div>
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <h3 className="font-semibold text-slate-900 mb-1">Vad är FSRS?</h3>
+        <p className="text-slate-700 leading-relaxed">
           FSRS (Free Spaced Repetition Scheduler) modellerar ditt minne och
           räknar ut exakt när du är på väg att glömma ett ord. Rätt svar =
           längre väntetid. Fel svar = kortare.
@@ -199,7 +206,7 @@ export default function WordCoursePlan() {
         onClick={() => status === "started" && navigate(stageRoute(stage.id))}
         className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors rounded-lg ${
           status === "started"
-            ? "hover:bg-black/5 cursor-pointer active:bg-black/8"
+            ? "hover:bg-slate-50 cursor-pointer active:bg-slate-100"
             : status === "next"
               ? "opacity-50 cursor-default"
               : "opacity-20 cursor-default"
@@ -208,7 +215,7 @@ export default function WordCoursePlan() {
         {/* Status dot */}
         <div className="w-5 h-5 shrink-0 flex items-center justify-center">
           {status === "locked" ? (
-            <div className="w-2.5 h-2.5 rounded-full bg-black/20" />
+            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
           ) : status === "next" ? (
             <div className="w-2.5 h-2.5 rounded-full border-2 border-p-100/50" />
           ) : pct >= 100 ? (
@@ -224,13 +231,13 @@ export default function WordCoursePlan() {
         </div>
 
         {/* Name */}
-        <span className="flex-1 text-sm text-black/80 truncate">
+        <span className="flex-1 text-sm text-slate-900 truncate">
           {stage.shortName}
         </span>
 
         {/* Progress count */}
         {status === "started" && (
-          <span className="text-xs text-black/35 shrink-0 tabular-nums">
+          <span className="text-xs text-slate-600 shrink-0 tabular-nums">
             {progress.learned}/{progress.total}
           </span>
         )}
@@ -241,25 +248,25 @@ export default function WordCoursePlan() {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-white text-black pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
       {/* ── Header ──────────────────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-black/10 px-4 py-3 flex items-center gap-3">
+      <div className="sticky top-0 z-10 bg-white border-b border-slate-200 shadow-sm px-4 py-3 flex items-center gap-3">
         <button
           onClick={() => navigate("/")}
-          className="text-black/50 hover:text-black transition-colors text-sm px-1"
+          className="text-slate-700 hover:text-slate-900 transition-colors text-sm px-1"
         >
           ← Hem
         </button>
-        <h1 className="text-base font-semibold text-black flex-1">
+        <h1 className="text-base font-semibold text-slate-900 flex-1">
           Kursplan – Ord
         </h1>
-        <span className="text-xs text-black/35">
+        <span className="text-xs text-slate-500">
           {stats.stagesStarted}/{stats.totalStages} etapper
         </span>
         {stats.stagesStarted > 0 && (
           <button
             onClick={() => setShowGuideModal(true)}
-            className="w-7 h-7 flex items-center justify-center rounded-full bg-black/8 hover:bg-black/15 text-black/50 hover:text-black text-sm font-bold transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-sm font-bold transition-colors"
             title="Visa guide"
             aria-label="Visa guide"
           >
@@ -279,7 +286,7 @@ export default function WordCoursePlan() {
               Lär dig ord inför högskoleprovet – etapp för etapp
             </h2>
           </div>
-          <p className="text-black/55 text-sm leading-relaxed mb-7">
+          <p className="text-slate-700 text-sm leading-relaxed mb-7">
             Kursplanen delar upp alla {stats.totalWords} ord i etapper om 20 ord
             vardera. Varje etapp låses upp när du är klar med repetitionerna för
             dagen. Inlärningen sker med{" "}
@@ -288,9 +295,9 @@ export default function WordCoursePlan() {
           </p>
           {guideBody}
           {nextStage && (
-            <div className="bg-black/5 border border-black/10 rounded-xl p-4 mt-6">
-              <p className="text-xs text-black/45 mb-0.5">Redo att börja?</p>
-              <p className="text-black font-medium text-sm mb-3">
+            <div className="bg-white border border-slate-200 rounded-xl p-4 mt-6 shadow-sm">
+              <p className="text-xs text-slate-500 mb-0.5">Redo att börja?</p>
+              <p className="text-slate-900 font-medium text-sm mb-3">
                 {nextStage.name}
               </p>
               <button
@@ -308,14 +315,14 @@ export default function WordCoursePlan() {
       {stats.stagesStarted > 0 && (
         <div className="max-w-xl mx-auto px-4 pt-5 space-y-4">
           {/* Overall progress */}
-          <div className="bg-black/5 rounded-xl p-4 border border-black/10">
+          <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
             <div className="flex justify-between text-sm mb-2">
-              <span className="text-black/60">Introducerade ord</span>
-              <span className="font-semibold text-black tabular-nums">
+              <span className="text-slate-700">Introducerade ord</span>
+              <span className="font-semibold text-slate-900 tabular-nums">
                 {stats.introduced} / {stats.totalWords}
               </span>
             </div>
-            <div className="w-full bg-black/10 rounded-full h-1.5">
+            <div className="w-full bg-slate-200 rounded-full h-1.5">
               <div
                 className="bg-p-100 h-1.5 rounded-full transition-all"
                 style={{
@@ -331,8 +338,8 @@ export default function WordCoursePlan() {
 
           {/* Forecast chart */}
           {stats.introduced > 0 && (
-            <div className="bg-black/5 rounded-xl p-4 border border-black/10">
-              <h2 className="text-xs font-medium text-black/45 uppercase tracking-wider mb-3">
+            <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+              <h2 className="text-xs font-medium text-slate-600 uppercase tracking-wider mb-3">
                 Repetition — kommande 14 dagar
               </h2>
               <div className="flex items-end gap-0.75 h-20">
@@ -354,7 +361,7 @@ export default function WordCoursePlan() {
                       {f.count > 0 && (
                         <span
                           className={`text-[10px] tabular-nums leading-none ${
-                            isToday ? "text-p-100" : "text-black/50"
+                            isToday ? "text-p-100" : "text-slate-600"
                           }`}
                         >
                           {f.count}
@@ -362,16 +369,16 @@ export default function WordCoursePlan() {
                       )}
                       <div
                         className={`w-full rounded-sm ${
-                          isToday ? "bg-p-100" : "bg-black/20"
+                          isToday ? "bg-p-100" : "bg-slate-200"
                         }`}
                         style={{ height: `${heightPct}%` }}
-                        title={`${f.date}: ${f.count} kort`}
+                        title={`${f.date}: ${f.count} ord`}
                       />
                     </div>
                   );
                 })}
               </div>
-              <div className="flex justify-between text-[10px] text-black/30 mt-1.5 px-0.5">
+              <div className="flex justify-between text-[10px] text-slate-500 mt-1.5 px-0.5">
                 <span>Idag</span>
                 <span>
                   {new Date(forecast[13]?.date ?? "").toLocaleDateString("sv", {
@@ -380,10 +387,10 @@ export default function WordCoursePlan() {
                   })}
                 </span>
               </div>
-              <p className="text-xs text-black/45 text-center mt-1">
+              <p className="text-xs text-slate-600 text-center mt-1">
                 {forecast[0].count > 0
-                  ? `${forecast[0].count} kort att öva idag`
-                  : "Inga kort att öva idag"}
+                  ? `${forecast[0].count} ord att öva idag`
+                  : "Inga ord att öva idag"}
               </p>
             </div>
           )}
@@ -397,28 +404,28 @@ export default function WordCoursePlan() {
               >
                 Öva nu (
                 {forecast[0].count > 0
-                  ? `${forecast[0].count} kort idag`
+                  ? `${forecast[0].count} ord idag`
                   : "fortsätt"}
                 )
               </button>
             )}
 
             {nextStage && (
-              <div className="bg-black/5 border border-black/10 rounded-xl p-4">
+              <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div>
-                    <p className="text-xs text-black/45 mb-0.5">Nästa etapp</p>
-                    <p className="text-black font-medium text-sm">
+                    <p className="text-xs text-slate-500 mb-0.5">Nästa etapp</p>
+                    <p className="text-slate-900 font-medium text-sm">
                       {nextStage.name}
                     </p>
                   </div>
-                  <span className="text-xs text-black/35 shrink-0 mt-1">
+                  <span className="text-xs text-slate-500 shrink-0 mt-1">
                     {nextStage.wordIds.length} ord
                   </span>
                 </div>
                 {!canUnlock && (
-                  <p className="text-xs text-yellow-700/80 mb-3">
-                    Du har {forecast[0].count} kort kvar idag — öva klart dem
+                  <p className="text-xs text-amber-600 mb-3">
+                    Du har {forecast[0].count} ord kvar idag — öva klart dem
                     innan du låser upp mer.
                   </p>
                 )}
@@ -427,8 +434,8 @@ export default function WordCoursePlan() {
                   disabled={!canUnlock}
                   className={`w-full font-semibold py-2.5 rounded-xl text-sm transition-colors ${
                     canUnlock
-                      ? "bg-black/10 hover:bg-black/15 text-black"
-                      : "bg-black/5 text-black/30 cursor-not-allowed"
+                      ? "bg-slate-100 hover:bg-slate-200 text-slate-900"
+                      : "bg-slate-200 text-slate-500 cursor-not-allowed"
                   }`}
                 >
                   Lås upp etapp
@@ -445,10 +452,10 @@ export default function WordCoursePlan() {
 
           {/* Stage list */}
           <div className="space-y-1 pt-2 pb-4">
-            <h2 className="text-xs font-medium text-black/35 uppercase tracking-wider px-1 mb-1.5">
+            <h2 className="text-xs font-medium text-slate-600 uppercase tracking-wider px-1 mb-1.5">
               Etapper
             </h2>
-            <div className="bg-black/5 border border-black/10 rounded-xl overflow-hidden divide-y divide-black/5">
+            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-100 shadow-sm">
               {stages.map(renderStageRow)}
             </div>
           </div>
@@ -463,16 +470,16 @@ export default function WordCoursePlan() {
             onClick={() => setShowGuideModal(false)}
           >
             <div
-              className="bg-white border border-black/10 rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto shadow-xl"
+              className="bg-white border border-slate-200 rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="sticky top-0 bg-white/95 backdrop-blur border-b border-black/8 px-5 py-3 flex items-center justify-between">
-                <h2 className="text-base font-semibold text-black">
+              <div className="sticky top-0 bg-white border-b border-slate-200 px-5 py-3 flex items-center justify-between">
+                <h2 className="text-base font-semibold text-slate-900">
                   Guide – hur kursplanen fungerar
                 </h2>
                 <button
                   onClick={() => setShowGuideModal(false)}
-                  className="text-black/50 hover:text-black w-7 h-7 flex items-center justify-center rounded-full hover:bg-black/10 transition-colors"
+                  className="text-slate-700 hover:text-slate-900 w-7 h-7 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
                 >
                   ✕
                 </button>

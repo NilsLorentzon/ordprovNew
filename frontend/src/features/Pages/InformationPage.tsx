@@ -1,7 +1,7 @@
 function InformationPage() {
   return (
-    <div className="h-full lg:p-8 pt-16 w-full">
-      <div className=" rounded-md p-4 m-auto shadow-md border border-black/20 bg-white max-w-2xl">
+    <div className="h-full lg:p-8 pt-16 w-full bg-slate-50 overflow-auto">
+      <div className=" rounded-xl p-4 m-auto shadow-sm border border-slate-200 bg-white max-w-2xl">
         <div className="mb-4">
           <h2 className="text-2xl font-medium">Vad är Ordprov.com?</h2>
           <div className="">
@@ -15,10 +15,6 @@ function InformationPage() {
               ord samt många exempelmeningar så att man förstår exakt vad orden
               betyder och hur de används i olika sammanhang. Vårt mål är att
               göra det enkelt och roligt att lära sig nya ord.
-            </p>
-            <p className="tracking-wide text-lg">
-              Genom att skapa ett konto kan du spara dina framsteg, skapa mål,
-              och se din statistik.
             </p>
           </div>
         </div>
@@ -51,7 +47,7 @@ function InformationPage() {
               svenska språket och att lära mig nya ord. Jag ville skapa en
               resurs som kunde hjälpa mig och förhoppningsvis många andra att
               förbättra sitt ordförråd på ett roligt och effektivt sätt. du
-              hittar de flesta av mina hemsidor på{" "}
+              hittar de flesta av mina hemsidor på
               <button
                 className="
               pointer-events-auto
@@ -62,11 +58,9 @@ function InformationPage() {
                   window.open("https://kunskapskapitalet.se", "_blank");
                 }}
               >
-                <span className="tracking-wide">Kunskaps</span>
-                <span style={{ color: "#2bd99f" }} className="">
-                  kapitalet
+                <span className="tracking-wide text-p-400 underline">
+                  Kunskapskapitalet.se
                 </span>
-                <span className="text-sm">.se</span>
               </button>
             </p>
           </div>
@@ -103,7 +97,7 @@ function InformationPage() {
           <div className="">
             <p className="tracking-wide text-lg mb-2">
               Hemsidan är fortfarande under utveckling och idag finns endast
-              2000 ord tillgängliga. Jag jobbar kontinuerligt med att lägga till
+              2060 ord tillgängliga. Jag jobbar kontinuerligt med att lägga till
               fler ord och förbättra definitionerna. Jag jobbar också på att
               implementera fler funktioner som kan hjälpa dig med inlärningen
               och göra upplevelsen ännu bättre.
@@ -119,18 +113,10 @@ function InformationPage() {
               Vi har inga planer på att införa reklam eller datainsamling i
               framtiden.
             </p>
-            <p className="tracking-wide text-lg mb-2">
-              Skapar man ett konto så sparas ens e-postadress samt lösenord i
-              krypterad form i vår databas. Denna information används endast för
-              att möjliggöra inloggning och för att spara användarens framsteg
-              på hemsidan. Vi delar inte denna information med någon tredje
-              part. När man tar bort sitt konto raderas all information som är
-              kopplad till ens konto permanent från vår databas.
-            </p>
           </div>
         </div>
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <h2 className="text-2xl font-medium">Copyright</h2>
           <div className="">
             <p className="tracking-wide text-lg mb-2">
@@ -141,7 +127,7 @@ function InformationPage() {
               av mig och får inte kopieras eller användas utan mitt tillstånd.
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="p-8"></div>
     </div>

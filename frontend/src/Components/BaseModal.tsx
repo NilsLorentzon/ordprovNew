@@ -27,13 +27,13 @@
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         <div
           className={clsx(
-            " bg-black/40  sm:p-6 p-2 py-16  h-full min-h-full overflow-auto",
+            " flex justify-center items-center bg-black/40  sm:p-6 p-2 py-16  h-full min-h-full overflow-auto",
           )}
         >
-          <div className="w-full">
+          <div className="md:pl-60 w-full">
             <div
               // style={{ maxWidth: `${maxWidth}px` }}
-              className="max-w-2xl m-auto flex w-full flex-col overflow-hidden rounded-md bg-neutral-100 p-4 text-black shadow-lg"
+              className="max-w-2xl m-auto flex w-full flex-col  rounded-md bg-neutral-100 p-4 text-black shadow-lg"
               ref={modalReference}
             >
               <div className="flex items-center justify-between">
@@ -48,7 +48,7 @@
                 </button>
               </div>
               <div className="my-4"></div>
-              <div className="h-full overflow-auto">{children}</div>
+              <div className="h-full ">{children}</div>
             </div>
           </div>
         </div>

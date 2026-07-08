@@ -39,7 +39,7 @@ const MainMenu = ({ children }: Props) => {
           id="main-content"
           className={clsx(
             isMobile
-              ? "w-full relative overflow-auto h-full pt-12"
+              ? "w-full relative overflow-auto h-full pt-14"
               : "w-full relative overflow-auto",
           )}
           role="main"
@@ -174,7 +174,7 @@ const WebMenu = () => {
               <div className="h-full leading-4 text-sm">Kursplan</div>
             </div>
           </Link>
-          <Link to={`${routePaths.statistics}`} className=" ">
+          {/* <Link to={`${routePaths.statistics}`} className=" ">
             <div
               className={clsx(
                 "text-white px-3 py-2 hover:bg-p-400 w-full rounded-md mb-1 flex items-end",
@@ -184,7 +184,7 @@ const WebMenu = () => {
               <StatisticsIcon className="w-5 h-5 fill-white inline-block mr-2" />
               <div className="h-full leading-4 text-sm">Statistik</div>
             </div>
-          </Link>
+          </Link> */}
 
           {/* )} */}
         </div>
@@ -454,7 +454,7 @@ const MobileMenu = () => {
                 <div className="h-full leading-4 text-md">Kursplan</div>
               </div>
             </Link>
-            <Link
+            {/* <Link
               to={`${routePaths.statistics}`}
               className=" "
               onClick={() => setIsOpen(false)}
@@ -468,7 +468,7 @@ const MobileMenu = () => {
                 <StatisticsIcon className="w-5 h-5 fill-white inline-block mr-2" />
                 <div className="h-full leading-4 text-md">Statistik</div>
               </div>
-            </Link>
+            </Link> */}
           </div>
           <div className="">
             {/* {auth.email && (
